@@ -674,7 +674,7 @@ async function submitRegisterEmail() {
     }
 }
 
-const STRIPE_CHECKOUT_URL = 'https://buy.stripe.com/dRm00c3TZfCX2tTbT60co06';
+const STRIPE_CHECKOUT_URL = 'https://buy.stripe.com/fZu4gs3TZaiDecB8GU0co07';
 
 async function startStripeCheckout() {
     showToast('Redirecting to Secure Stripe Checkout...');

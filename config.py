@@ -8,7 +8,7 @@ PORT = int(os.environ.get("PORT", os.environ.get("JOVX_PORT", 5050)))
 DEBUG = os.environ.get("JOVX_DEBUG", "True").lower() == "true"
 
 # Stripe (Link de Pagamento Oficial Configurado)
-STRIPE_PAYMENT_LINK = os.environ.get("STRIPE_PAYMENT_LINK", "https://buy.stripe.com/dRm00c3TZfCX2tTbT60co06")
+STRIPE_PAYMENT_LINK = os.environ.get("STRIPE_PAYMENT_LINK", "https://buy.stripe.com/fZu4gs3TZaiDecB8GU0co07")
 STRIPE_PUBLIC_KEY = os.environ.get("STRIPE_PUBLIC_KEY", "pk_test_sample_jovx")
 STRIPE_SECRET_KEY = os.environ.get("STRIPE_SECRET_KEY", "sk_test_sample_jovx")
 STRIPE_PRICE_ID_PRO = os.environ.get("STRIPE_PRICE_ID_PRO", "price_pro_3months_19_90usd")
