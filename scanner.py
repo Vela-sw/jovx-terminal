@@ -60,6 +60,15 @@ class JovxScanner:
         ]
         self.search_index = 0
 
+        # Smart Pulse Helius (Controle rigoroso para economizar créditos e durar 31 dias)
+        self.last_helius_fetch = 0
+        self.helius_interval = 360  # Pulso a cada 6 minutos (~1.000 créditos/hora)
+        self.helius_prog_index = 0
+        self.helius_daily_credits = 0
+        self.helius_day_tracker = time.strftime("%Y-%m-%d")
+        self.helius_daily_limit = 20000  # Trava máxima diária de 20.000 créditos (~600.000/mês)
+        self.helius_disabled = False
+
         # Carregar sementes verificadas 100% reais (Top 5 minutos + FOMO Gems)
         self._seed_initial_pool()
 
@@ -717,24 +726,40 @@ class JovxScanner:
         """Executa um ciclo rápido de coleta em lote e auditoria de contratos"""
         candidate_addrs = []
 
-        # 0. Se Helius estiver configurada, puxar novos tokens da Solana em tempo real (Raydium v4, CPMM + Pump.fun)
-        if HELIUS_API_KEY:
-            sol_programs = [
-                "675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8",  # Raydium AMM v4
-                "CPMMoo8L3F4NbTegBCKVNunggL7H1ZpdTHKxQB5qKP1C",  # Raydium CPMM
-                "6EF8rrecthR5Dkzon8Nwu78hRvfCKubJ14M5uBEwF6P"   # Pump.fun
-            ]
-            for prog in sol_programs:
+        # 0. Smart Pulse Helius (Pulso a cada 6 minutos, alternando 1 programa por vez, com trava de segurança de 20k/dia)
+        now = time.time()
+        if HELIUS_API_KEY and not self.helius_disabled and (now - self.last_helius_fetch >= self.helius_interval):
+            current_day = time.strftime("%Y-%m-%d")
+            if current_day != self.helius_day_tracker:
+                self.helius_day_tracker = current_day
+                self.helius_daily_credits = 0
+
+            if self.helius_daily_credits >= self.helius_daily_limit:
+                logger.info("[HELIUS GUARD] Limite diário de segurança (20k créditos) atingido. Preservando cota e operando 100% via DexScreener gratuito.")
+            else:
+                sol_programs = [
+                    "675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8",  # Raydium AMM v4
+                    "6EF8rrecthR5Dkzon8Nwu78hRvfCKubJ14M5uBEwF6P",   # Pump.fun
+                    "CPMMoo8L3F4NbTegBCKVNunggL7H1ZpdTHKxQB5qKP1C"   # Raydium CPMM
+                ]
+                prog = sol_programs[self.helius_prog_index % len(sol_programs)]
+                self.helius_prog_index += 1
+                self.last_helius_fetch = now
+
                 try:
                     helius_url = f"https://api.helius.xyz/v0/addresses/{prog}/transactions?api-key={HELIUS_API_KEY}&limit=20"
                     r_h = requests.get(helius_url, timeout=3)
                     if r_h.status_code == 200:
+                        self.helius_daily_credits += 100
                         txs = r_h.json()
                         for tx in txs:
                             for token_trans in tx.get("tokenTransfers", []):
                                 mint = token_trans.get("mint")
                                 if mint and mint not in EXCLUDED_SYMBOLS and len(mint) >= 32:
                                     candidate_addrs.append(mint)
+                    elif r_h.status_code in (402, 429):
+                        logger.warning(f"[HELIUS FALLBACK] Status {r_h.status_code} recebido. Ativando fallback automático 100% DexScreener gratuito.")
+                        self.helius_disabled = True
                 except Exception as e:
                     logger.error(f"[HELIUS FETCH ERROR]: {e}")
 
