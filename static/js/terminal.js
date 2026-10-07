@@ -46,7 +46,7 @@ function updateProUI() {
             headerBtn.className = "px-3 py-1 rounded bg-surface border border-emerald-500/40 text-alphaGreen font-semibold transition flex items-center space-x-1.5";
         }
         if (loginBtn) {
-            loginBtn.innerHTML = '<i data-lucide="user-check" class="w-3.5 h-3.5 text-alphaGreen"></i><span>CONTA PRO</span>';
+            loginBtn.innerHTML = '<i data-lucide="key" class="w-3.5 h-3.5 text-alphaGreen"></i><span>JÁ SOU PRO (ATIVO)</span>';
         }
     } else {
         if (badge) {
