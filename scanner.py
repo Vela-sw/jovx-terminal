@@ -44,6 +44,7 @@ class JovxScanner:
         }
         self.profiles_url = "https://api.dexscreener.com/token-profiles/latest/v1"
         self.boosts_url = "https://api.dexscreener.com/token-boosts/latest/v1"
+        self.boosts_top_url = "https://api.dexscreener.com/token-boosts/top/v1"
         self.tokens_batch_url = "https://api.dexscreener.com/latest/dex/tokens/"
         self.search_url = "https://api.dexscreener.com/latest/dex/search"
         
@@ -716,11 +717,16 @@ class JovxScanner:
         """Executa um ciclo rápido de coleta em lote e auditoria de contratos"""
         candidate_addrs = []
 
-        # 0. Se Helius estiver configurada, puxar novos tokens da Solana em tempo real (Raydium + Pump.fun)
+        # 0. Se Helius estiver configurada, puxar novos tokens da Solana em tempo real (Raydium v4, CPMM + Pump.fun)
         if HELIUS_API_KEY:
-            for prog in ["675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8", "6EF8rrecthR5Dkzon8Nwu78hRvfCKubJ14M5uBEwF6P"]:
+            sol_programs = [
+                "675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8",  # Raydium AMM v4
+                "CPMMoo8L3F4NbTegBCKVNunggL7H1ZpdTHKxQB5qKP1C",  # Raydium CPMM
+                "6EF8rrecthR5Dkzon8Nwu78hRvfCKubJ14M5uBEwF6P"   # Pump.fun
+            ]
+            for prog in sol_programs:
                 try:
-                    helius_url = f"https://api.helius.xyz/v0/addresses/{prog}/transactions?api-key={HELIUS_API_KEY}&limit=12"
+                    helius_url = f"https://api.helius.xyz/v0/addresses/{prog}/transactions?api-key={HELIUS_API_KEY}&limit=20"
                     r_h = requests.get(helius_url, timeout=3)
                     if r_h.status_code == 200:
                         txs = r_h.json()
@@ -738,23 +744,24 @@ class JovxScanner:
             if r.status_code == 200:
                 profiles = r.json()
                 if isinstance(profiles, list):
-                    for p in profiles[:25]:
+                    for p in profiles[:30]:
                         addr = p.get("tokenAddress")
                         if addr: candidate_addrs.append(addr)
         except Exception:
             pass
 
-        # 2. Puxar os boosts mais recentes
-        try:
-            r_b = requests.get(self.boosts_url, headers=self.headers, timeout=4)
-            if r_b.status_code == 200:
-                boosts = r_b.json()
-                if isinstance(boosts, list):
-                    for b in boosts[:20]:
-                        addr = b.get("tokenAddress")
-                        if addr: candidate_addrs.append(addr)
-        except Exception:
-            pass
+        # 2. Puxar os boosts mais recentes e os Top boosts
+        for b_url in [self.boosts_url, self.boosts_top_url]:
+            try:
+                r_b = requests.get(b_url, headers=self.headers, timeout=4)
+                if r_b.status_code == 200:
+                    boosts = r_b.json()
+                    if isinstance(boosts, list):
+                        for b in boosts[:25]:
+                            addr = b.get("tokenAddress")
+                            if addr: candidate_addrs.append(addr)
+            except Exception:
+                pass
 
         # 3. Adicionar tokens já no pool para auditar se começaram a cair
         with self.lock:
@@ -775,7 +782,7 @@ class JovxScanner:
             except Exception:
                 pass
 
-        unique_addrs = list(dict.fromkeys(candidate_addrs))[:90]
+        unique_addrs = list(dict.fromkeys(candidate_addrs))[:120]
         if not unique_addrs:
             return
 
