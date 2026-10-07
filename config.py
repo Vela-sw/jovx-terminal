@@ -22,3 +22,8 @@ MIN_LIQUIDITY_USD = 15000       # Descarta moedas com liquidez menor que $15k
 MAX_TOP10_HOLDERS_PCT = 25.0    # Alerta se Top 10 tiver mais de 25%
 MIN_MARKET_CAP_USD = 30000      # Descarta micro-lixo abaixo de $30k
 TARGET_CHAINS = ["solana", "base", "ethereum", "robinhood"]
+
+# Helius Infrastructure (Solana Real-Time Sub-Second Feed)
+HELIUS_API_KEY = os.environ.get("HELIUS_API_KEY", "")
+HELIUS_RPC_URL = f"https://mainnet.helius-rpc.com/?api-key={HELIUS_API_KEY}" if HELIUS_API_KEY else ""
+HELIUS_WS_URL = f"wss://mainnet.helius-rpc.com/?api-key={HELIUS_API_KEY}" if HELIUS_API_KEY else ""
