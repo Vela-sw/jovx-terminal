@@ -1,0 +1,110 @@
+/* JOVX Terminal - Purple Cow Desktop Stylesheet */
+
+/* Custom Dark Purple Scrollbars */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #09070F;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #231D38;
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #A855F7;
+}
+
+/* Glowing Neon Elements */
+.glow-purple {
+    box-shadow: 0 0 15px rgba(168, 85, 247, 0.35);
+}
+
+.glow-green {
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.35);
+}
+
+/* Score Progress Bar Pulse */
+@keyframes alphaPulse {
+    0%, 100% {
+        opacity: 1;
+        box-shadow: 0 0 8px rgba(168, 85, 247, 0.4);
+    }
+    50% {
+        opacity: 0.85;
+        box-shadow: 0 0 16px rgba(192, 132, 252, 0.8);
+    }
+}
+
+.pulse-alpha {
+    animation: alphaPulse 2.5s infinite ease-in-out;
+}
+
+/* Table Hover Effect */
+tbody tr {
+    transition: all 0.15s ease-in-out;
+}
+
+tbody tr:hover {
+    background-color: rgba(35, 29, 56, 0.6) !important;
+}
+
+/* Copy Tooltip */
+.copy-badge:active {
+    transform: scale(0.95);
+}
+
+/* PRO Locked Top 5 Rows Styling */
+.pro-row-locked {
+    background: linear-gradient(90deg, rgba(107, 33, 168, 0.12) 0%, rgba(18, 15, 29, 0.95) 50%, rgba(107, 33, 168, 0.08) 100%);
+    position: relative;
+}
+
+.pro-row-locked:hover {
+    background: linear-gradient(90deg, rgba(168, 85, 247, 0.18) 0%, rgba(35, 29, 56, 0.95) 50%, rgba(168, 85, 247, 0.15) 100%) !important;
+}
+
+.pro-locked-blur {
+    filter: blur(5.5px);
+    user-select: none;
+    -webkit-user-select: none;
+    pointer-events: none;
+    display: inline-block;
+    transition: filter 0.3s ease;
+}
+
+.pro-badge-glow {
+    box-shadow: 0 0 12px rgba(168, 85, 247, 0.5), inset 0 0 8px rgba(192, 132, 252, 0.2);
+    border: 1px solid rgba(192, 132, 252, 0.6);
+}
+
+.unlock-btn-glow {
+    background: linear-gradient(135deg, #7E22CE 0%, #A855F7 50%, #C084FC 100%);
+    box-shadow: 0 0 14px rgba(168, 85, 247, 0.45);
+    transition: all 0.2s ease-in-out;
+}
+
+.unlock-btn-glow:hover {
+    box-shadow: 0 0 22px rgba(192, 132, 252, 0.8);
+    transform: translateY(-1px) scale(1.03);
+}
+
+.pulse-lock {
+    animation: lockPulse 2s infinite ease-in-out;
+}
+
+@keyframes lockPulse {
+    0%, 100% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 4px rgba(192, 132, 252, 0.4));
+    }
+    50% {
+        transform: scale(1.08);
+        filter: drop-shadow(0 0 10px rgba(192, 132, 252, 0.9));
+    }
+}
+

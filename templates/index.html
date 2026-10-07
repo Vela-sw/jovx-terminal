@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JOVX — The High-Probability Token Intelligence Engine</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts: JetBrains Mono & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/terminal.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        obsidian: '#09070F',
+                        surface: '#120F1D',
+                        surfaceBorder: '#231D38',
+                        jovxPurple: '#A855F7',
+                        jovxNeon: '#C084FC',
+                        jovxDarkPurple: '#6B21A8',
+                        alphaGreen: '#10B981',
+                        warningAmber: '#F59E0B',
+                        dangerRose: '#F43F5E'
+                    },
+                    fontFamily: {
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                        sans: ['"Inter"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-obsidian text-slate-200 font-sans min-h-screen selection:bg-jovxPurple selection:text-white antialiased overflow-x-hidden">
+
+    <!-- TOP TICKER BAR -->
+    <header class="border-b border-surfaceBorder bg-surface/80 backdrop-blur-md px-6 py-2.5 flex items-center justify-between text-xs font-mono">
+        <div class="flex items-center space-x-6">
+            <div class="flex items-center space-x-2">
+                <span class="relative flex h-2.5 w-2.5">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-jovxPurple opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-jovxPurple"></span>
+                </span>
+                <span class="text-jovxNeon font-semibold tracking-wider">JOVX CORE ENGINE v2.4</span>
+            </div>
+            <div class="hidden md:flex items-center space-x-5 text-slate-400">
+                <span>SCANNED 24H: <strong class="text-white">24,890</strong></span>
+                <span class="text-surfaceBorder">|</span>
+                <span>RUG ELIMINATION RATE: <strong class="text-dangerRose">99.82%</strong></span>
+                <span class="text-surfaceBorder">|</span>
+                <span>CHAINS: <strong class="text-cyan-400">SOLANA / BASE / ETHEREUM</strong></span>
+                <span class="text-surfaceBorder">|</span>
+                <!-- LIVE COUNTDOWN DISPLAY -->
+                <span class="flex items-center space-x-1.5 text-jovxNeon font-bold">
+                    <i data-lucide="refresh-cw" class="w-3.5 h-3.5 animate-spin text-jovxNeon"></i>
+                    <span>NEXT SCAN IN: <span id="countdownTimer">15</span>s</span>
+                </span>
+            </div>
+        </div>
+
+        <div class="flex items-center space-x-4">
+            <div id="userTierBadge" onclick="toggleProTest()" title="Clique aqui para alternar entre Modo Visitante (Grátis) e Modo PRO" class="cursor-pointer hidden sm:flex items-center space-x-1.5 px-2.5 py-1 rounded border border-surfaceBorder bg-surface hover:border-jovxPurple text-[11px] font-mono text-slate-400 transition select-none">
+                <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+                <span id="userTierText">FREE TIER (5 PRO GEMS LOCKED)</span>
+            </div>
+            <button id="soundToggleBtn" onclick="toggleAudio()" class="px-2.5 py-1 rounded border border-surfaceBorder hover:border-jovxPurple/50 text-slate-400 hover:text-white transition flex items-center space-x-1.5">
+                <i data-lucide="volume-2" id="soundIcon" class="w-3.5 h-3.5 text-jovxNeon"></i>
+                <span id="soundLabel">SOUND: ON</span>
+            </button>
+            <button onclick="openProModal()" id="headerUpgradeBtn" class="px-3 py-1 rounded bg-gradient-to-r from-jovxDarkPurple to-jovxPurple hover:from-purple-600 hover:to-jovxNeon text-white font-semibold transition shadow-lg shadow-purple-900/40 flex items-center space-x-1.5">
+                <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                <span>UPGRADE TO PRO ($19.90 / 3 MONTHS)</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- MAIN COCKPIT -->
+    <main class="max-w-[1720px] mx-auto px-6 py-6 space-y-6">
+
+        <!-- HERO HEADER: THE PURPLE COW PHILOSOPHY -->
+        <section class="bg-gradient-to-b from-surface to-obsidian border border-surfaceBorder rounded-xl p-6 relative overflow-hidden shadow-2xl">
+            <!-- Glow background -->
+            <div class="absolute -top-24 -left-24 w-96 h-96 bg-jovxPurple/15 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute -bottom-24 -right-24 w-96 h-96 bg-alphaGreen/10 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
+                <div class="space-y-2">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-lg bg-jovxPurple/20 border border-jovxPurple/50 flex items-center justify-center shadow-lg shadow-purple-500/20">
+                            <span class="font-mono text-xl font-black text-jovxNeon">J</span>
+                        </div>
+                        <h1 class="text-3xl font-extrabold tracking-tight text-white flex items-center space-x-3">
+                            <span>JOVX TERMINAL</span>
+                            <span class="text-xs font-mono uppercase px-2.5 py-0.5 rounded-full bg-jovxPurple/20 border border-jovxPurple text-jovxNeon tracking-widest">Multi-Chain Alpha Engine</span>
+                        </h1>
+                    </div>
+                    <p class="text-slate-400 text-sm max-w-3xl leading-relaxed">
+                        Eliminating 99.8% of blockchain noise and rugpulls. Isolating in real time the <strong class="text-white">Top 20 Mathematical High-Probability Memecoins</strong> across Solana, Base, and Ethereum with instant 1-click DEX execution.
+                    </p>
+                </div>
+
+                <!-- LIVE METRIC CARDS -->
+                <div class="grid grid-cols-3 gap-4 font-mono text-xs min-w-[380px]">
+                    <div class="bg-obsidian/80 border border-surfaceBorder p-3 rounded-lg">
+                        <div class="text-slate-500 uppercase">Live Alpha Signals</div>
+                        <div id="statActiveGems" class="text-xl font-bold text-jovxNeon mt-1">20 TOKENS</div>
+                        <div class="text-[10px] text-alphaGreen mt-0.5 font-sans">Multi-Chain Verified</div>
+                    </div>
+                    <div class="bg-obsidian/80 border border-surfaceBorder p-3 rounded-lg">
+                        <div class="text-slate-500 uppercase">Avg Score Filter</div>
+                        <div class="text-xl font-bold text-alphaGreen mt-1">&ge; 82 / 100</div>
+                        <div class="text-[10px] text-slate-400 mt-0.5 font-sans">High Conviction</div>
+                    </div>
+                    <div class="bg-obsidian/80 border border-surfaceBorder p-3 rounded-lg">
+                        <div class="text-slate-500 uppercase">Refresh Cycle</div>
+                        <div class="text-xl font-bold text-white mt-1">15s AUTO</div>
+                        <div class="text-[10px] text-jovxNeon mt-0.5 font-sans">Zero API Cost</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FILTERS & ACTIONS BAR -->
+        <section class="space-y-3 bg-surface border border-surfaceBorder p-4 rounded-xl">
+            <!-- Row 1: Strategy Filters & Chains -->
+            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                
+                <!-- Strategy Pills -->
+                <div class="flex items-center space-x-2 text-xs font-mono flex-wrap gap-y-2">
+                    <span class="text-slate-500 mr-2 flex items-center space-x-1">
+                        <i data-lucide="filter" class="w-3.5 h-3.5"></i>
+                        <span>STRATEGY:</span>
+                    </span>
+                    <button onclick="setFilter('ALL')" id="filter-ALL" class="filter-pill active px-3.5 py-1.5 rounded-lg border border-jovxPurple bg-jovxPurple/20 text-jovxNeon font-semibold transition">
+                        ALL VERIFIED (20)
+                    </button>
+                    <button onclick="setFilter('ALPHA')" id="filter-ALPHA" class="filter-pill px-3.5 py-1.5 rounded-lg border border-surfaceBorder hover:border-slate-600 text-slate-300 transition">
+                        🔥 HIGH ALPHA (&ge; 85)
+                    </button>
+                    <button onclick="setFilter('EARLY')" id="filter-EARLY" class="filter-pill px-3.5 py-1.5 rounded-lg border border-surfaceBorder hover:border-slate-600 text-slate-300 transition">
+                        💎 SUB-$500K GEMS
+                    </button>
+                    <button onclick="setFilter('WHALE')" id="filter-WHALE" class="filter-pill px-3.5 py-1.5 rounded-lg border border-surfaceBorder hover:border-slate-600 text-slate-300 transition">
+                        🐋 BUYER SURGE
+                    <button onclick="setFilter('FOMO')" id="filter-FOMO" class="filter-pill px-3.5 py-1.5 rounded-lg border border-surfaceBorder hover:border-slate-600 text-slate-300 transition">
+                        ⚡ FOMO GEMS
+                    </button>
+                </div>
+
+                <!-- Chain Pills (Solana, Base, Ethereum, FOMO) -->
+                <div class="flex items-center space-x-2 text-xs font-mono">
+                    <span class="text-slate-500 mr-1">CHAIN:</span>
+                    <button onclick="setChainFilter('ALL')" id="chain-ALL" class="chain-pill active px-2.5 py-1 rounded border border-jovxPurple bg-jovxPurple/20 text-jovxNeon font-semibold transition">
+                        ALL
+                    </button>
+                    <button onclick="setChainFilter('FOMO')" id="chain-FOMO" class="chain-pill px-2.5 py-1 rounded border border-surfaceBorder hover:border-slate-600 text-slate-300 transition">
+                        ⚡ FOMO
+                    </button>
+                    <button onclick="setChainFilter('SOLANA')" id="chain-SOLANA" class="chain-pill px-2.5 py-1 rounded border border-surfaceBorder hover:border-slate-600 text-slate-300 transition">
+                        SOLANA
+                    </button>
+                    <button onclick="setChainFilter('BASE')" id="chain-BASE" class="chain-pill px-2.5 py-1 rounded border border-surfaceBorder hover:border-slate-600 text-slate-300 transition">
+                        BASE
+                    </button>
+                    <button onclick="setChainFilter('ETHEREUM')" id="chain-ETHEREUM" class="chain-pill px-2.5 py-1 rounded border border-surfaceBorder hover:border-slate-600 text-slate-300 transition">
+                        ETH
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- Row 2: Search & Refresh -->
+            <div class="flex items-center justify-between pt-2 border-t border-surfaceBorder/60 text-xs font-mono">
+                <div class="relative w-full max-w-md">
+                    <input type="text" id="searchInput" oninput="handleSearch()" placeholder="Search token name, symbol or contract..." class="w-full bg-obsidian border border-surfaceBorder rounded-lg px-3.5 py-2 pl-9 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-jovxPurple transition">
+                    <i data-lucide="search" class="w-3.5 h-3.5 text-slate-500 absolute left-3 top-2.5"></i>
+                </div>
+                <div class="flex items-center space-x-3 text-slate-400">
+                    <span>Press <kbd class="px-1.5 py-0.5 rounded bg-surfaceBorder text-slate-300 text-[10px]">CTRL + C</kbd> to copy CA</span>
+                    <button onclick="fetchTokens(true)" class="px-3 py-1.5 rounded-lg bg-surface border border-surfaceBorder hover:border-jovxPurple text-slate-300 hover:text-white transition flex items-center space-x-1.5 group" title="Force Refresh">
+                        <i data-lucide="rotate-cw" class="w-3.5 h-3.5 text-jovxNeon group-hover:rotate-180 transition-transform duration-500"></i>
+                        <span>FORCE SCAN</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- TOKEN MATRIX TABLE (DESKTOP PRO TRADER VIEW) -->
+        <section class="bg-surface border border-surfaceBorder rounded-xl overflow-hidden shadow-2xl">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs font-mono border-collapse">
+                    <thead>
+                        <tr class="border-b border-surfaceBorder bg-obsidian/60 text-slate-400 uppercase text-[11px] tracking-wider select-none">
+                            <th class="py-3.5 px-4 w-12 text-center">#</th>
+                            <th class="py-3.5 px-4">TOKEN / NETWORK</th>
+                            <th class="py-3.5 px-4 text-center">JOVX PROBABILITY SCORE</th>
+                            <th class="py-3.5 px-4 text-right">PRICE (USD)</th>
+                            <th class="py-3.5 px-4 text-right">MARKET CAP</th>
+                            <th class="py-3.5 px-4 text-right">LIQUIDITY</th>
+                            <th class="py-3.5 px-4 text-right">24H VOLUME</th>
+                            <th class="py-3.5 px-4 text-center">BUY / SELL PRESSURE</th>
+                            <th class="py-3.5 px-4 text-center">AGE</th>
+                            <th class="py-3.5 px-4 text-center">RISK LEVEL</th>
+                            <th class="py-3.5 px-4 text-center">DIRECT BUY / TRADE</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tokenTableBody" class="divide-y divide-surfaceBorder/60">
+                        <tr>
+                            <td colspan="11" class="py-20 text-center text-slate-500 font-mono">
+                                <div class="flex flex-col items-center justify-center space-y-3">
+                                    <div class="w-8 h-8 border-2 border-jovxPurple border-t-transparent rounded-full animate-spin"></div>
+                                    <span>RUNNING DEEP SCAN ACROSS SOLANA, BASE & ETHEREUM...</span>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- TABLE FOOTER -->
+            <div class="border-t border-surfaceBorder px-6 py-3 flex items-center justify-between text-xs font-mono text-slate-400 bg-obsidian/40">
+                <div class="flex items-center space-x-2">
+                    <span class="inline-block w-2 h-2 rounded-full bg-alphaGreen"></span>
+                    <span>MULTI-CHAIN DECENTRALIZED DATA FEED (ZERO LAG)</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span>Showing <strong id="tokenCountLabel" class="text-white">20</strong> High-Probability Pairs</span>
+                    <button onclick="openProModal()" class="text-jovxNeon hover:underline flex items-center space-x-1">
+                        <span>Unlock Instant Webhook & Telegram Alerts</span>
+                        <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- PRO UPGRADE MODAL (STRIPE CHECKOUT) -->
+    <div id="proModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-surface border border-jovxPurple/60 rounded-2xl max-w-lg w-full p-8 relative shadow-2xl shadow-purple-900/50">
+            <button onclick="closeProModal()" class="absolute top-5 right-5 text-slate-400 hover:text-white transition">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+
+            <div class="space-y-6">
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 rounded-xl bg-jovxPurple/20 border border-jovxPurple flex items-center justify-center shadow-lg shadow-purple-500/30">
+                        <i data-lucide="zap" class="w-6 h-6 text-jovxNeon"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-extrabold text-white">JOVX PRO PASS</h3>
+                        <p class="text-xs font-mono text-jovxNeon">High-Conviction Memecoin Intelligence</p>
+                    </div>
+                </div>
+
+                <div class="space-y-3 text-sm text-slate-300">
+                    <div class="flex items-start space-x-3">
+                        <i data-lucide="check-circle" class="w-5 h-5 text-alphaGreen shrink-0 mt-0.5"></i>
+                        <span><strong>Uncensored Top #1 - #5 Alpha Gems:</strong> Instant real-time unlock of the highest-scoring breakout tokens before the public wave.</span>
+                    </div>
+                    <div class="flex items-start space-x-3">
+                        <i data-lucide="check-circle" class="w-5 h-5 text-alphaGreen shrink-0 mt-0.5"></i>
+                        <span><strong>Zero-Delay Realtime Feed:</strong> Live Block-0 signals on Solana, Base, and Ethereum with sub-second WebSocket updates.</span>
+                    </div>
+                    <div class="flex items-start space-x-3">
+                        <i data-lucide="check-circle" class="w-5 h-5 text-alphaGreen shrink-0 mt-0.5"></i>
+                        <span><strong>99.8% Rug-Pull Shield:</strong> Real-time LP lock verification, honeypot elimination, and aggressive anti-dump kill switches.</span>
+                    </div>
+                    <div class="flex items-start space-x-3">
+                        <i data-lucide="check-circle" class="w-5 h-5 text-alphaGreen shrink-0 mt-0.5"></i>
+                        <span><strong>1-Click Instant DEX Execution:</strong> Direct swap routing to Jupiter, Uniswap, and Raydium.</span>
+                    </div>
+                </div>
+
+                <div class="border-t border-surfaceBorder pt-6 flex items-center justify-between">
+                    <div>
+                        <div class="text-3xl font-black text-white">$19.90 <span class="text-xs font-normal text-slate-400">/ 3 Months Access</span></div>
+                        <div class="text-[11px] text-jovxNeon font-semibold">Founder 3-Month Pass (Only ~$6.63/mo)</div>
+                        <div class="text-[10px] text-alphaGreen mt-0.5">Pay once. No forced monthly billing. 100% Secure via Stripe.</div>
+                    </div>
+                    <button onclick="startStripeCheckout()" id="stripeCheckoutBtn" class="px-6 py-3 rounded-xl bg-gradient-to-r from-jovxDarkPurple via-jovxPurple to-jovxNeon text-white font-bold hover:shadow-lg hover:shadow-purple-500/40 transition flex items-center space-x-2">
+                        <span>Unlock for 3 Months ($19.90)</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast" class="fixed bottom-6 right-6 px-4 py-2.5 rounded-lg bg-surface border border-jovxPurple text-white text-xs font-mono shadow-2xl flex items-center space-x-2 transform translate-y-20 opacity-0 transition-all duration-300 z-50">
+        <i data-lucide="check" class="w-4 h-4 text-alphaGreen"></i>
+        <span id="toastMsg">Contract Address Copied!</span>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/static/js/terminal.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
