@@ -676,10 +676,16 @@ class JovxScanner:
 
         # Montar os Top 5
         final_top5 = top5_candidates[:5]
-        # Se houver menos de 5 no top5_candidates, completa com os melhores do regular que têm boa liquidez
+        # Se houver menos de 5 no top5_candidates, completa apenas com regulares maduros (>= 45m) e verdes
         if len(final_top5) < 5:
             needed = 5 - len(final_top5)
-            fillers = [t for t in regular_candidates if t.get("liquidity_usd", 0) >= 30000][:needed]
+            fillers = [
+                t for t in regular_candidates 
+                if t.get("age_seconds", 0) >= 2700 
+                and t.get("liquidity_usd", 0) >= 30000 
+                and t.get("price_change_1h", 0) >= 0.0 
+                and t.get("price_change_5m", 0) >= -1.0
+            ][:needed]
             final_top5.extend(fillers)
             regular_candidates = [t for t in regular_candidates if t not in fillers]
 
