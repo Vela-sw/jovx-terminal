@@ -56,10 +56,16 @@ class JovxScanner:
         
         # Blacklist permanente de tokens que derreteram/falharam na auditoria ao vivo (Zero Retorno)
         self.blacklisted_dumped_addrs = {
-            "GfBwZAaRLdarL7mmUce8wkFc2xALuTSzyrREVKixpump", # DONSOM derreteu -97% (Banido permanentemente)
+            "GfBwZAaRLdarL7mmUce8wkFc2xALuTSzyrREVKixpump", # DONSOM derreteu -97% (Banido)
             "0xa0c5F58Bf54700B0c582691aA85eab3B8603f4e8", # MOSS liquidez derreteu (Banido)
             "BZ8pkWUs4TjboT2xHRCwg3o6PK8xkvmNewvqMyyfpump", # IRL derreteu -93% (Banido)
             "95pkzpn2xcos5nb4uwedeztncwb2gdbs7iuzr3yz2tb7", # ST par inexistente (Banido)
+            "0xAF8A8A828632Cc88BF917A42d9e1AaB71D5a1994", # TRUMP fake (Volume $0, 0 vendas - Banido)
+            "0xc28b8cd6A219B152B5ee190b6A56e268d51397f7", # CAT fake (Volume $0, 0 vendas - Banido)
+            "0xDc4Ecc86f21220602573A73AbC2d44DFA071495d", # SUPER fake (Volume $0, 0 vendas - Banido)
+            "0x423cF4c0766F3B5eCD64ef81Dd7496d5990C2BA9", # WIF fake (Volume $0, 0 vendas - Banido)
+            "0xeb37F000DE3008C2Aea130325449711A84e00c9A", # TRUMP fake 2 (Volume $0 - Banido)
+            "0xd5e347719602a831e5f84dca83897d8c6b75c5a7", # MOON fake (Volume $1 - Banido)
         }
         
         # Palavras-chave cobrindo FOMO e as melhores narrativas
@@ -222,87 +228,6 @@ class JovxScanner:
                 "dex_platform": "UNISWAP (BASE)",
                 "pair_url": "https://dexscreener.com/base/0xcb18c4cf24d8cf14f36b124846a13a249fbd2681022a5b151cc5346e1b42bcbe",
                 "icon": "https://dd.dexscreener.com/ds-data/tokens/base/0xf9cDf67Dd3dde76a72F37cE4F0A27325Ba25F4D9.png",
-            },
-            {
-                "address": "0xAF8A8A828632Cc88BF917A42d9e1AaB71D5a1994",
-                "name": "Official Trump",
-                "symbol": "TRUMP",
-                "chain": "ROBINHOOD",
-                "price_usd": 4.23,
-                "market_cap": 4230922385.0,
-                "liquidity_usd": 2115461192.79,
-                "volume_24h": 0.03,
-                "volume_5m": 0.0,
-                "buys_24h": 2,
-                "sells_24h": 0,
-                "price_change_24h": 0.07,
-                "price_change_1h": 0.0,
-                "price_change_5m": 0.0,
-                "age": "1d",
-                "age_seconds": 86400,
-                "jovx_score": 99,
-                "tag": "BULLISH TREND",
-                "risk_level": "LOW RISK 🛡️",
-                "lp_locked": True,
-                "liquidity_locked": True,
-                "buy_url": "https://app.uniswap.org/swap?chain=robinhood&outputCurrency=0xAF8A8A828632Cc88BF917A42d9e1AaB71D5a1994",
-                "dex_platform": "UNISWAP (ROBINHOOD)",
-                "pair_url": "https://dexscreener.com/robinhood/0x4c925966e4384ca983696698a106c52da3d87537",
-                "icon": "https://dd.dexscreener.com/ds-data/tokens/robinhood/0xAF8A8A828632Cc88BF917A42d9e1AaB71D5a1994.png",
-            },
-            {
-                "address": "0xc28b8cd6A219B152B5ee190b6A56e268d51397f7",
-                "name": "Caterpillar Inc.",
-                "symbol": "CAT",
-                "chain": "ROBINHOOD",
-                "price_usd": 1416.76,
-                "market_cap": 1416762116.0,
-                "liquidity_usd": 708381058.19,
-                "volume_24h": 0.03,
-                "volume_5m": 0.0,
-                "buys_24h": 2,
-                "sells_24h": 0,
-                "price_change_24h": 0.07,
-                "price_change_1h": 0.0,
-                "price_change_5m": 0.0,
-                "age": "1d",
-                "age_seconds": 86400,
-                "jovx_score": 99,
-                "tag": "BULLISH TREND",
-                "risk_level": "LOW RISK 🛡️",
-                "lp_locked": True,
-                "liquidity_locked": True,
-                "buy_url": "https://app.uniswap.org/swap?chain=robinhood&outputCurrency=0xc28b8cd6A219B152B5ee190b6A56e268d51397f7",
-                "dex_platform": "UNISWAP (ROBINHOOD)",
-                "pair_url": "https://dexscreener.com/robinhood/0x6dee1b078e781bb92b7badeee5f3651e96f15946",
-                "icon": "https://dd.dexscreener.com/ds-data/tokens/robinhood/0xc28b8cd6A219B152B5ee190b6A56e268d51397f7.png",
-            },
-            {
-                "address": "0xDc4Ecc86f21220602573A73AbC2d44DFA071495d",
-                "name": "SuperFarm",
-                "symbol": "SUPER",
-                "chain": "ROBINHOOD",
-                "price_usd": 0.1718,
-                "market_cap": 171800444.0,
-                "liquidity_usd": 85900222.17,
-                "volume_24h": 0.03,
-                "volume_5m": 0.0,
-                "buys_24h": 2,
-                "sells_24h": 0,
-                "price_change_24h": 0.07,
-                "price_change_1h": 0.0,
-                "price_change_5m": 0.0,
-                "age": "1d",
-                "age_seconds": 86400,
-                "jovx_score": 99,
-                "tag": "BULLISH TREND",
-                "risk_level": "LOW RISK 🛡️",
-                "lp_locked": True,
-                "liquidity_locked": True,
-                "buy_url": "https://app.uniswap.org/swap?chain=robinhood&outputCurrency=0xDc4Ecc86f21220602573A73AbC2d44DFA071495d",
-                "dex_platform": "UNISWAP (ROBINHOOD)",
-                "pair_url": "https://dexscreener.com/robinhood/0x579ec04d76bd3585e1cd4ac9d519bb0f03f2f16c",
-                "icon": "https://dd.dexscreener.com/ds-data/tokens/robinhood/0xDc4Ecc86f21220602573A73AbC2d44DFA071495d.png",
             },
             {
                 "address": "2BVfJ4AHMvHdKtEZNHaBr48dQzTfZvYkjaaxbM6bpump",
@@ -683,33 +608,6 @@ class JovxScanner:
                 "icon": "https://cdn.dexscreener.com/cms/images/BqiXSL6Rj5M6NWSU?width=800&height=800&quality=95&format=auto",
             },
             {
-                "address": "0x92D3c33129E94195DA2323853211575D09ea9658",
-                "name": "Dogwifhat",
-                "symbol": "WIF",
-                "chain": "ROBINHOOD",
-                "price_usd": 0.2404,
-                "market_cap": 238559685.0,
-                "liquidity_usd": 119279842.72,
-                "volume_24h": 0.03,
-                "volume_5m": 0.0,
-                "buys_24h": 1000,
-                "sells_24h": 800,
-                "price_change_24h": 0.07,
-                "price_change_1h": 0.0,
-                "price_change_5m": 0.0,
-                "age": "1d",
-                "age_seconds": 86400,
-                "jovx_score": 92,
-                "tag": "BULLISH TREND",
-                "risk_level": "LOW RISK 🛡️",
-                "lp_locked": True,
-                "liquidity_locked": True,
-                "buy_url": "https://app.uniswap.org/swap?chain=robinhood&outputCurrency=0x92D3c33129E94195DA2323853211575D09ea9658",
-                "dex_platform": "UNISWAP (ROBINHOOD)",
-                "pair_url": "https://dexscreener.com/robinhood/0x9a0d4b0a982bcb5ea9b39d734eb609294f2a90af",
-                "icon": "https://dd.dexscreener.com/ds-data/tokens/robinhood/0x92D3c33129E94195DA2323853211575D09ea9658.png",
-            },
-            {
                 "address": "2T6Wg3urxPQHaoGh4gqNHyYL6FAfyWA5BaH6Lo37pump",
                 "name": "Miners",
                 "symbol": "MINER",
@@ -735,33 +633,6 @@ class JovxScanner:
                 "dex_platform": "RAYDIUM (SOL)",
                 "pair_url": "https://dexscreener.com/solana/8j42or3k3kbgnguqr2rbzcrweta7jhrnscjmscipv8in",
                 "icon": "https://cdn.dexscreener.com/cms/images/Ob4hEiorBGqsUkDB?width=800&height=800&quality=95&format=auto",
-            },
-            {
-                "address": "0x13a0e12C215BC0669941dA309c3Bfbd5B32c4c1f",
-                "name": "Coin",
-                "symbol": "COIN",
-                "chain": "ROBINHOOD",
-                "price_usd": 3.573e-06,
-                "market_cap": 35737.0,
-                "liquidity_usd": 36720.34,
-                "volume_24h": 14967.17,
-                "volume_5m": 0.0,
-                "buys_24h": 77,
-                "sells_24h": 14,
-                "price_change_24h": 279.0,
-                "price_change_1h": 0.0,
-                "price_change_5m": 0.0,
-                "age": "21.3h",
-                "age_seconds": 76826,
-                "jovx_score": 90,
-                "tag": "HIGH ALPHA",
-                "risk_level": "LOW RISK 🛡️",
-                "lp_locked": True,
-                "liquidity_locked": True,
-                "buy_url": "https://app.uniswap.org/swap?chain=robinhood&outputCurrency=0x13a0e12C215BC0669941dA309c3Bfbd5B32c4c1f",
-                "dex_platform": "UNISWAP (ROBINHOOD)",
-                "pair_url": "https://dexscreener.com/robinhood/0x9c97a40cf7077e2aaec305206e0af1e4c32a795acc18815f5c77dd9eb09f0775",
-                "icon": "https://dd.dexscreener.com/ds-data/tokens/robinhood/0x13a0e12C215BC0669941dA309c3Bfbd5B32c4c1f.png",
             },
             {
                 "address": "AAYnxkQJySJ4RkTQidjUoi4c7P7RNBHDWgzpHjbapump",
@@ -845,33 +716,6 @@ class JovxScanner:
                 "icon": "https://cdn.dexscreener.com/cms/images/RamMH3aG8--lKUMh?width=800&height=800&quality=95&format=auto",
             },
             {
-                "address": "0xCC4304A31d09258b0029eA7FE63d032f52e44EFe",
-                "name": "TrustSwap Token",
-                "symbol": "SWAP",
-                "chain": "ETHEREUM",
-                "price_usd": 0.04382,
-                "market_cap": 4382208.0,
-                "liquidity_usd": 60957.61,
-                "volume_24h": 6802.22,
-                "volume_5m": 0.0,
-                "buys_24h": 23,
-                "sells_24h": 21,
-                "price_change_24h": 0.98,
-                "price_change_1h": 0.0,
-                "price_change_5m": 0.0,
-                "age": "1d",
-                "age_seconds": 86400,
-                "jovx_score": 87,
-                "tag": "BULLISH TREND",
-                "risk_level": "LOW RISK 🛡️",
-                "lp_locked": True,
-                "liquidity_locked": True,
-                "buy_url": "https://app.uniswap.org/swap?chain=ethereum&outputCurrency=0xCC4304A31d09258b0029eA7FE63d032f52e44EFe",
-                "dex_platform": "UNISWAP (ETHEREUM)",
-                "pair_url": "https://dexscreener.com/ethereum/0xd90a1ba0cbaaaabfdc6c814cdf1611306a26e1f8",
-                "icon": "https://dd.dexscreener.com/ds-data/tokens/ethereum/0xCC4304A31d09258b0029eA7FE63d032f52e44EFe.png",
-            },
-            {
                 "address": "DwcXyhEcSvzWgakDKpetZLFvbAHutpGpzhbU4iempump",
                 "name": "Bullcraft",
                 "symbol": "BULLCRAFT",
@@ -897,33 +741,6 @@ class JovxScanner:
                 "dex_platform": "RAYDIUM (SOL)",
                 "pair_url": "https://dexscreener.com/solana/eghzxfbbb6gkwl9m7zenzn2s1bejjvafyexkat5ghfsf",
                 "icon": "https://cdn.dexscreener.com/cms/images/JoEkYOrOAqhG-gX5?width=800&height=800&quality=95&format=auto",
-            },
-            {
-                "address": "0xd5aF6A84cbc4907F3f358F0600338787b65f5651",
-                "name": "moonad",
-                "symbol": "MOON",
-                "chain": "ROBINHOOD",
-                "price_usd": 2.565e-05,
-                "market_cap": 25651.0,
-                "liquidity_usd": 25650.92,
-                "volume_24h": 1.48,
-                "volume_5m": 0.0,
-                "buys_24h": 3,
-                "sells_24h": 0,
-                "price_change_24h": 0.01,
-                "price_change_1h": 0.0,
-                "price_change_5m": 0.0,
-                "age": "2.8h",
-                "age_seconds": 9984,
-                "jovx_score": 80,
-                "tag": "BULLISH TREND",
-                "risk_level": "LOW RISK 🛡️",
-                "lp_locked": True,
-                "liquidity_locked": True,
-                "buy_url": "https://app.uniswap.org/swap?chain=robinhood&outputCurrency=0xd5aF6A84cbc4907F3f358F0600338787b65f5651",
-                "dex_platform": "UNISWAP (ROBINHOOD)",
-                "pair_url": "https://dexscreener.com/robinhood/0xf91d7c20d7b825332c39d71256787cb4771d19951789288c1cfd7bd82e7d02a7",
-                "icon": "https://dd.dexscreener.com/ds-data/tokens/robinhood/0xd5aF6A84cbc4907F3f358F0600338787b65f5651.png",
             },
         ]
         with self.lock:
@@ -975,6 +792,11 @@ class JovxScanner:
             if not t.get("lp_locked", True) or not t.get("liquidity_locked", True):
                 continue
             if t.get("price_change_24h", 0) < 0.0:
+                continue
+            # FILTRO DE VOLUME E ATIVIDADE REAL (Elimina moedas fantasmas com 0 volume ou 0 vendas)
+            if t.get("volume_24h", 0) < 20000:
+                continue
+            if t.get("sells_24h", 0) < 2 or t.get("buys_24h", 0) < 5:
                 continue
             if t.get("sells_24h", 0) > (t.get("buys_24h", 0) * 1.35) and t.get("buys_24h", 0) > 0:
                 continue
@@ -1064,7 +886,7 @@ class JovxScanner:
             for fb in self.fallback_reserve:
                 fb_addr = fb.get("address")
                 if fb_addr and fb_addr not in existing_addrs and fb_addr not in self.blacklisted_dumped_addrs:
-                    if fb.get("liquidity_usd", 0) >= 20000 and fb.get("price_change_24h", 0) >= 0.0:
+                    if fb.get("liquidity_usd", 0) >= 20000 and fb.get("price_change_24h", 0) >= 0.0 and fb.get("volume_24h", 0) >= 20000 and fb.get("sells_24h", 0) >= 2:
                         clean_tokens.append(fb)
                         existing_addrs.add(fb_addr)
                         if len(clean_tokens) >= 20:
@@ -1233,7 +1055,7 @@ class JovxScanner:
             # Pega qualquer moeda que derreteu (24h negativo, liquidez < 20k ou na blacklist)
             dumped_in_memory = set()
             for addr, t in list(self.pool.items()):
-                if addr in self.blacklisted_dumped_addrs or t.get("price_change_24h", 0) < 0.0 or t.get("liquidity_usd", 0) < 20000:
+                if addr in self.blacklisted_dumped_addrs or t.get("price_change_24h", 0) < 0.0 or t.get("liquidity_usd", 0) < 20000 or t.get("volume_24h", 0) < 20000 or t.get("sells_24h", 0) < 2:
                     dumped_in_memory.add(addr)
 
             for bad_addr in dumped_in_memory:
@@ -1312,7 +1134,7 @@ class JovxScanner:
             if age_sec > MAX_TOKEN_AGE_SECONDS:
                 return None
 
-            # KILL SWITCHES ANTI-DERRETIMENTO
+            # KILL SWITCHES ANTI-DERRETIMENTO & ANTI-GHOST
             if price_change_24h < 0.0:
                 return None
             if price_change_1h < -8.0:
@@ -1320,6 +1142,10 @@ class JovxScanner:
             if price_change_5m < -6.0:
                 return None
             if liquidity_usd < 20000:
+                return None
+            if volume_24h < 20000:
+                return None
+            if sells < 2 or buys < 5:
                 return None
             if market_cap < 30000:
                 return None
