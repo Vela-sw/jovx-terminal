@@ -668,13 +668,13 @@ async function submitRegisterEmail() {
     } finally {
         if (btn) {
             btn.disabled = false;
-            btn.innerHTML = `<i data-lucide="sparkles" class="w-4 h-4"></i><span>Activate My 90 Days Now</span>`;
+            btn.innerHTML = `<i data-lucide="sparkles" class="w-4 h-4"></i><span>Activate My Monthly VIP Pass Now</span>`;
             if (window.lucide) lucide.createIcons();
         }
     }
 }
 
-const STRIPE_CHECKOUT_URL = 'https://buy.stripe.com/fZu4gs3TZaiDecB8GU0co07';
+const STRIPE_CHECKOUT_URL = 'https://buy.stripe.com/6oU3co1LR3Uf7Od9KY0co0a';
 
 async function startStripeCheckout() {
     showToast('Redirecting to Secure Stripe Checkout...');
@@ -684,9 +684,16 @@ async function startStripeCheckout() {
         btn.innerHTML = `<div class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div><span>Connecting to Stripe...</span>`;
     }
 
-    setTimeout(() => {
-        window.location.href = STRIPE_CHECKOUT_URL;
-    }, 300);
+    try {
+        const res = await fetch('/api/stripe/create-checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' } });
+        const data = await res.json();
+        if (data && data.checkout_url) {
+            window.location.href = data.checkout_url;
+            return;
+        }
+    } catch (e) {}
+
+    window.location.href = STRIPE_CHECKOUT_URL;
 }
 
 // Automatic initialization and status verification
@@ -695,7 +702,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (urlParams.get('status') === 'success') {
         openActivateModal();
     } else {
-        // 2. If email already stored, verify with server for active 90-day subscription
+        // 2. If email already stored, verify with server for active monthly subscription
         const savedEmail = localStorage.getItem('jovx_pro_email');
         if (savedEmail) {
             fetch('/api/auth/verify-email', {
@@ -711,7 +718,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     isProUser = false;
                     localStorage.setItem('jovx_pro', 'false');
-                    showToast('Your 3-Month PRO Pass has expired.');
+                    showToast('Your PRO VIP Pass has expired.');
                 }
                 updateProUI();
                 renderTokens();
