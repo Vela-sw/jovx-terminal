@@ -641,20 +641,21 @@ class JovxScanner:
         """Executa um ciclo rápido de coleta em lote e auditoria de contratos"""
         candidate_addrs = []
 
-        # 0. Se Helius estiver configurada, puxar novos tokens da Solana em tempo real
+        # 0. Se Helius estiver configurada, puxar novos tokens da Solana em tempo real (Raydium + Pump.fun)
         if HELIUS_API_KEY:
-            try:
-                helius_url = f"https://api.helius.xyz/v0/addresses/675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8/transactions?api-key={HELIUS_API_KEY}&limit=20"
-                r_h = requests.get(helius_url, timeout=3)
-                if r_h.status_code == 200:
-                    txs = r_h.json()
-                    for tx in txs:
-                        for token_trans in tx.get("tokenTransfers", []):
-                            mint = token_trans.get("mint")
-                            if mint and mint not in EXCLUDED_SYMBOLS:
-                                candidate_addrs.append(mint)
-            except Exception as e:
-                logger.error(f"[HELIUS FETCH ERROR]: {e}")
+            for prog in ["675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8", "6EF8rrecthR5Dkzon8Nwu78hRvfCKubJ14M5uBEwF6P"]:
+                try:
+                    helius_url = f"https://api.helius.xyz/v0/addresses/{prog}/transactions?api-key={HELIUS_API_KEY}&limit=12"
+                    r_h = requests.get(helius_url, timeout=3)
+                    if r_h.status_code == 200:
+                        txs = r_h.json()
+                        for tx in txs:
+                            for token_trans in tx.get("tokenTransfers", []):
+                                mint = token_trans.get("mint")
+                                if mint and mint not in EXCLUDED_SYMBOLS and len(mint) >= 32:
+                                    candidate_addrs.append(mint)
+                except Exception as e:
+                    logger.error(f"[HELIUS FETCH ERROR]: {e}")
 
         # 1. Puxar os perfis mais recentes da DexScreener
         try:
