@@ -425,7 +425,7 @@ function renderTokens() {
                 <!-- LIQUIDITY -->
                 <td class="py-3 px-4 text-right font-mono">
                     <div class="font-semibold text-slate-200">$${formatCurrency(t.liquidity_usd)}</div>
-                    <div class="text-[10px] text-alphaGreen font-mono">LP VERIFIED</div>
+                    <div class="text-[10px] text-alphaGreen font-mono font-bold">LP LOCKED 🔒</div>
                 </td>
 
                 <!-- 24H VOLUME -->

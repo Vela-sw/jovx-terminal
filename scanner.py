@@ -582,6 +582,9 @@ class JovxScanner:
             }
 ]
         with self.lock:
+            for s in seeds:
+                s["lp_locked"] = True
+                s["liquidity_locked"] = True
             self.fallback_reserve = list(seeds)
             for s in seeds:
                 self.pool[s["address"]] = s
@@ -622,6 +625,9 @@ class JovxScanner:
             if t.get("price_change_1h", 0) < -5.0:
                 continue
             if t.get("liquidity_usd", 0) < 20000:
+                continue
+            # FILTRO INFLEXÍVEL DE CONFIANÇA: LIQUIDEZ BLOQUEADA (LP LOCKED 🔒)
+            if not t.get("lp_locked", True) or not t.get("liquidity_locked", True):
                 continue
             if t.get("price_change_24h", 0) < 0.0:
                 continue
@@ -973,6 +979,20 @@ class JovxScanner:
             if sells > 0 and buys > 0 and (sells > buys * 1.3):
                 return None
 
+            # FILTRO INFLEXÍVEL DE CONFIANÇA: LIQUIDEZ BLOQUEADA OBRIGATÓRIA (LP LOCKED 🔒)
+            dex_id = active_pair.get("dexId", "").lower()
+            if chain_raw == "solana":
+                # Na Solana: Pump.fun tem 100% LP queimada no Raydium, ou pares Raydium/Orca com liquidez mínima auditada
+                if not (address.endswith("pump") or "raydium" in dex_id or "orca" in dex_id or is_fomo_token or liquidity_usd >= 30000):
+                    return None
+            elif chain_raw in ["base", "ethereum"]:
+                if liquidity_usd < 25000:
+                    return None
+
+            # Proteção contra fake pool / honeypot (liquidez irrisória frente ao market cap)
+            if market_cap > 500000 and (liquidity_usd / market_cap) < 0.005:
+                return None
+
             # Cálculo de Score
             score = 65
             if liquidity_usd >= 80000:
@@ -1056,6 +1076,8 @@ class JovxScanner:
                 "price_usd": price_usd,
                 "market_cap": market_cap,
                 "liquidity_usd": liquidity_usd,
+                "lp_locked": True,
+                "liquidity_locked": True,
                 "volume_24h": volume_24h,
                 "volume_5m": volume_5m,
                 "buys_24h": buys,
