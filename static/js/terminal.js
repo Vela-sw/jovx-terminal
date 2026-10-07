@@ -56,7 +56,7 @@ function updateProUI() {
             badgeText.textContent = "FREE TIER (5 PRO GEMS LOCKED)";
         }
         if (headerBtn) {
-            headerBtn.innerHTML = '<i data-lucide="sparkles" class="w-3.5 h-3.5"></i><span>UPGRADE TO PRO ($19.90 / 3 MONTHS)</span>';
+            headerBtn.innerHTML = '<i data-lucide="sparkles" class="w-3.5 h-3.5"></i><span>UPGRADE TO PRO ($19.90 / MONTH)</span>';
             headerBtn.className = "px-3 py-1 rounded bg-gradient-to-r from-jovxDarkPurple to-jovxPurple hover:from-purple-600 hover:to-jovxNeon text-white font-semibold transition shadow-lg shadow-purple-900/40 flex items-center space-x-1.5";
         }
         if (loginBtn) {
@@ -358,7 +358,7 @@ function renderTokens() {
                     <!-- CTA BOTÃO DE DESBLOQUEIO -->
                     <td class="py-3 px-4 text-center">
                         <div class="flex items-center justify-center space-x-2">
-                            <button onclick="startStripeCheckout()" class="px-3.5 py-1.5 rounded-lg unlock-btn-glow text-white font-mono text-[11px] font-extrabold flex items-center space-x-1.5 shadow-lg transform hover:scale-105 active:scale-95" title="Secure Stripe Checkout — PRO Pass (3 Months)">
+                            <button onclick="startStripeCheckout()" class="px-3.5 py-1.5 rounded-lg unlock-btn-glow text-white font-mono text-[11px] font-extrabold flex items-center space-x-1.5 shadow-lg transform hover:scale-105 active:scale-95" title="Secure Stripe Checkout — PRO Monthly Pass">
                                 <i data-lucide="lock" class="w-3.5 h-3.5"></i>
                                 <span>PRO PASS ⚡</span>
                             </button>

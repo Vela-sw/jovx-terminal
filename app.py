@@ -62,10 +62,10 @@ def create_checkout_session():
                     "price_data": {
                         "currency": "usd",
                         "product_data": {
-                            "name": "JOVX Terminal PRO — 3-Month Access Pass",
-                            "description": "Instant Unlocked Access to Top #1 to #5 Alpha Gems & Zero-Delay High-Probability Screener for 3 Months",
+                            "name": "JOVX Terminal PRO — Monthly VIP Access",
+                            "description": "Instant Unlocked Access to Top #1 to #5 Alpha Gems & Zero-Delay High-Probability Screener (Monthly Subscription)",
                         },
-                        "unit_amount": 1990,  # $19.90 USD (3 Months Access)
+                        "unit_amount": 1990,  # $19.90 USD (Monthly Access)
                     },
                     "quantity": 1,
                 }
@@ -78,13 +78,13 @@ def create_checkout_session():
     except Exception as e:
         # Fallback seguro para simulação ou teste sem chaves reais configuradas
         return jsonify({
-            "checkout_url": "https://buy.stripe.com/test_sample_jovx_checkout",
-            "note": "Stripe test link configured"
+            "checkout_url": STRIPE_PAYMENT_LINK,
+            "note": "Stripe link configured"
         })
 
 @app.route("/api/auth/register-success", methods=["POST"])
 def auth_register_success():
-    """Registra o e-mail do comprador com 90 dias (3 meses) de acesso PRO"""
+    """Registra o e-mail do comprador com 30 dias (1 mês) de acesso PRO"""
     data = request.get_json() or {}
     email = data.get("email", "").strip().lower()
     session_id = data.get("session_id", None)
@@ -92,7 +92,7 @@ def auth_register_success():
         return jsonify({"status": "error", "message": "Please provide a valid email address."}), 400
     
     import subscribers
-    ok, msg = subscribers.add_subscriber(email, days=90, stripe_session_id=session_id)
+    ok, msg = subscribers.add_subscriber(email, days=30, stripe_session_id=session_id)
     if ok:
         is_active, days_left, exp_date = subscribers.verify_subscriber(email)
         return jsonify({
@@ -106,7 +106,7 @@ def auth_register_success():
 
 @app.route("/api/auth/verify-email", methods=["POST"])
 def auth_verify_email():
-    """Verifica se o e-mail possui 3 meses pagos ativos para liberar em qualquer aparelho"""
+    """Verifica se o e-mail possui plano mensal pago ativo para liberar em qualquer aparelho"""
     data = request.get_json() or {}
     email = data.get("email", "").strip().lower()
     if not email or "@" not in email:

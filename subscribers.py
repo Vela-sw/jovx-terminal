@@ -69,7 +69,7 @@ def verify_subscriber(email: str):
         now = datetime.utcnow()
         
         if now > expires_at:
-            return False, 0, f"Your 3-month PRO subscription expired on {expires_at.strftime('%m/%d/%Y')}. Renew now!"
+            return False, 0, f"Your PRO subscription expired on {expires_at.strftime('%m/%d/%Y')}. Renew now!"
         
         days_left = max(1, (expires_at - now).days)
         return True, days_left, expires_at.strftime("%b %d, %Y")

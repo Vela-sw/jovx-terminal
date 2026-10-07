@@ -7,13 +7,13 @@ BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 PORT = int(os.environ.get("PORT", os.environ.get("JOVX_PORT", 5050)))
 DEBUG = os.environ.get("JOVX_DEBUG", "True").lower() == "true"
 
-# Stripe (Link de Pagamento Oficial Configurado)
-STRIPE_PAYMENT_LINK = os.environ.get("STRIPE_PAYMENT_LINK", "https://buy.stripe.com/fZu4gs3TZaiDecB8GU0co07")
+# Stripe (Link de Pagamento Oficial Mensal Configurado)
+STRIPE_PAYMENT_LINK = os.environ.get("STRIPE_PAYMENT_LINK", "https://buy.stripe.com/5kQaEQgGL8av4C1aP20co08")
 STRIPE_PUBLIC_KEY = os.environ.get("STRIPE_PUBLIC_KEY", "pk_test_sample_jovx")
 STRIPE_SECRET_KEY = os.environ.get("STRIPE_SECRET_KEY", "sk_test_sample_jovx")
-STRIPE_PRICE_ID_PRO = os.environ.get("STRIPE_PRICE_ID_PRO", "price_pro_3months_19_90usd")
+STRIPE_PRICE_ID_PRO = os.environ.get("STRIPE_PRICE_ID_PRO", "price_pro_monthly_19_90usd")
 PRO_PRICE_USD = 19.90
-PRO_ACCESS_MONTHS = 3
+PRO_ACCESS_MONTHS = 1
 
 # Regras do Algoritmo de Probabilidade JOVX
 MAX_TOKEN_AGE_DAYS = 3              # Máximo 3 dias de vida (72 horas) para TODAS as 20 moedas
