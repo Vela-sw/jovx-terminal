@@ -82,6 +82,65 @@ def create_checkout_session():
             "note": "Stripe test link configured"
         })
 
+@app.route("/api/auth/register-success", methods=["POST"])
+def auth_register_success():
+    """Registra o e-mail do comprador com 90 dias (3 meses) de acesso PRO"""
+    data = request.get_json() or {}
+    email = data.get("email", "").strip().lower()
+    session_id = data.get("session_id", None)
+    if not email or "@" not in email:
+        return jsonify({"status": "error", "message": "Por favor, insira um e-mail válido."}), 400
+    
+    import subscribers
+    ok, msg = subscribers.add_subscriber(email, days=90, stripe_session_id=session_id)
+    if ok:
+        is_active, days_left, exp_date = subscribers.verify_subscriber(email)
+        return jsonify({
+            "status": "success",
+            "message": "Assinatura ativada com sucesso!",
+            "email": email,
+            "days_left": days_left,
+            "expires_at": exp_date
+        })
+    return jsonify({"status": "error", "message": msg}), 400
+
+@app.route("/api/auth/verify-email", methods=["POST"])
+def auth_verify_email():
+    """Verifica se o e-mail possui 3 meses pagos ativos para liberar em qualquer aparelho"""
+    data = request.get_json() or {}
+    email = data.get("email", "").strip().lower()
+    if not email or "@" not in email:
+        return jsonify({"status": "error", "message": "Por favor, insira um e-mail válido."}), 400
+    
+    import subscribers
+    is_active, days_left, exp_date = subscribers.verify_subscriber(email)
+    if is_active:
+        return jsonify({
+            "status": "success",
+            "email": email,
+            "days_left": days_left,
+            "expires_at": exp_date,
+            "message": f"Acesso PRO confirmado! {days_left} dias restantes (Válido até {exp_date})."
+        })
+    else:
+        return jsonify({
+            "status": "error",
+            "message": exp_date if "expirou" in str(exp_date) else "E-mail não encontrado na base de assinantes PRO. Verifique a grafia ou assine por $19,90."
+        }), 403
+
+@app.route("/api/admin/subscribers")
+def admin_subscribers():
+    """Painel simples para o dono ver todos os assinantes cadastrados"""
+    key = request.args.get("key", "")
+    if key != "jovx_admin_2026":
+        return jsonify({"status": "error", "message": "Acesso não autorizado"}), 401
+    
+    import subscribers
+    return jsonify({
+        "status": "success",
+        "subscribers": subscribers.list_subscribers()
+    })
+
 @app.route("/health")
 def health():
     return jsonify({"status": "healthy", "service": "JOVX-TERMINAL"})

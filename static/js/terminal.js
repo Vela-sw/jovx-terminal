@@ -25,16 +25,28 @@ function updateProUI() {
     const badge = document.getElementById('userTierBadge');
     const badgeText = document.getElementById('userTierText');
     const headerBtn = document.getElementById('headerUpgradeBtn');
+    const loginBtn = document.getElementById('loginBtn');
+    const savedEmail = localStorage.getItem('jovx_pro_email');
+    const daysLeft = localStorage.getItem('jovx_pro_days');
+
     if (isProUser) {
         if (badge) {
             badge.className = "hidden sm:flex items-center space-x-1.5 px-2.5 py-1 rounded border border-emerald-500/50 bg-emerald-500/10 text-[11px] font-mono text-alphaGreen";
         }
         if (badgeText) {
-            badgeText.textContent = "JOVX PRO ACTIVE ⚡";
+            if (savedEmail) {
+                const shortEmail = savedEmail.length > 20 ? savedEmail.slice(0, 18) + '...' : savedEmail;
+                badgeText.textContent = `PRO ATIVO: ${shortEmail} (${daysLeft || 90}d)`;
+            } else {
+                badgeText.textContent = "JOVX PRO ACTIVE ⚡";
+            }
         }
         if (headerBtn) {
             headerBtn.innerHTML = '<i data-lucide="check-circle" class="w-3.5 h-3.5 text-alphaGreen"></i><span>PRO ACTIVE</span>';
             headerBtn.className = "px-3 py-1 rounded bg-surface border border-emerald-500/40 text-alphaGreen font-semibold transition flex items-center space-x-1.5";
+        }
+        if (loginBtn) {
+            loginBtn.innerHTML = '<i data-lucide="user-check" class="w-3.5 h-3.5 text-alphaGreen"></i><span>CONTA PRO</span>';
         }
     } else {
         if (badge) {
@@ -46,6 +58,9 @@ function updateProUI() {
         if (headerBtn) {
             headerBtn.innerHTML = '<i data-lucide="sparkles" class="w-3.5 h-3.5"></i><span>UPGRADE TO PRO ($19.90 / 3 MONTHS)</span>';
             headerBtn.className = "px-3 py-1 rounded bg-gradient-to-r from-jovxDarkPurple to-jovxPurple hover:from-purple-600 hover:to-jovxNeon text-white font-semibold transition shadow-lg shadow-purple-900/40 flex items-center space-x-1.5";
+        }
+        if (loginBtn) {
+            loginBtn.innerHTML = '<i data-lucide="key" class="w-3.5 h-3.5 text-jovxNeon"></i><span>JÁ SOU PRO</span>';
         }
     }
     if (window.lucide) lucide.createIcons();
@@ -512,6 +527,153 @@ function closeProModal() {
     if (modal) modal.classList.add('hidden');
 }
 
+// Login / Restaurar Acesso Handlers
+function openLoginModal() {
+    const modal = document.getElementById('loginModal');
+    const feedback = document.getElementById('loginFeedback');
+    if (feedback) feedback.classList.add('hidden');
+    if (modal) modal.classList.remove('hidden');
+    const input = document.getElementById('loginEmailInput');
+    if (input) {
+        input.value = localStorage.getItem('jovx_pro_email') || '';
+        input.focus();
+    }
+}
+
+function closeLoginModal() {
+    const modal = document.getElementById('loginModal');
+    if (modal) modal.classList.add('hidden');
+}
+
+async function submitVerifyEmail() {
+    const input = document.getElementById('loginEmailInput');
+    const feedback = document.getElementById('loginFeedback');
+    const btn = document.getElementById('verifyEmailBtn');
+    const email = (input?.value || '').trim().toLowerCase();
+
+    if (!email || !email.includes('@')) {
+        if (feedback) {
+            feedback.textContent = 'Por favor, digite um e-mail válido.';
+            feedback.className = 'text-xs font-mono text-dangerRose mt-1 block';
+        }
+        return;
+    }
+
+    if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = `<div class="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></div><span>Verificando...</span>`;
+    }
+
+    try {
+        const res = await fetch('/api/auth/verify-email', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email })
+        });
+        const data = await res.json();
+
+        if (data.status === 'success') {
+            localStorage.setItem('jovx_pro', 'true');
+            localStorage.setItem('jovx_pro_email', data.email);
+            localStorage.setItem('jovx_pro_days', data.days_left);
+            localStorage.setItem('jovx_pro_expires', data.expires_at);
+            isProUser = true;
+
+            closeLoginModal();
+            updateProUI();
+            renderTokens();
+            showToast(`Acesso PRO Liberado! (${data.days_left} dias restantes)`);
+        } else {
+            if (feedback) {
+                feedback.textContent = data.message || 'E-mail não encontrado ou expirado.';
+                feedback.className = 'text-xs font-mono text-dangerRose mt-1 block';
+            }
+        }
+    } catch (err) {
+        if (feedback) {
+            feedback.textContent = 'Erro ao conectar ao servidor. Tente novamente.';
+            feedback.className = 'text-xs font-mono text-dangerRose mt-1 block';
+        }
+    } finally {
+        if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = `<i data-lucide="check" class="w-4 h-4"></i><span>Entrar / Liberar</span>`;
+            if (window.lucide) lucide.createIcons();
+        }
+    }
+}
+
+// Pós-Pagamento Stripe Activation Handlers
+function openActivateModal() {
+    const modal = document.getElementById('activateModal');
+    if (modal) modal.classList.remove('hidden');
+    const input = document.getElementById('activateEmailInput');
+    if (input) input.focus();
+}
+
+function closeActivateModal() {
+    const modal = document.getElementById('activateModal');
+    if (modal) modal.classList.add('hidden');
+}
+
+async function submitRegisterEmail() {
+    const input = document.getElementById('activateEmailInput');
+    const feedback = document.getElementById('activateFeedback');
+    const btn = document.getElementById('registerEmailBtn');
+    const email = (input?.value || '').trim().toLowerCase();
+
+    if (!email || !email.includes('@')) {
+        if (feedback) {
+            feedback.textContent = 'Por favor, digite seu e-mail da compra Stripe.';
+            feedback.className = 'text-xs font-mono text-dangerRose mt-1 block';
+        }
+        return;
+    }
+
+    if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = `<div class="w-4 h-4 border-2 border-obsidian border-t-transparent rounded-full animate-spin"></div><span>Ativando 90 Dias...</span>`;
+    }
+
+    try {
+        const res = await fetch('/api/auth/register-success', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email })
+        });
+        const data = await res.json();
+
+        if (data.status === 'success') {
+            localStorage.setItem('jovx_pro', 'true');
+            localStorage.setItem('jovx_pro_email', data.email);
+            localStorage.setItem('jovx_pro_days', data.days_left);
+            localStorage.setItem('jovx_pro_expires', data.expires_at);
+            isProUser = true;
+
+            closeActivateModal();
+            updateProUI();
+            renderTokens();
+            showToast('🎉 Parabéns! Seus 3 Meses PRO foram ativados com sucesso!');
+        } else {
+            if (feedback) {
+                feedback.textContent = data.message || 'Erro ao registrar e-mail.';
+                feedback.className = 'text-xs font-mono text-dangerRose mt-1 block';
+            }
+        }
+    } catch (err) {
+        if (feedback) {
+            feedback.textContent = 'Erro ao conectar. Tente novamente.';
+            feedback.className = 'text-xs font-mono text-dangerRose mt-1 block';
+        }
+    } finally {
+        if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = `<i data-lucide="sparkles" class="w-4 h-4"></i><span>Ativar Meus 90 Dias Agora</span>`;
+            if (window.lucide) lucide.createIcons();
+        }
+    }
+}
+
 const STRIPE_CHECKOUT_URL = 'https://buy.stripe.com/dRm00c3TZfCX2tTbT60co06';
 
 async function startStripeCheckout() {
@@ -527,8 +689,38 @@ async function startStripeCheckout() {
     }, 300);
 }
 
-// Inicialização automática
+// Inicialização automática com verificação de status
 document.addEventListener('DOMContentLoaded', () => {
+    // 1. Se acabou de voltar da Stripe com sucesso
+    if (urlParams.get('status') === 'success') {
+        openActivateModal();
+    } else {
+        // 2. Se já tem e-mail salvo, valida no servidor se ainda está nos 90 dias
+        const savedEmail = localStorage.getItem('jovx_pro_email');
+        if (savedEmail) {
+            fetch('/api/auth/verify-email', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: savedEmail })
+            }).then(r => r.json()).then(data => {
+                if (data.status === 'success') {
+                    isProUser = true;
+                    localStorage.setItem('jovx_pro', 'true');
+                    localStorage.setItem('jovx_pro_days', data.days_left);
+                    localStorage.setItem('jovx_pro_expires', data.expires_at);
+                } else {
+                    isProUser = false;
+                    localStorage.setItem('jovx_pro', 'false');
+                    showToast('Seu período de 3 meses PRO expirou.');
+                }
+                updateProUI();
+                renderTokens();
+            }).catch(() => {
+                updateProUI();
+            });
+        }
+    }
+
     updateProUI();
     fetchTokens();
     startCountdown();
