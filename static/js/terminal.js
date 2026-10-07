@@ -14,7 +14,7 @@ window.setPro = function(val) {
     localStorage.setItem('jovx_pro', isProUser ? 'true' : 'false');
     updateProUI();
     renderTokens();
-    showToast(isProUser ? 'PRO Pass Activated!' : 'Modo Visitante Grátis (Top 5 Bloqueadas)');
+    showToast(isProUser ? 'PRO Pass Activated!' : 'Free Visitor Mode (Top 5 Alpha Gems Locked)');
 };
 
 window.toggleProTest = function() {
@@ -36,7 +36,7 @@ function updateProUI() {
         if (badgeText) {
             if (savedEmail) {
                 const shortEmail = savedEmail.length > 20 ? savedEmail.slice(0, 18) + '...' : savedEmail;
-                badgeText.textContent = `PRO ATIVO: ${shortEmail} (${daysLeft || 90}d)`;
+                badgeText.textContent = `PRO ACTIVE: ${shortEmail} (${daysLeft || 90}d)`;
             } else {
                 badgeText.textContent = "JOVX PRO ACTIVE ⚡";
             }
@@ -46,7 +46,7 @@ function updateProUI() {
             headerBtn.className = "px-3 py-1 rounded bg-surface border border-emerald-500/40 text-alphaGreen font-semibold transition flex items-center space-x-1.5";
         }
         if (loginBtn) {
-            loginBtn.innerHTML = '<i data-lucide="key" class="w-3.5 h-3.5 text-alphaGreen"></i><span>JÁ SOU PRO (ATIVO)</span>';
+            loginBtn.innerHTML = '<i data-lucide="key" class="w-3.5 h-3.5 text-alphaGreen"></i><span>PRO ACTIVE</span>';
         }
     } else {
         if (badge) {
@@ -60,7 +60,7 @@ function updateProUI() {
             headerBtn.className = "px-3 py-1 rounded bg-gradient-to-r from-jovxDarkPurple to-jovxPurple hover:from-purple-600 hover:to-jovxNeon text-white font-semibold transition shadow-lg shadow-purple-900/40 flex items-center space-x-1.5";
         }
         if (loginBtn) {
-            loginBtn.innerHTML = '<i data-lucide="key" class="w-3.5 h-3.5 text-jovxNeon"></i><span>JÁ SOU PRO</span>';
+            loginBtn.innerHTML = '<i data-lucide="key" class="w-3.5 h-3.5 text-jovxNeon"></i><span>ALREADY PRO?</span>';
         }
     }
     if (window.lucide) lucide.createIcons();
@@ -276,7 +276,7 @@ function renderTokens() {
                     
                     <!-- TOKEN IDENTIFIER (BLURRED & LOCKED) -->
                     <td class="py-3 px-4">
-                        <div class="flex items-center space-x-3 cursor-pointer" onclick="startStripeCheckout()" title="VIP Alpha Gem — Toque para Liberar no Plano Pró">
+                        <div class="flex items-center space-x-3 cursor-pointer" onclick="startStripeCheckout()" title="VIP Alpha Gem — Click to Unlock with PRO Pass">
                             <div class="w-9 h-9 rounded-lg bg-surface border border-jovxPurple/60 flex items-center justify-center shrink-0 shadow-lg shadow-purple-500/20">
                                 <i data-lucide="lock" class="w-4 h-4 text-jovxNeon pulse-lock"></i>
                             </div>
@@ -289,7 +289,7 @@ function renderTokens() {
                                 <div class="flex items-center space-x-1.5 text-[11px] font-mono mt-0.5">
                                     <i data-lucide="sparkles" class="w-3 h-3 text-jovxNeon"></i>
                                     <span class="text-slate-400">Score ${t.jovx_score}/100 • </span>
-                                    <span class="text-jovxNeon underline hover:text-white transition font-semibold">Liberar no Plano Pró</span>
+                                    <span class="text-jovxNeon underline hover:text-white transition font-semibold">Unlock with PRO Pass</span>
 
                                 </div>
                             </div>
@@ -358,11 +358,11 @@ function renderTokens() {
                     <!-- CTA BOTÃO DE DESBLOQUEIO -->
                     <td class="py-3 px-4 text-center">
                         <div class="flex items-center justify-center space-x-2">
-                            <button onclick="startStripeCheckout()" class="px-3.5 py-1.5 rounded-lg unlock-btn-glow text-white font-mono text-[11px] font-extrabold flex items-center space-x-1.5 shadow-lg transform hover:scale-105 active:scale-95" title="Ir para pagamento seguro Stripe — Plano Pró (3 Meses)">
+                            <button onclick="startStripeCheckout()" class="px-3.5 py-1.5 rounded-lg unlock-btn-glow text-white font-mono text-[11px] font-extrabold flex items-center space-x-1.5 shadow-lg transform hover:scale-105 active:scale-95" title="Secure Stripe Checkout — PRO Pass (3 Months)">
                                 <i data-lucide="lock" class="w-3.5 h-3.5"></i>
-                                <span>PLANO PRÓ ⚡</span>
+                                <span>PRO PASS ⚡</span>
                             </button>
-                            <button onclick="openProModal()" class="p-1.5 rounded bg-surface border border-surfaceBorder hover:border-jovxPurple text-slate-400 hover:text-white transition" title="Benefícios do Plano Pró">
+                            <button onclick="openProModal()" class="p-1.5 rounded bg-surface border border-surfaceBorder hover:border-jovxPurple text-slate-400 hover:text-white transition" title="PRO Pass Benefits">
                                 <i data-lucide="info" class="w-3.5 h-3.5"></i>
                             </button>
                         </div>
@@ -527,7 +527,7 @@ function closeProModal() {
     if (modal) modal.classList.add('hidden');
 }
 
-// Login / Restaurar Acesso Handlers
+// Login / Restore Access Handlers
 function openLoginModal() {
     const modal = document.getElementById('loginModal');
     const feedback = document.getElementById('loginFeedback');
@@ -553,7 +553,7 @@ async function submitVerifyEmail() {
 
     if (!email || !email.includes('@')) {
         if (feedback) {
-            feedback.textContent = 'Por favor, digite um e-mail válido.';
+            feedback.textContent = 'Please enter a valid email address.';
             feedback.className = 'text-xs font-mono text-dangerRose mt-1 block';
         }
         return;
@@ -561,7 +561,7 @@ async function submitVerifyEmail() {
 
     if (btn) {
         btn.disabled = true;
-        btn.innerHTML = `<div class="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></div><span>Verificando...</span>`;
+        btn.innerHTML = `<div class="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></div><span>Verifying...</span>`;
     }
 
     try {
@@ -582,28 +582,28 @@ async function submitVerifyEmail() {
             closeLoginModal();
             updateProUI();
             renderTokens();
-            showToast(`Acesso PRO Liberado! (${data.days_left} dias restantes)`);
+            showToast(`PRO Access Granted! (${data.days_left} days remaining)`);
         } else {
             if (feedback) {
-                feedback.textContent = data.message || 'E-mail não encontrado ou expirado.';
+                feedback.textContent = data.message || 'Email not found or subscription expired.';
                 feedback.className = 'text-xs font-mono text-dangerRose mt-1 block';
             }
         }
     } catch (err) {
         if (feedback) {
-            feedback.textContent = 'Erro ao conectar ao servidor. Tente novamente.';
+            feedback.textContent = 'Server connection error. Please try again.';
             feedback.className = 'text-xs font-mono text-dangerRose mt-1 block';
         }
     } finally {
         if (btn) {
             btn.disabled = false;
-            btn.innerHTML = `<i data-lucide="check" class="w-4 h-4"></i><span>Entrar / Liberar</span>`;
+            btn.innerHTML = `<i data-lucide="check" class="w-4 h-4"></i><span>Verify & Unlock</span>`;
             if (window.lucide) lucide.createIcons();
         }
     }
 }
 
-// Pós-Pagamento Stripe Activation Handlers
+// Post-Payment Stripe Activation Handlers
 function openActivateModal() {
     const modal = document.getElementById('activateModal');
     if (modal) modal.classList.remove('hidden');
@@ -624,7 +624,7 @@ async function submitRegisterEmail() {
 
     if (!email || !email.includes('@')) {
         if (feedback) {
-            feedback.textContent = 'Por favor, digite seu e-mail da compra Stripe.';
+            feedback.textContent = 'Please enter your Stripe checkout email.';
             feedback.className = 'text-xs font-mono text-dangerRose mt-1 block';
         }
         return;
@@ -632,7 +632,7 @@ async function submitRegisterEmail() {
 
     if (btn) {
         btn.disabled = true;
-        btn.innerHTML = `<div class="w-4 h-4 border-2 border-obsidian border-t-transparent rounded-full animate-spin"></div><span>Ativando 90 Dias...</span>`;
+        btn.innerHTML = `<div class="w-4 h-4 border-2 border-obsidian border-t-transparent rounded-full animate-spin"></div><span>Activating 90-Day Access...</span>`;
     }
 
     try {
@@ -653,22 +653,22 @@ async function submitRegisterEmail() {
             closeActivateModal();
             updateProUI();
             renderTokens();
-            showToast('🎉 Parabéns! Seus 3 Meses PRO foram ativados com sucesso!');
+            showToast('🎉 Congratulations! Your 3-Month PRO Pass has been activated!');
         } else {
             if (feedback) {
-                feedback.textContent = data.message || 'Erro ao registrar e-mail.';
+                feedback.textContent = data.message || 'Error registering email.';
                 feedback.className = 'text-xs font-mono text-dangerRose mt-1 block';
             }
         }
     } catch (err) {
         if (feedback) {
-            feedback.textContent = 'Erro ao conectar. Tente novamente.';
+            feedback.textContent = 'Connection error. Please try again.';
             feedback.className = 'text-xs font-mono text-dangerRose mt-1 block';
         }
     } finally {
         if (btn) {
             btn.disabled = false;
-            btn.innerHTML = `<i data-lucide="sparkles" class="w-4 h-4"></i><span>Ativar Meus 90 Dias Agora</span>`;
+            btn.innerHTML = `<i data-lucide="sparkles" class="w-4 h-4"></i><span>Activate My 90 Days Now</span>`;
             if (window.lucide) lucide.createIcons();
         }
     }
@@ -677,11 +677,11 @@ async function submitRegisterEmail() {
 const STRIPE_CHECKOUT_URL = 'https://buy.stripe.com/dRm00c3TZfCX2tTbT60co06';
 
 async function startStripeCheckout() {
-    showToast('Redirecionando para o Checkout Seguro Stripe...');
+    showToast('Redirecting to Secure Stripe Checkout...');
     const btn = document.getElementById('stripeCheckoutBtn');
     if (btn) {
         btn.disabled = true;
-        btn.innerHTML = `<div class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div><span>Conectando à Stripe...</span>`;
+        btn.innerHTML = `<div class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div><span>Connecting to Stripe...</span>`;
     }
 
     setTimeout(() => {
@@ -689,13 +689,13 @@ async function startStripeCheckout() {
     }, 300);
 }
 
-// Inicialização automática com verificação de status
+// Automatic initialization and status verification
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Se acabou de voltar da Stripe com sucesso
+    // 1. If returning from Stripe with success query param
     if (urlParams.get('status') === 'success') {
         openActivateModal();
     } else {
-        // 2. Se já tem e-mail salvo, valida no servidor se ainda está nos 90 dias
+        // 2. If email already stored, verify with server for active 90-day subscription
         const savedEmail = localStorage.getItem('jovx_pro_email');
         if (savedEmail) {
             fetch('/api/auth/verify-email', {
@@ -711,7 +711,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     isProUser = false;
                     localStorage.setItem('jovx_pro', 'false');
-                    showToast('Seu período de 3 meses PRO expirou.');
+                    showToast('Your 3-Month PRO Pass has expired.');
                 }
                 updateProUI();
                 renderTokens();

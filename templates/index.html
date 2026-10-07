@@ -65,7 +65,7 @@
         </div>
 
         <div class="flex items-center space-x-4">
-            <div id="userTierBadge" onclick="toggleProTest()" title="Clique aqui para alternar entre Modo Visitante (Grátis) e Modo PRO" class="cursor-pointer hidden sm:flex items-center space-x-1.5 px-2.5 py-1 rounded border border-surfaceBorder bg-surface hover:border-jovxPurple text-[11px] font-mono text-slate-400 transition select-none">
+            <div id="userTierBadge" onclick="toggleProTest()" title="Click to toggle Free / PRO Mode preview" class="cursor-pointer hidden sm:flex items-center space-x-1.5 px-2.5 py-1 rounded border border-surfaceBorder bg-surface hover:border-jovxPurple text-[11px] font-mono text-slate-400 transition select-none">
                 <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
                 <span id="userTierText">FREE TIER (5 PRO GEMS LOCKED)</span>
             </div>
@@ -73,9 +73,9 @@
                 <i data-lucide="volume-2" id="soundIcon" class="w-3.5 h-3.5 text-jovxNeon"></i>
                 <span id="soundLabel">SOUND: ON</span>
             </button>
-            <button onclick="openLoginModal()" id="loginBtn" class="px-3 py-1 rounded-lg bg-surface border border-jovxPurple/70 hover:border-jovxNeon text-jovxNeon hover:text-white font-bold transition flex items-center space-x-1.5 shadow-md shadow-purple-900/30" title="Já assinou? Acesse com seu e-mail em qualquer aparelho">
+            <button onclick="openLoginModal()" id="loginBtn" class="px-3 py-1 rounded-lg bg-surface border border-jovxPurple/70 hover:border-jovxNeon text-jovxNeon hover:text-white font-bold transition flex items-center space-x-1.5 shadow-md shadow-purple-900/30" title="Already subscribed? Access with your email on any device">
                 <i data-lucide="key" class="w-3.5 h-3.5 text-jovxNeon"></i>
-                <span>JÁ SOU PRO</span>
+                <span>ALREADY PRO?</span>
             </button>
             <button onclick="openProModal()" id="headerUpgradeBtn" class="px-3 py-1 rounded bg-gradient-to-r from-jovxDarkPurple to-jovxPurple hover:from-purple-600 hover:to-jovxNeon text-white font-semibold transition shadow-lg shadow-purple-900/40 flex items-center space-x-1.5">
                 <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
@@ -295,7 +295,7 @@
                 </div>
             </div>
         </div>
-    <!-- LOGIN / RESTAURAR ACESSO MODAL -->
+    <!-- LOGIN / RESTORE ACCESS MODAL -->
     <div id="loginModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-surface border border-jovxPurple/60 rounded-2xl max-w-md w-full p-6 relative shadow-2xl shadow-purple-900/50">
             <button onclick="closeLoginModal()" class="absolute top-5 right-5 text-slate-400 hover:text-white transition">
@@ -307,22 +307,22 @@
                         <i data-lucide="key" class="w-5 h-5 text-jovxNeon"></i>
                     </div>
                     <div>
-                        <h3 class="text-xl font-bold text-white">Acesso PRO (3 Meses)</h3>
-                        <p class="text-xs text-slate-400">Restaurar acesso em qualquer celular ou PC</p>
+                        <h3 class="text-xl font-bold text-white">PRO Access (3 Months)</h3>
+                        <p class="text-xs text-slate-400">Restore access on any phone, tablet, or desktop</p>
                     </div>
                 </div>
                 <p class="text-xs text-slate-300">
-                    Digite o mesmo <strong>e-mail</strong> que você utilizou no checkout da Stripe para desbloquear o terminal.
+                    Enter the same <strong>email address</strong> you used at Stripe checkout to unlock the terminal.
                 </p>
                 <div class="space-y-2">
-                    <input type="email" id="loginEmailInput" placeholder="seu-email@exemplo.com" class="w-full bg-obsidian border border-surfaceBorder rounded-lg px-3.5 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-jovxPurple font-mono text-sm">
+                    <input type="email" id="loginEmailInput" placeholder="your-email@example.com" class="w-full bg-obsidian border border-surfaceBorder rounded-lg px-3.5 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-jovxPurple font-mono text-sm">
                     <div id="loginFeedback" class="text-xs font-mono hidden"></div>
                 </div>
                 <div class="flex items-center justify-end space-x-2 pt-2">
-                    <button onclick="closeLoginModal()" class="px-4 py-2 rounded-lg bg-surface border border-surfaceBorder text-slate-400 hover:text-white text-xs font-semibold">Cancelar</button>
+                    <button onclick="closeLoginModal()" class="px-4 py-2 rounded-lg bg-surface border border-surfaceBorder text-slate-400 hover:text-white text-xs font-semibold">Cancel</button>
                     <button onclick="submitVerifyEmail()" id="verifyEmailBtn" class="px-5 py-2 rounded-lg bg-jovxPurple hover:bg-purple-600 text-white text-xs font-bold transition flex items-center space-x-1.5 shadow-lg shadow-purple-900/40">
                         <i data-lucide="check" class="w-4 h-4"></i>
-                        <span>Entrar / Liberar</span>
+                        <span>Verify & Unlock</span>
                     </button>
                 </div>
             </div>
@@ -338,20 +338,20 @@
                         <i data-lucide="check-circle" class="w-6 h-6 text-alphaGreen"></i>
                     </div>
                     <div>
-                        <h3 class="text-xl font-black text-white">🎉 Pagamento Confirmado!</h3>
-                        <p class="text-xs text-alphaGreen font-mono font-semibold">JOVX PRO — 3 Meses Ativo</p>
+                        <h3 class="text-xl font-black text-white">🎉 Payment Confirmed!</h3>
+                        <p class="text-xs text-alphaGreen font-mono font-semibold">JOVX PRO — 3 Months Active Pass</p>
                     </div>
                 </div>
                 <p class="text-xs text-slate-300">
-                    Para garantir que seu acesso dure <strong>90 dias</strong> e você possa usá-lo também no celular ou outro computador, confirme seu <strong>e-mail</strong> abaixo:
+                    To lock in your <strong>90-day access</strong> across all your devices, confirm your <strong>email</strong> below:
                 </p>
                 <div class="space-y-2">
-                    <input type="email" id="activateEmailInput" placeholder="seu-email-da-stripe@exemplo.com" class="w-full bg-obsidian border border-surfaceBorder rounded-lg px-3.5 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-alphaGreen font-mono text-sm">
+                    <input type="email" id="activateEmailInput" placeholder="your-stripe-email@example.com" class="w-full bg-obsidian border border-surfaceBorder rounded-lg px-3.5 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-alphaGreen font-mono text-sm">
                     <div id="activateFeedback" class="text-xs font-mono hidden"></div>
                 </div>
                 <button onclick="submitRegisterEmail()" id="registerEmailBtn" class="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-alphaGreen text-obsidian font-black text-sm transition flex items-center justify-center space-x-2 shadow-lg shadow-emerald-900/40">
                     <i data-lucide="sparkles" class="w-4 h-4"></i>
-                    <span>Ativar Meus 90 Dias Agora</span>
+                    <span>Activate My 90-Day Access Now</span>
                 </button>
             </div>
         </div>
