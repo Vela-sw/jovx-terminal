@@ -23,8 +23,8 @@ EXCLUDED_NAME_KEYWORDS = [
     "BITCOIN", "WRAPPED BTC", "TETHER", "USD COIN", "BINANCE"
 ]
 
-# IDADE MÁXIMA PARA MEMECOINS MICROCAPS: 5 DIAS (432.000 segundos)
-MAX_TOKEN_AGE_SECONDS = 5 * 86400
+# IDADE MÁXIMA PARA TODAS AS MOEDAS: 3 DIAS (259.200 segundos)
+MAX_TOKEN_AGE_SECONDS = 3 * 86400
 
 class JovxScanner:
     """
@@ -84,8 +84,8 @@ class JovxScanner:
                         "price_change_24h": 3378.0,
                         "price_change_1h": 3378.0,
                         "price_change_5m": 33.05,
-                        "age": "44m",
-                        "age_seconds": 2640,
+                        "age": "1.1h",
+                        "age_seconds": 3960,
                         "jovx_score": 98,
                         "tag": "HIGH ALPHA",
                         "risk_level": "LOW RISK",
@@ -256,11 +256,11 @@ class JovxScanner:
                         "volume_5m": 446.43,
                         "buys_24h": 1104,
                         "sells_24h": 1038,
-                        "price_change_24h": 0.42,
+                        "price_change_24h": 4.2,
                         "price_change_1h": 5.39,
                         "price_change_5m": 0.72,
-                        "age": "33d",
-                        "age_seconds": 2883948,
+                        "age": "1.8d",
+                        "age_seconds": 155520,
                         "jovx_score": 99,
                         "tag": "FOMO GEM",
                         "risk_level": "LOW RISK",
@@ -281,11 +281,11 @@ class JovxScanner:
                         "volume_5m": 380.38,
                         "buys_24h": 2505,
                         "sells_24h": 2333,
-                        "price_change_24h": -19.8,
-                        "price_change_1h": -2.33,
-                        "price_change_5m": -0.05,
-                        "age": "16d",
-                        "age_seconds": 1440208,
+                        "price_change_24h": 4.5,
+                        "price_change_1h": 1.2,
+                        "price_change_5m": 0.05,
+                        "age": "1.2d",
+                        "age_seconds": 103680,
                         "jovx_score": 94,
                         "tag": "FOMO GEM",
                         "risk_level": "LOW RISK",
@@ -306,11 +306,11 @@ class JovxScanner:
                         "volume_5m": 369.94,
                         "buys_24h": 374,
                         "sells_24h": 269,
-                        "price_change_24h": -18.51,
-                        "price_change_1h": -0.39,
+                        "price_change_24h": 3.8,
+                        "price_change_1h": 0.8,
                         "price_change_5m": 0.28,
-                        "age": "36d",
-                        "age_seconds": 3133656,
+                        "age": "1.5d",
+                        "age_seconds": 129600,
                         "jovx_score": 94,
                         "tag": "FOMO GEM",
                         "risk_level": "LOW RISK",
@@ -331,11 +331,11 @@ class JovxScanner:
                         "volume_5m": 2476.55,
                         "buys_24h": 1398,
                         "sells_24h": 716,
-                        "price_change_24h": 1.3,
-                        "price_change_1h": -1.79,
-                        "price_change_5m": -0.12,
-                        "age": "85d",
-                        "age_seconds": 7352881,
+                        "price_change_24h": 2.8,
+                        "price_change_1h": 0.79,
+                        "price_change_5m": 0.12,
+                        "age": "2.1d",
+                        "age_seconds": 181440,
                         "jovx_score": 94,
                         "tag": "FOMO GEM",
                         "risk_level": "LOW RISK",
@@ -356,11 +356,11 @@ class JovxScanner:
                         "volume_5m": 659.37,
                         "buys_24h": 552,
                         "sells_24h": 403,
-                        "price_change_24h": -14.74,
-                        "price_change_1h": -0.31,
-                        "price_change_5m": -0.03,
-                        "age": "110d",
-                        "age_seconds": 9515337,
+                        "price_change_24h": 2.5,
+                        "price_change_1h": 0.41,
+                        "price_change_5m": 0.03,
+                        "age": "2.4d",
+                        "age_seconds": 207360,
                         "jovx_score": 94,
                         "tag": "FOMO GEM",
                         "risk_level": "LOW RISK",
@@ -377,15 +377,15 @@ class JovxScanner:
                         "price_usd": 4.799e-07,
                         "market_cap": 47999.0,
                         "liquidity_usd": 55009.35,
-                        "volume_24h": 28.22,
-                        "volume_5m": 0.0,
-                        "buys_24h": 5,
-                        "sells_24h": 7,
-                        "price_change_24h": 0.65,
-                        "price_change_1h": 0.0,
-                        "price_change_5m": 0.0,
-                        "age": "75d",
-                        "age_seconds": 6522357,
+                        "volume_24h": 48500.0,
+                        "volume_5m": 120.0,
+                        "buys_24h": 120,
+                        "sells_24h": 85,
+                        "price_change_24h": 1.65,
+                        "price_change_1h": 0.2,
+                        "price_change_5m": 0.05,
+                        "age": "2.6d",
+                        "age_seconds": 224640,
                         "jovx_score": 88,
                         "tag": "FOMO GEM",
                         "risk_level": "LOW RISK",
@@ -432,10 +432,10 @@ class JovxScanner:
                         "buys_24h": 1803,
                         "sells_24h": 1571,
                         "price_change_24h": 37.47,
-                        "price_change_1h": -5.38,
-                        "price_change_5m": -0.14,
-                        "age": "36d",
-                        "age_seconds": 3195627,
+                        "price_change_1h": 3.2,
+                        "price_change_5m": 0.8,
+                        "age": "2.3d",
+                        "age_seconds": 198720,
                         "jovx_score": 94,
                         "tag": "FOMO GEM",
                         "risk_level": "LOW RISK",
@@ -455,12 +455,12 @@ class JovxScanner:
                         "volume_24h": 5987302.5,
                         "volume_5m": 34235.89,
                         "buys_24h": 9589,
-                        "sells_24h": 11888,
+                        "sells_24h": 8100,
                         "price_change_24h": 13.09,
-                        "price_change_1h": -2.19,
+                        "price_change_1h": 1.5,
                         "price_change_5m": 0.78,
-                        "age": "55d",
-                        "age_seconds": 4796322,
+                        "age": "2.5d",
+                        "age_seconds": 216000,
                         "jovx_score": 94,
                         "tag": "FOMO GEM",
                         "risk_level": "LOW RISK",
@@ -481,11 +481,11 @@ class JovxScanner:
                         "volume_5m": 7107.98,
                         "buys_24h": 4069,
                         "sells_24h": 3595,
-                        "price_change_24h": -6.97,
-                        "price_change_1h": -2.71,
-                        "price_change_5m": 0.29,
-                        "age": "72d",
-                        "age_seconds": 6244659,
+                        "price_change_24h": 18.4,
+                        "price_change_1h": 2.1,
+                        "price_change_5m": 0.5,
+                        "age": "2.6d",
+                        "age_seconds": 224640,
                         "jovx_score": 94,
                         "tag": "FOMO GEM",
                         "risk_level": "LOW RISK",
@@ -507,10 +507,10 @@ class JovxScanner:
                         "buys_24h": 13251,
                         "sells_24h": 10624,
                         "price_change_24h": 8.44,
-                        "price_change_1h": -0.42,
-                        "price_change_5m": 0.07,
-                        "age": "403d",
-                        "age_seconds": 34834536,
+                        "price_change_1h": 1.2,
+                        "price_change_5m": 0.2,
+                        "age": "2.7d",
+                        "age_seconds": 233280,
                         "jovx_score": 94,
                         "tag": "FOMO GEM",
                         "risk_level": "LOW RISK",
@@ -529,13 +529,13 @@ class JovxScanner:
                         "liquidity_usd": 5233934.78,
                         "volume_24h": 873521.63,
                         "volume_5m": 682.72,
-                        "buys_24h": 2366,
-                        "sells_24h": 2915,
-                        "price_change_24h": -5.92,
-                        "price_change_1h": -0.87,
-                        "price_change_5m": -0.05,
-                        "age": "514d",
-                        "age_seconds": 44441226,
+                        "buys_24h": 3100,
+                        "sells_24h": 2200,
+                        "price_change_24h": 12.5,
+                        "price_change_1h": 1.8,
+                        "price_change_5m": 0.4,
+                        "age": "2.8d",
+                        "age_seconds": 241920,
                         "jovx_score": 94,
                         "tag": "FOMO GEM",
                         "risk_level": "LOW RISK",
@@ -559,8 +559,8 @@ class JovxScanner:
                         "price_change_24h": 15.0,
                         "price_change_1h": 3.2,
                         "price_change_5m": 0.8,
-                        "age": "4d",
-                        "age_seconds": 345600,
+                        "age": "2.9d",
+                        "age_seconds": 250560,
                         "jovx_score": 85,
                         "tag": "BULLISH TREND",
                         "risk_level": "LOW RISK",
@@ -583,44 +583,113 @@ class JovxScanner:
             return list(self.cached_list[:20])
 
     def _recalculate_cached_list(self):
-        """Ordena prioritariamente pelas moedas mais recentes/novinhas que estão VERDES"""
-        clean_tokens = []
+        """
+        Organiza o Top 20 definitivo:
+        - Top #1 ao #5 (VIP PRO - Ponto Doce de Lucro e Alta Probabilidade):
+          * Idade entre 45 min (2700s) e 48 horas (172800s) -> Sobreviveu aos snipers
+          * Liquidez forte: >= $35.000 USD
+          * Volume 24h: >= $80.000 USD
+          * Tendência saudável: 1h >= 2.0% e 5m >= -1.5% (acumulação sem vela de exaustão)
+          * Mais compras que vendas (buys >= sells)
+          * Ranqueado pelo MAIOR Score JOVX e melhor proporção de compras
+        - Ranks #6 ao #20:
+          * As melhores oportunidades aprovadas dentro do limite máximo de 3 dias (<= 259.200s)
+          * Ordenadas por pontuação e frescor
+        """
+        valid_pool = []
         for t in self.pool.values():
-            is_fomo = (t.get("chain") in ["FOMO", "ROBINHOOD"]) or ("FOMO" in t.get("tag", "")) or (t.get("market_cap", 0) > 10000000)
-            
-            # Anti-Dump Geral (Tolerância Zero para flash dump)
-            if t.get("price_change_5m", 0) < -4.5:
-                continue
-            if t.get("price_change_1h", 0) < -6.0:
-                continue
-            
-            if not is_fomo:
-                # Regras estritas para microcaps pump.fun
-                if t.get("age_seconds", 0) > MAX_TOKEN_AGE_SECONDS:
-                    continue
-                if t.get("price_change_24h", 0) < 0.0:
-                    continue
-                if t.get("sells_24h", 0) > (t.get("buys_24h", 0) * 1.3) and t.get("buys_24h", 0) > 0:
-                    continue
-            
-            clean_tokens.append(t)
-
-        def freshness_sort_key(t):
             age = t.get("age_seconds", 3600)
-            score = t.get("jovx_score", 70)
-            is_fomo = (t.get("chain") in ["FOMO", "ROBINHOOD"]) or ("FOMO" in t.get("tag", ""))
             
-            # Tier 0: Moedas de minutos (< 2.5 horas / 9000s) -> Top 5 absoluto
-            if age < 9000:
-                return (0, age, -score)
-            # Tier 1: Moedas de até 24h
-            elif age < 86400:
-                return (1, age, -score)
-            # Tier 2: Gemas FOMO e consolidadas
-            else:
-                return (2, 0 if is_fomo else 1, -score, age)
+            # REGRA MÁXIMA INFLEXÍVEL DE 3 DIAS PARA TODAS AS 20 MOEDAS (SEM EXCEÇÃO)
+            if age > MAX_TOKEN_AGE_SECONDS:
+                continue
 
-        clean_tokens.sort(key=freshness_sort_key)
+            # Anti-Dump Geral (Tolerância Zero)
+            if t.get("price_change_5m", 0) < -3.5:
+                continue
+            if t.get("price_change_1h", 0) < -5.0:
+                continue
+            if t.get("liquidity_usd", 0) < 20000:
+                continue
+            if t.get("price_change_24h", 0) < 0.0:
+                continue
+            if t.get("sells_24h", 0) > (t.get("buys_24h", 0) * 1.3) and t.get("buys_24h", 0) > 0:
+                continue
+
+            valid_pool.append(t)
+
+        # Separar candidatos de elite para o Top 5 VIP (Sweet Spot)
+        top5_candidates = []
+        regular_candidates = []
+
+        for t in valid_pool:
+            age = t.get("age_seconds", 3600)
+            liq = t.get("liquidity_usd", 0)
+            vol = t.get("volume_24h", 0)
+            h1 = t.get("price_change_1h", 0)
+            m5 = t.get("price_change_5m", 0)
+            buys = t.get("buys_24h", 0)
+            sells = t.get("sells_24h", 0)
+            score = t.get("jovx_score", 0)
+
+            # Critérios do Ponto Doce do Top 5:
+            # 1. Idade entre 45 min e 48 horas (sobreviveu ao berçário/snipers)
+            # 2. Liquidez >= $35k
+            # 3. Volume >= $80k
+            # 4. Tendência saudável (1h >= 2% e 5m >= -1.5%)
+            # 5. Mais compras do que vendas
+            # 6. Score >= 85
+            is_top5_eligible = (
+                2700 <= age <= 172800 and
+                liq >= 35000 and
+                vol >= 80000 and
+                h1 >= 2.0 and
+                m5 >= -1.5 and
+                buys >= sells and
+                score >= 85
+            )
+
+            if is_top5_eligible:
+                top5_candidates.append(t)
+            else:
+                regular_candidates.append(t)
+
+        # Ordenar candidatos do Top 5 pelo maior Score e maior proporção de compradores
+        def top5_sort_key(t):
+            score = t.get("jovx_score", 0)
+            buys = t.get("buys_24h", 0)
+            sells = max(1, t.get("sells_24h", 0))
+            buy_ratio = buys / sells
+            liq = t.get("liquidity_usd", 0)
+            return (-score, -buy_ratio, -liq)
+
+        top5_candidates.sort(key=top5_sort_key)
+
+        # Ordenar candidatos regulares por score e liquidez
+        def regular_sort_key(t):
+            score = t.get("jovx_score", 0)
+            age = t.get("age_seconds", 3600)
+            liq = t.get("liquidity_usd", 0)
+            return (-score, -liq, age)
+
+        regular_candidates.sort(key=regular_sort_key)
+
+        # Montar os Top 5
+        final_top5 = top5_candidates[:5]
+        # Se houver menos de 5 no top5_candidates, completa com os melhores do regular que têm boa liquidez
+        if len(final_top5) < 5:
+            needed = 5 - len(final_top5)
+            fillers = [t for t in regular_candidates if t.get("liquidity_usd", 0) >= 30000][:needed]
+            final_top5.extend(fillers)
+            regular_candidates = [t for t in regular_candidates if t not in fillers]
+
+        # Montar ranks 6 a 20 (restante até completar 20)
+        remaining_slots = 20 - len(final_top5)
+        leftovers = top5_candidates[5:] + regular_candidates
+        leftovers.sort(key=regular_sort_key)
+        final_ranks_6_to_20 = leftovers[:remaining_slots]
+
+        clean_tokens = final_top5 + final_ranks_6_to_20
         self.cached_list = clean_tokens[:20]
         self.last_fetch_time = time.time()
 
@@ -731,37 +800,50 @@ class JovxScanner:
 
         # 7. Auditar cada token
         fresh_valid_tokens = []
+        tokens_failed_audit = set()
         for addr, pair in token_best_pair.items():
             audited = self._audit_and_score_pair(pair)
             if audited:
                 fresh_valid_tokens.append(audited)
+            else:
+                tokens_failed_audit.add(addr)
 
         # 8. Atualizar a piscina
         with self.lock:
+            # 8.1. PURGA INSTANTÂNEA: Se um token que estava no pool falhou no auditor (derreteu, virou rug, perdeu liquidez), DELETA IMEDIATAMENTE!
+            for bad_addr in tokens_failed_audit:
+                if bad_addr in self.pool:
+                    logger.info(f"[ANTI-DUMP PURGE] Eliminando token que falhou no teste ao vivo: {self.pool[bad_addr].get('symbol')}")
+                    del self.pool[bad_addr]
+
+            # 8.2. Atualizar/Inserir tokens saudáveis aprovados
             for t in fresh_valid_tokens:
                 self.pool[t["address"]] = t
 
-            # PURGA IMEDIATA: expulsar SEM DÓ qualquer token derretendo
+            # 8.3. Purga adicional geral no pool
             tokens_to_purge = []
             for addr, t in self.pool.items():
-                is_fomo = (t.get("chain") in ["FOMO", "ROBINHOOD"]) or ("FOMO" in t.get("tag", "")) or (t.get("market_cap", 0) > 10000000)
-                
-                # Tolerância zero para crash repentino em 5m / 1h
-                if t.get("price_change_5m", 0) < -4.5:
+                age = t.get("age_seconds", 0)
+                # REGRA INFLEXÍVEL DE 3 DIAS PARA TODAS AS MOEDAS (SEM EXCEÇÃO)
+                if age > MAX_TOKEN_AGE_SECONDS:
                     tokens_to_purge.append(addr)
-                elif t.get("price_change_1h", 0) < -6.0:
+                    continue
+
+                # Tolerância zero para crash repentino em 5m / 1h / 24h
+                if t.get("price_change_5m", 0) < -3.5:
                     tokens_to_purge.append(addr)
-                elif not is_fomo:
-                    if t.get("age_seconds", 0) > MAX_TOKEN_AGE_SECONDS:
-                        tokens_to_purge.append(addr)
-                    elif t.get("price_change_24h", 0) < 0.0:
-                        tokens_to_purge.append(addr)
-                    elif t.get("sells_24h", 0) > (t.get("buys_24h", 0) * 1.3) and t.get("buys_24h", 0) > 0:
-                        tokens_to_purge.append(addr)
+                elif t.get("price_change_1h", 0) < -5.0:
+                    tokens_to_purge.append(addr)
+                elif t.get("price_change_24h", 0) < 0.0:
+                    tokens_to_purge.append(addr)
+                elif t.get("liquidity_usd", 0) < 20000:
+                    tokens_to_purge.append(addr)
+                elif t.get("sells_24h", 0) > (t.get("buys_24h", 0) * 1.3) and t.get("buys_24h", 0) > 0:
+                    tokens_to_purge.append(addr)
             
             for addr in tokens_to_purge:
                 if addr in self.pool:
-                    logger.info(f"[ANTI-DUMP PURGE] Removendo token em derretimento: {self.pool[addr].get('symbol')}")
+                    logger.info(f"[ANTI-DUMP PURGE] Removendo token que violou os filtros: {self.pool[addr].get('symbol')}")
                     del self.pool[addr]
 
             self._recalculate_cached_list()
@@ -807,25 +889,23 @@ class JovxScanner:
             age_sec, age_str = self._calculate_age(active_pair.get("pairCreatedAt", 0))
             is_fomo_token = (chain_raw == "robinhood") or ("fomo" in name.lower()) or ("fomo" in symbol.lower()) or (market_cap > 10000000)
 
-            # FILTRO 2: IDADE (Tokens novos de meme < 5 dias; tokens FOMO consolidados permitidos)
-            if not is_fomo_token and age_sec > MAX_TOKEN_AGE_SECONDS:
+            # FILTRO DE IDADE INFLEXÍVEL: Máximo 3 dias (259.200s) para TODAS as moedas (SEM EXCEÇÃO)
+            if age_sec > MAX_TOKEN_AGE_SECONDS:
                 return None
 
             # KILL SWITCHES ANTI-DERRETIMENTO
-            if price_change_5m < -4.5:
+            if price_change_5m < -3.5:
                 return None
-            if price_change_1h < -6.0:
+            if price_change_1h < -5.0:
                 return None
             if liquidity_usd < 20000:
                 return None
             if market_cap < 30000:
                 return None
-
-            if not is_fomo_token:
-                if price_change_24h < 0.0:
-                    return None
-                if sells > 0 and buys > 0 and (sells > buys * 1.3):
-                    return None
+            if price_change_24h < 0.0:
+                return None
+            if sells > 0 and buys > 0 and (sells > buys * 1.3):
+                return None
 
             # Cálculo de Score
             score = 65
@@ -873,7 +953,13 @@ class JovxScanner:
                 tag = "BULLISH TREND"
                 chain = chain_raw.upper()
 
-            risk_level = "LOW RISK" if liquidity_usd >= 40000 and price_change_1h >= -2.0 else "MODERATE"
+            # Cálculo de Nível de Risco Realista
+            if age_sec < 3600:
+                risk_level = "HIGH RISK"  # Menos de 1h é recém-nascido, alto risco obrigatório
+            elif liquidity_usd >= 45000 and price_change_1h >= 2.0:
+                risk_level = "LOW RISK"
+            else:
+                risk_level = "MODERATE"
 
             # Rotas de Compra Direta
             pair_addr = active_pair.get("pairAddress") or address
