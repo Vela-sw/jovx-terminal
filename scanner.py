@@ -49,6 +49,7 @@ class JovxScanner:
         self.search_url = "https://api.dexscreener.com/latest/dex/search"
         
         self.pool = {}
+        self.fallback_reserve = []
         self.cached_list = []
         self.last_fetch_time = time.time()
         self.lock = threading.Lock()
@@ -581,6 +582,7 @@ class JovxScanner:
             }
 ]
         with self.lock:
+            self.fallback_reserve = list(seeds)
             for s in seeds:
                 self.pool[s["address"]] = s
             self._recalculate_cached_list()
@@ -706,6 +708,18 @@ class JovxScanner:
         final_ranks_6_to_20 = leftovers[:remaining_slots]
 
         clean_tokens = final_top5 + final_ranks_6_to_20
+
+        # GARANTIA ABSOLUTA DE 20 MOEDAS FIXAS:
+        # Se a purga removeu tokens e a lista tiver menos de 20, completa com a reserva técnica
+        if len(clean_tokens) < 20 and hasattr(self, 'fallback_reserve') and self.fallback_reserve:
+            existing_addrs = {t.get("address") for t in clean_tokens}
+            for fb in self.fallback_reserve:
+                if fb.get("address") not in existing_addrs:
+                    clean_tokens.append(fb)
+                    existing_addrs.add(fb.get("address"))
+                    if len(clean_tokens) >= 20:
+                        break
+
         self.cached_list = clean_tokens[:20]
         self.last_fetch_time = time.time()
 
@@ -857,6 +871,11 @@ class JovxScanner:
             # 8.2. Atualizar/Inserir tokens saudáveis aprovados
             for t in fresh_valid_tokens:
                 self.pool[t["address"]] = t
+                if hasattr(self, 'fallback_reserve') and t["address"] not in {r.get("address") for r in self.fallback_reserve}:
+                    self.fallback_reserve.append(t)
+
+            if hasattr(self, 'fallback_reserve'):
+                self.fallback_reserve = [r for r in self.fallback_reserve if r.get("age_seconds", 0) <= MAX_TOKEN_AGE_SECONDS][:40]
 
             # 8.3. Purga adicional geral no pool
             tokens_to_purge = []
