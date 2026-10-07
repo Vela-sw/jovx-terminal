@@ -224,7 +224,7 @@ class JovxScanner:
                         "age_seconds": 13680,
                         "jovx_score": 99,
                         "tag": "HIGH ALPHA",
-                        "risk_level": "PRIME ALPHA 🚀",
+                        "risk_level": "LOW RISK 🛡️",
                         "buy_url": "https://jup.ag/swap/SOL-2BVfJ4AHMvHdKtEZNHaBr48dQzTfZvYkjaaxbM6bpump",
                         "dex_platform": "JUPITER (SOL)",
                         "pair_url": "https://dexscreener.com/solana/69fyvgotxqxbdv7tazd99m1vycwos3pyjkj8rrffzszj",
@@ -249,7 +249,7 @@ class JovxScanner:
                         "age_seconds": 15480,
                         "jovx_score": 98,
                         "tag": "HIGH ALPHA",
-                        "risk_level": "PRIME ALPHA 🚀",
+                        "risk_level": "LOW RISK 🛡️",
                         "buy_url": "https://jup.ag/swap/SOL-BZ8pkWUs4TjboT2xHRCwg3o6PK8xkvmNewvqMyyfpump",
                         "dex_platform": "JUPITER (SOL)",
                         "pair_url": "https://dexscreener.com/solana/dx8t9f6hzn1xx7ykzjeecc7n6wfptaicq6d3euypayum",
@@ -274,7 +274,7 @@ class JovxScanner:
                         "age_seconds": 155520,
                         "jovx_score": 99,
                         "tag": "FOMO GEM",
-                        "risk_level": "PRIME ALPHA 🚀",
+                        "risk_level": "LOW RISK 🛡️",
                         "buy_url": "https://dexscreener.com/robinhood/0x7aebd80541bfaaf23dbb6e99ce13d4d31c1a84c91414f971eadbff7db5f85995",
                         "dex_platform": "FOMO / ROBINHOOD",
                         "pair_url": "https://dexscreener.com/robinhood/0x7aebd80541bfaaf23dbb6e99ce13d4d31c1a84c91414f971eadbff7db5f85995",
@@ -299,7 +299,7 @@ class JovxScanner:
                         "age_seconds": 103680,
                         "jovx_score": 94,
                         "tag": "FOMO GEM",
-                        "risk_level": "PRIME ALPHA 🚀",
+                        "risk_level": "ACCUMULATING 💎",
                         "buy_url": "https://dexscreener.com/robinhood/0xea9f200e13055b82f175f44f592c4c13dd8c9d9320a66487d3c5cd90d68550ef",
                         "dex_platform": "FOMO / ROBINHOOD",
                         "pair_url": "https://dexscreener.com/robinhood/0xea9f200e13055b82f175f44f592c4c13dd8c9d9320a66487d3c5cd90d68550ef",
@@ -324,7 +324,7 @@ class JovxScanner:
                         "age_seconds": 129600,
                         "jovx_score": 94,
                         "tag": "FOMO GEM",
-                        "risk_level": "PRIME ALPHA 🚀",
+                        "risk_level": "LOW RISK 🛡️",
                         "buy_url": "https://dexscreener.com/robinhood/0xfec7b1efe77aa60887986db5bcbfff39ca40b56d964bb8ce3d9dd0d9baaca4d4",
                         "dex_platform": "FOMO / ROBINHOOD",
                         "pair_url": "https://dexscreener.com/robinhood/0xfec7b1efe77aa60887986db5bcbfff39ca40b56d964bb8ce3d9dd0d9baaca4d4",
@@ -349,7 +349,7 @@ class JovxScanner:
                         "age_seconds": 181440,
                         "jovx_score": 94,
                         "tag": "FOMO GEM",
-                        "risk_level": "PRIME ALPHA 🚀",
+                        "risk_level": "ACCUMULATING 💎",
                         "buy_url": "https://dexscreener.com/robinhood/0x10CC6BD38112cAc182db90B6a71d8Bb5939526bA",
                         "dex_platform": "FOMO / ROBINHOOD",
                         "pair_url": "https://dexscreener.com/robinhood/0x10cc6bd38112cac182db90b6a71d8bb5939526ba",
@@ -374,7 +374,7 @@ class JovxScanner:
                         "age_seconds": 207360,
                         "jovx_score": 94,
                         "tag": "FOMO GEM",
-                        "risk_level": "PRIME ALPHA 🚀",
+                        "risk_level": "LOW RISK 🛡️",
                         "buy_url": "https://dexscreener.com/robinhood/0xA70fc67C9F69da90B63a0e4C05D229954574E313",
                         "dex_platform": "FOMO / ROBINHOOD",
                         "pair_url": "https://dexscreener.com/robinhood/0xa70fc67c9f69da90b63a0e4c05d229954574e313",
@@ -399,7 +399,7 @@ class JovxScanner:
                         "age_seconds": 224640,
                         "jovx_score": 88,
                         "tag": "FOMO GEM",
-                        "risk_level": "PRIME ALPHA 🚀",
+                        "risk_level": "ACCUMULATING 💎",
                         "buy_url": "https://dexscreener.com/robinhood/0x94d40a947551b06802705277bcedbb7c2ea2d789b1aba763e208fd5141dccab6",
                         "dex_platform": "FOMO / ROBINHOOD",
                         "pair_url": "https://dexscreener.com/robinhood/0x94d40a947551b06802705277bcedbb7c2ea2d789b1aba763e208fd5141dccab6",
@@ -424,7 +424,7 @@ class JovxScanner:
                         "age_seconds": 86400,
                         "jovx_score": 95,
                         "tag": "HIGH ALPHA",
-                        "risk_level": "PRIME ALPHA 🚀",
+                        "risk_level": "LOW RISK 🛡️",
                         "buy_url": "https://jup.ag/swap/SOL-GyWkSn2ah7dqLyPeZAjEZmfxuU2H4nwfGvgJhfYDVegn",
                         "dex_platform": "JUPITER (SOL)",
                         "pair_url": "https://dexscreener.com/solana/cnwmuoehufxq2y1hfq67ttnks8zis3eujy6ksfsspsph",
@@ -449,7 +449,7 @@ class JovxScanner:
                         "age_seconds": 198720,
                         "jovx_score": 94,
                         "tag": "FOMO GEM",
-                        "risk_level": "PRIME ALPHA 🚀",
+                        "risk_level": "LOW RISK 🛡️",
                         "buy_url": "https://jup.ag/swap/SOL-HcRLc9VDgjLeK154xDawfb1dmVJ98DoSqcwTHGqiDeJR",
                         "dex_platform": "FOMO / JUPITER (SOL)",
                         "pair_url": "https://dexscreener.com/solana/btccxxtfi7a9xjte1exkn38jgie35s6gnerxd8dm61rc",
@@ -474,7 +474,7 @@ class JovxScanner:
                         "age_seconds": 216000,
                         "jovx_score": 94,
                         "tag": "FOMO GEM",
-                        "risk_level": "PRIME ALPHA 🚀",
+                        "risk_level": "ACCUMULATING 💎",
                         "buy_url": "https://jup.ag/swap/SOL-6GmAFSYs4gk3FDao5FzzySQpPZaWsa4rUJHacpMpUNgx",
                         "dex_platform": "FOMO / JUPITER (SOL)",
                         "pair_url": "https://dexscreener.com/solana/zxtpi4btawx3mgdapoezkmd1hxx8cdecfrqxmwvsclx",
@@ -499,7 +499,7 @@ class JovxScanner:
                         "age_seconds": 224640,
                         "jovx_score": 94,
                         "tag": "FOMO GEM",
-                        "risk_level": "PRIME ALPHA 🚀",
+                        "risk_level": "LOW RISK 🛡️",
                         "buy_url": "https://jup.ag/swap/SOL-Ai66LHZG9MCzg1WKdawwqduVAXpNDUuV8M3uyq5ppump",
                         "dex_platform": "FOMO / JUPITER (SOL)",
                         "pair_url": "https://dexscreener.com/solana/hmzvseemtzhhvznw9uwbag85hctmfnkbhzux16cy7ca3",
@@ -524,7 +524,7 @@ class JovxScanner:
                         "age_seconds": 233280,
                         "jovx_score": 94,
                         "tag": "FOMO GEM",
-                        "risk_level": "PRIME ALPHA 🚀",
+                        "risk_level": "LOW RISK 🛡️",
                         "buy_url": "https://jup.ag/swap/SOL-CARDSccUMFKoPRZxt5vt3ksUbxEFEcnZ3H2pd3dKxYjp",
                         "dex_platform": "FOMO / JUPITER (SOL)",
                         "pair_url": "https://dexscreener.com/solana/hnhpjpjgbg2kwnimtnw8cvbhvk1hfog3rc3kjnyc23td",
@@ -549,7 +549,7 @@ class JovxScanner:
                         "age_seconds": 241920,
                         "jovx_score": 94,
                         "tag": "FOMO GEM",
-                        "risk_level": "PRIME ALPHA 🚀",
+                        "risk_level": "ACCUMULATING 💎",
                         "buy_url": "https://jup.ag/swap/SOL-Dz9mQ9NzkBcCsuGPFJ3r1bS4wgqKMHBPiVuniW8Mbonk",
                         "dex_platform": "FOMO / JUPITER (SOL)",
                         "pair_url": "https://dexscreener.com/solana/q2sphpduwfmg7m7wwrqklrn619caucfrsmhvjffodsp",
@@ -574,7 +574,7 @@ class JovxScanner:
                         "age_seconds": 250560,
                         "jovx_score": 85,
                         "tag": "BULLISH TREND",
-                        "risk_level": "PRIME ALPHA 🚀",
+                        "risk_level": "LOW RISK 🛡️",
                         "buy_url": "https://app.uniswap.org/swap?chain=base&outputCurrency=0xbbae4ba1c48640c737af320c2ccef8ab910b0e076f659df956091f84e4da6927",
                         "dex_platform": "UNISWAP (BASE)",
                         "pair_url": "https://dexscreener.com/base/0xbbae4ba1c48640c737af320c2ccef8ab910b0e076f659df956091f84e4da6927",
@@ -719,6 +719,15 @@ class JovxScanner:
                     existing_addrs.add(fb.get("address"))
                     if len(clean_tokens) >= 20:
                         break
+
+        # SINAIS EXCLUSIVOS: Top 5 recebem PRIME ALPHA 🚀 para chamar atenção máxima;
+        # As 15 moedas abaixo (6 a 20) usam LOW RISK 🛡️, ACCUMULATING 💎 ou HIGH VOLATILITY ⚡
+        for idx, token in enumerate(clean_tokens):
+            if idx < 5:
+                token["risk_level"] = "PRIME ALPHA 🚀"
+            else:
+                if "PRIME ALPHA" in str(token.get("risk_level", "")):
+                    token["risk_level"] = "LOW RISK 🛡️"
 
         self.cached_list = clean_tokens[:20]
         self.last_fetch_time = time.time()
@@ -1014,7 +1023,7 @@ class JovxScanner:
             if age_sec < 3600:
                 risk_level = "HIGH VOLATILITY ⚡"  # Menos de 1h é recém-nascido
             elif liquidity_usd >= 35000 and price_change_1h >= 1.5:
-                risk_level = "PRIME ALPHA 🚀"     # Moeda excelente, segura e em alta forte!
+                risk_level = "LOW RISK 🛡️"         # Moeda consolidada e segura
             else:
                 risk_level = "ACCUMULATING 💎"     # Moeda em consolidação saudável
 

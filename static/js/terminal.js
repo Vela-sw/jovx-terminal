@@ -350,7 +350,7 @@ function renderTokens() {
 
                     <!-- ALPHA SIGNAL -->
                     <td class="py-3 px-4 text-center">
-                        <span class="px-2.5 py-1 rounded text-[10px] font-mono font-black border ${t.risk_level && t.risk_level.includes('PRIME ALPHA') ? 'bg-emerald-500/15 border-emerald-500/40 text-alphaGreen shadow-sm shadow-emerald-500/20' : t.risk_level && t.risk_level.includes('ACCUMULAT') ? 'bg-cyan-500/15 border-cyan-500/40 text-cyan-300' : 'bg-amber-500/15 border-amber-500/40 text-warningAmber'}">
+                        <span class="px-2.5 py-1 rounded text-[10px] font-mono font-black border ${t.risk_level && t.risk_level.includes('PRIME ALPHA') ? 'bg-emerald-500/20 border-emerald-500/50 text-alphaGreen shadow-md shadow-emerald-500/25' : t.risk_level && (t.risk_level.includes('LOW RISK') || t.risk_level.includes('BAIXO')) ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400' : t.risk_level && t.risk_level.includes('ACCUMULAT') ? 'bg-cyan-500/15 border-cyan-500/40 text-cyan-300' : 'bg-amber-500/15 border-amber-500/40 text-warningAmber'}">
                             ${t.risk_level || 'PRIME ALPHA 🚀'}
                         </span>
                     </td>
@@ -452,8 +452,8 @@ function renderTokens() {
 
                 <!-- ALPHA SIGNAL -->
                 <td class="py-3 px-4 text-center">
-                    <span class="px-2.5 py-1 rounded text-[10px] font-mono font-bold border ${t.risk_level && t.risk_level.includes('PRIME ALPHA') ? 'bg-emerald-500/15 border-emerald-500/40 text-alphaGreen shadow-sm shadow-emerald-500/20' : t.risk_level && t.risk_level.includes('ACCUMULAT') ? 'bg-cyan-500/15 border-cyan-500/40 text-cyan-300' : 'bg-amber-500/15 border-amber-500/40 text-warningAmber'}">
-                        ${t.risk_level || 'PRIME ALPHA 🚀'}
+                    <span class="px-2.5 py-1 rounded text-[10px] font-mono font-bold border ${t.risk_level && t.risk_level.includes('PRIME ALPHA') ? 'bg-emerald-500/20 border-emerald-500/50 text-alphaGreen shadow-md shadow-emerald-500/25 font-black' : t.risk_level && (t.risk_level.includes('LOW RISK') || t.risk_level.includes('BAIXO')) ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400 font-semibold' : t.risk_level && t.risk_level.includes('ACCUMULAT') ? 'bg-cyan-500/15 border-cyan-500/40 text-cyan-300 font-semibold' : 'bg-amber-500/15 border-amber-500/40 text-warningAmber font-semibold'}">
+                        ${t.risk_level || 'LOW RISK 🛡️'}
                     </span>
                 </td>
 
