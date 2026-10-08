@@ -373,7 +373,7 @@ function renderTokens() {
 
         // Renderização para Tokens Abertos (Rank #6 ao #20, ou TODOS se PRO)
         return `
-            <tr class="hover:bg-surfaceBorder/40 transition">
+            <tr class="hover:bg-surfaceBorder/40 transition cursor-pointer" onclick="window.open('${t.pair_url}', '_blank')">
                 <td class="py-3 px-4 text-center font-mono text-slate-500 font-bold">${idx + 1}</td>
                 
                 <!-- TOKEN IDENTIFIER -->
@@ -389,7 +389,7 @@ function renderTokens() {
                             </div>
                             <div class="flex items-center space-x-2 text-[11px] text-slate-400 font-mono">
                                 <span class="text-slate-300 font-semibold">$${t.symbol}</span>
-                                <button onclick="copyToClipboard('${t.address}')" class="text-slate-500 hover:text-jovxNeon transition flex items-center space-x-1" title="Copy Contract Address">
+                                <button onclick="event.stopPropagation(); copyToClipboard('${t.address}')" class="text-slate-500 hover:text-jovxNeon transition flex items-center space-x-1" title="Copy Contract Address">
                                     <span>${t.address.slice(0, 4)}...${t.address.slice(-4)}</span>
                                     <i data-lucide="copy" class="w-3 h-3"></i>
                                 </button>
@@ -461,13 +461,13 @@ function renderTokens() {
                 <td class="py-3 px-4 text-center">
                     <div class="flex items-center justify-center space-x-2">
                         <!-- O BOTAO DE COMPRA PRINCIPAL BRILHANTE -->
-                        <a href="${t.buy_url}" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-obsidian font-mono text-[11px] font-extrabold transition shadow-lg shadow-emerald-500/30 flex items-center space-x-1.5 transform hover:scale-105 active:scale-95" title="Direct Swap on ${t.dex_platform}">
+                        <a href="${t.buy_url}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()" class="px-3 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-obsidian font-mono text-[11px] font-extrabold transition shadow-lg shadow-emerald-500/30 flex items-center space-x-1.5 transform hover:scale-105 active:scale-95" title="Direct Swap on ${t.dex_platform}">
                             <i data-lucide="shopping-cart" class="w-3.5 h-3.5"></i>
                             <span>BUY NOW</span>
                         </a>
 
                         <!-- ATALHO DEXSCREENER -->
-                        <a href="${t.pair_url}" target="_blank" rel="noopener noreferrer" class="p-1.5 rounded bg-surface border border-surfaceBorder hover:border-jovxPurple text-slate-400 hover:text-white transition" title="Open Chart">
+                        <a href="${t.pair_url}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()" class="p-1.5 rounded bg-surface border border-surfaceBorder hover:border-jovxPurple text-slate-400 hover:text-white transition" title="Open Chart">
                             <i data-lucide="bar-chart-2" class="w-3.5 h-3.5"></i>
                         </a>
                     </div>
