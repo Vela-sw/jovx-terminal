@@ -76,6 +76,8 @@ class JovxScanner:
             "0x53df63071253a6639b7bf60f1ad92500be8f02b9", # MEME par inexistente (Banido)
             "0x0989b52a4cf548079bfab84b3ca48efbf98ba298", # CHAD par inexistente (Banido)
             "0x89980d0d82626e254ff9cb0df57e3f8373cb7462", # BUNKER par inexistente (Banido)
+            "0xddbaDAB50698bFFa1E02dF1643309AD08bca7777", # CHAD par inexistente DexScreener 404 (Banido)
+            "0xe3F035A10b407Bcd9A6842525f6C1E27D0657777", # ANON par inexistente DexScreener 404 (Banido)
             "2BVfJ4AHMvHdKtEZNHaBr48dQzTfZvYkjaaxbM6bpump", # SWORDINU derreteu -91% (Banido)
             "867dkvaccyrrudp66bqnxbujxfjaxsnb9wtpc4cmbdad", # MISTAKE 27 dias de idade - Banido da regra de 3-4 dias
             "8nvfb1unnk9adtl5hoof8hahf2rt4glpwx9cteadikhg", # PUMPOWEEN 33 dias de idade - Banido da regra de 3-4 dias
@@ -410,33 +412,6 @@ class JovxScanner:
                 "icon": "https://dd.dexscreener.com/ds-data/tokens/robinhood/0xcafE1D64c643AA1B33dcBBD32ABb517EB6FaF2D1.png",
             },
             {
-                "address": "0xe3F035A10b407Bcd9A6842525f6C1E27D0657777",
-                "name": "AnonInu",
-                "symbol": "ANON",
-                "chain": "ROBINHOOD",
-                "price_usd": 0.0002375,
-                "market_cap": 54282.0,
-                "liquidity_usd": 52324.31,
-                "volume_24h": 60182.95,
-                "volume_5m": 0.0,
-                "buys_24h": 127,
-                "sells_24h": 105,
-                "price_change_24h": 288.0,
-                "price_change_1h": 0.0,
-                "price_change_5m": 0.0,
-                "age": "1.0d",
-                "age_seconds": 86400,
-                "jovx_score": 97,
-                "tag": "PRIME ALPHA",
-                "risk_level": "LOW RISK 🛡️",
-                "lp_locked": True,
-                "liquidity_locked": True,
-                "buy_url": "https://app.uniswap.org/swap?chain=robinhood&outputCurrency=0xe3F035A10b407Bcd9A6842525f6C1E27D0657777",
-                "dex_platform": "UNISWAP (ROBINHOOD)",
-                "pair_url": "https://dexscreener.com/robinhood/0xbd68582f0e3306143f98501d69a8115028e44b052890f9c29e12f58f202ed402",
-                "icon": "https://dd.dexscreener.com/ds-data/tokens/robinhood/0xe3F035A10b407Bcd9A6842525f6C1E27D0657777.png",
-            },
-            {
                 "address": "0x29eAc11b6A976928e2acdB8443E06C6c8b7b7777",
                 "name": "Webull Corporation - Backpack Se",
                 "symbol": "BULL",
@@ -462,33 +437,6 @@ class JovxScanner:
                 "dex_platform": "UNISWAP (ROBINHOOD)",
                 "pair_url": "https://dexscreener.com/robinhood/0xd04dec4a4f4c1b9910453e4f7b6a559a0a057a80edf8b6d3df5b9cab712ca541",
                 "icon": "https://dd.dexscreener.com/ds-data/tokens/robinhood/0x29eAc11b6A976928e2acdB8443E06C6c8b7b7777.png",
-            },
-            {
-                "address": "0xddbaDAB50698bFFa1E02dF1643309AD08bca7777",
-                "name": "Chad",
-                "symbol": "CHAD",
-                "chain": "ROBINHOOD",
-                "price_usd": 0.0002438,
-                "market_cap": 55710.0,
-                "liquidity_usd": 53002.91,
-                "volume_24h": 57146.64,
-                "volume_5m": 0.0,
-                "buys_24h": 125,
-                "sells_24h": 106,
-                "price_change_24h": 293.0,
-                "price_change_1h": 0.0,
-                "price_change_5m": 0.0,
-                "age": "1.0d",
-                "age_seconds": 86400,
-                "jovx_score": 98,
-                "tag": "PRIME ALPHA",
-                "risk_level": "LOW RISK 🛡️",
-                "lp_locked": True,
-                "liquidity_locked": True,
-                "buy_url": "https://app.uniswap.org/swap?chain=robinhood&outputCurrency=0xddbaDAB50698bFFa1E02dF1643309AD08bca7777",
-                "dex_platform": "UNISWAP (ROBINHOOD)",
-                "pair_url": "https://dexscreener.com/robinhood/0x15495a44653b43aca35a43f72d0a274e4e7fafed3c7b81c7d2f6938edfa0f137",
-                "icon": "https://dd.dexscreener.com/ds-data/tokens/robinhood/0xddbaDAB50698bFFa1E02dF1643309AD08bca7777.png",
             },
             {
                 "address": "F6EDRhRzXGmkBabhSHdAnqx26XLhG6NCa83wwuqFpump",
@@ -796,9 +744,12 @@ class JovxScanner:
             for idx, token in enumerate(self.cached_list[:20]):
                 if idx < 5:
                     token["risk_level"] = "PRIME ALPHA 🚀"
+                    token["tag"] = "PRIME ALPHA"
                 else:
                     if "PRIME ALPHA" in str(token.get("risk_level", "")):
                         token["risk_level"] = "LOW RISK 🛡️"
+                    if token.get("tag") == "PRIME ALPHA":
+                        token["tag"] = "HIGH ALPHA"
 
             return list(self.cached_list[:20])
 
@@ -966,9 +917,12 @@ class JovxScanner:
         for idx, token in enumerate(clean_tokens):
             if idx < 5:
                 token["risk_level"] = "PRIME ALPHA 🚀"
+                token["tag"] = "PRIME ALPHA"
             else:
                 if "PRIME ALPHA" in str(token.get("risk_level", "")):
                     token["risk_level"] = "LOW RISK 🛡️"
+                if token.get("tag") == "PRIME ALPHA":
+                    token["tag"] = "HIGH ALPHA"
 
         self.cached_list = clean_tokens[:20]
         self.last_fetch_time = time.time()
