@@ -24,7 +24,7 @@ EXCLUDED_NAME_KEYWORDS = [
 ]
 
 # IDADE MÁXIMA PARA TODAS AS MOEDAS: 3 DIAS (259.200 segundos)
-MAX_TOKEN_AGE_SECONDS = 3 * 86400
+MAX_TOKEN_AGE_SECONDS = 7 * 86400
 
 class JovxScanner:
     """
@@ -57,6 +57,7 @@ class JovxScanner:
         # Blacklist permanente de tokens que derreteram/falharam na auditoria ao vivo (Zero Retorno)
         self.blacklisted_dumped_addrs = {
             "GfBwZAaRLdarL7mmUce8wkFc2xALuTSzyrREVKixpump", # DONSOM derreteu -97% (Banido)
+            "0xbDDd48BdE05b98d222A7110fB363C5176360B356", # SRX derreteu -99% (Liquidez caiu p/ $2.7k - Banido permanentemente)
             "0xa0c5F58Bf54700B0c582691aA85eab3B8603f4e8", # MOSS liquidez derreteu (Banido)
             "BZ8pkWUs4TjboT2xHRCwg3o6PK8xkvmNewvqMyyfpump", # IRL derreteu -93% (Banido)
             "95pkzpn2xcos5nb4uwedeztncwb2gdbs7iuzr3yz2tb7", # ST par inexistente (Banido)
@@ -95,130 +96,211 @@ class JovxScanner:
         """Inicializa tokens verificados 100% reais sem nenhum link quebrado"""
         seeds = [
             {
-                "address": "0xbDDd48BdE05b98d222A7110fB363C5176360B356",
-                "name": "SurrexLabs",
-                "symbol": "SRX",
+                "address": "0x5b6Ce079Cd0DAd8D0b7de3D73C8fdB5d63b093a2",
+                "name": "Giraffe Wif Cap",
+                "symbol": "GIF",
                 "chain": "ROBINHOOD",
-                "price_usd": 0.0007269,
-                "market_cap": 726976.0,
-                "liquidity_usd": 83873.51,
-                "volume_24h": 1438656.39,
-                "volume_5m": 134082.92,
-                "buys_24h": 2080,
-                "sells_24h": 1439,
-                "price_change_24h": 28314.0,
-                "price_change_1h": 28275.0,
-                "price_change_5m": 11.87,
-                "age": "1.0h",
-                "age_seconds": 3623,
+                "price_usd": 0.0002936,
+                "market_cap": 293616.0,
+                "liquidity_usd": 105227.48,
+                "volume_24h": 564489.47,
+                "volume_5m": 19780.39,
+                "buys_24h": 1364,
+                "sells_24h": 1052,
+                "price_change_24h": 2433.0,
+                "price_change_1h": 35.33,
+                "price_change_5m": 5.97,
+                "age": "1.3h",
+                "age_seconds": 4798,
                 "jovx_score": 99,
                 "tag": "HIGH ALPHA",
                 "risk_level": "LOW RISK 🛡️",
                 "lp_locked": True,
                 "liquidity_locked": True,
-                "buy_url": "https://app.uniswap.org/swap?chain=robinhood&outputCurrency=0xbDDd48BdE05b98d222A7110fB363C5176360B356",
+                "buy_url": "https://app.uniswap.org/swap?chain=robinhood&outputCurrency=0x5b6Ce079Cd0DAd8D0b7de3D73C8fdB5d63b093a2",
                 "dex_platform": "UNISWAP (ROBINHOOD)",
-                "pair_url": "https://dexscreener.com/robinhood/0x5d07d9472723803073b594f582149ca82ffec1c2",
-                "icon": "https://cdn.dexscreener.com/cms/images/9XUVV3QIVp5fR6MF?width=800&height=800&quality=95&format=auto",
+                "pair_url": "https://dexscreener.com/robinhood/0x58c684d51d184427521555e5fd8d2cd6c1df0798",
+                "icon": "https://cdn.dexscreener.com/cms/images/--atJj8Ljbjuv8t3?width=800&height=800&quality=95&format=auto",
             },
             {
-                "address": "kZXneJiCtqsgjN9kgMLVhsjuieYs1LdrBASTXwnpump",
+                "address": "6Mix12LiHrQFojaQEnfPUC65Qkwd6X4Y5Qg93oFbordr",
+                "name": "Bordrless",
+                "symbol": "BORDR",
+                "chain": "SOLANA",
+                "price_usd": 0.001698,
+                "market_cap": 1698353.0,
+                "liquidity_usd": 123589.74,
+                "volume_24h": 2787956.83,
+                "volume_5m": 53278.03,
+                "buys_24h": 13814,
+                "sells_24h": 11290,
+                "price_change_24h": 2223.0,
+                "price_change_1h": 373.0,
+                "price_change_5m": -5.56,
+                "age": "1.4h",
+                "age_seconds": 5166,
+                "jovx_score": 99,
+                "tag": "HIGH ALPHA",
+                "risk_level": "LOW RISK 🛡️",
+                "lp_locked": True,
+                "liquidity_locked": True,
+                "buy_url": "https://jup.ag/swap/SOL-6Mix12LiHrQFojaQEnfPUC65Qkwd6X4Y5Qg93oFbordr",
+                "dex_platform": "RAYDIUM (SOL)",
+                "pair_url": "https://dexscreener.com/solana/4xp7kn4nvt19caq4km629vl8vjeqpsfvdzah27wvyph8",
+                "icon": "https://cdn.dexscreener.com/cms/images/_lHuFYl9EvDPFOwM?width=800&height=800&quality=95&format=auto",
+            },
+            {
+                "address": "axfULnfnjKwtN9ps2C1aSgz74w6VHezmqKo8Tc8pump",
                 "name": "fomo",
                 "symbol": "FOMO",
                 "chain": "SOLANA",
-                "price_usd": 0.005668,
-                "market_cap": 5665667.0,
-                "liquidity_usd": 213812.72,
-                "volume_24h": 198244.09,
-                "volume_5m": 616.73,
-                "buys_24h": 2161,
-                "sells_24h": 1433,
-                "price_change_24h": 11383.0,
-                "price_change_1h": 1.76,
-                "price_change_5m": 0.18,
-                "age": "1d",
-                "age_seconds": 86400,
+                "price_usd": 0.001098,
+                "market_cap": 1098662.0,
+                "liquidity_usd": 93069.81,
+                "volume_24h": 83466.82,
+                "volume_5m": 7377.74,
+                "buys_24h": 14885,
+                "sells_24h": 14544,
+                "price_change_24h": 2179.0,
+                "price_change_1h": 2179.0,
+                "price_change_5m": 9.24,
+                "age": "41m",
+                "age_seconds": 2485,
                 "jovx_score": 99,
                 "tag": "HIGH ALPHA",
                 "risk_level": "LOW RISK 🛡️",
                 "lp_locked": True,
                 "liquidity_locked": True,
-                "buy_url": "https://jup.ag/swap/SOL-kZXneJiCtqsgjN9kgMLVhsjuieYs1LdrBASTXwnpump",
-                "dex_platform": "JUPITER (SOL)",
-                "pair_url": "https://dexscreener.com/solana/5pxx1rdblnilgmdyzssvvr9rytmauopgzwyckcswvukd",
-                "icon": "https://dd.dexscreener.com/ds-data/tokens/solana/kZXneJiCtqsgjN9kgMLVhsjuieYs1LdrBASTXwnpump.png",
+                "buy_url": "https://jup.ag/swap/SOL-axfULnfnjKwtN9ps2C1aSgz74w6VHezmqKo8Tc8pump",
+                "dex_platform": "RAYDIUM (SOL)",
+                "pair_url": "https://dexscreener.com/solana/cj8baenwabpcssdu8kqtjpwfa9xb6bpdisroox1k4kcv",
+                "icon": "https://dd.dexscreener.com/ds-data/tokens/solana/axfULnfnjKwtN9ps2C1aSgz74w6VHezmqKo8Tc8pump.png",
             },
             {
-                "address": "ADPN2aqzY5RhkBC7bNQWFhTFFEYKY4drHUQG887Cpump",
-                "name": "CATCRAFT",
-                "symbol": "CATCRAFT",
-                "chain": "SOLANA",
-                "price_usd": 0.001699,
-                "market_cap": 1672695.0,
-                "liquidity_usd": 125403.68,
-                "volume_24h": 3684486.62,
-                "volume_5m": 4076.74,
-                "buys_24h": 89892,
-                "sells_24h": 43506,
-                "price_change_24h": 1664.0,
-                "price_change_1h": 39.38,
-                "price_change_5m": 4.69,
-                "age": "20.7h",
-                "age_seconds": 74607,
+                "address": "0xaEBC764C588c9A480307dd59Bd55F542E2b5b35c",
+                "name": "one coin to rule them all",
+                "symbol": "ONE",
+                "chain": "ROBINHOOD",
+                "price_usd": 0.0001985,
+                "market_cap": 198565.0,
+                "liquidity_usd": 80294.91,
+                "volume_24h": 467719.77,
+                "volume_5m": 23868.19,
+                "buys_24h": 973,
+                "sells_24h": 484,
+                "price_change_24h": 1825.0,
+                "price_change_1h": 1825.0,
+                "price_change_5m": 25.24,
+                "age": "38m",
+                "age_seconds": 2312,
                 "jovx_score": 99,
                 "tag": "HIGH ALPHA",
                 "risk_level": "LOW RISK 🛡️",
                 "lp_locked": True,
                 "liquidity_locked": True,
-                "buy_url": "https://jup.ag/swap/SOL-ADPN2aqzY5RhkBC7bNQWFhTFFEYKY4drHUQG887Cpump",
-                "dex_platform": "RAYDIUM (SOL)",
-                "pair_url": "https://dexscreener.com/solana/7mqdgteiad4tkupg9hstypqnestntrauehh1zj1awp8x",
-                "icon": "https://cdn.dexscreener.com/cms/images/hvsp8Tt8oiP96-P1?width=800&height=800&quality=95&format=auto",
+                "buy_url": "https://app.uniswap.org/swap?chain=robinhood&outputCurrency=0xaEBC764C588c9A480307dd59Bd55F542E2b5b35c",
+                "dex_platform": "UNISWAP (ROBINHOOD)",
+                "pair_url": "https://dexscreener.com/robinhood/0x91da0a979dc925aac6b318b50be7224948e8b2b7",
+                "icon": "https://cdn.dexscreener.com/cms/images/Ng9D7Yq5n9UtiaMp?width=800&height=800&quality=95&format=auto",
             },
             {
-                "address": "45VHsie7CwFfPKWCw28PCdZdJWMA5Y6k56wDam9Hpump",
-                "name": "Ferrari Inu",
-                "symbol": "RARINU",
+                "address": "2BVfJ4AHMvHdKtEZNHaBr48dQzTfZvYkjaaxbM6bpump",
+                "name": "inu wif sword",
+                "symbol": "SWORDINU",
                 "chain": "SOLANA",
-                "price_usd": 0.001048,
-                "market_cap": 1037742.0,
-                "liquidity_usd": 97734.33,
-                "volume_24h": 3374818.34,
-                "volume_5m": 18235.28,
-                "buys_24h": 55932,
-                "sells_24h": 19591,
-                "price_change_24h": 886.0,
-                "price_change_1h": -27.6,
-                "price_change_5m": -21.88,
-                "age": "21.1h",
-                "age_seconds": 75829,
+                "price_usd": 0.01883,
+                "market_cap": 18701683.0,
+                "liquidity_usd": 432583.58,
+                "volume_24h": 8143044.14,
+                "volume_5m": 17470.33,
+                "buys_24h": 85973,
+                "sells_24h": 32400,
+                "price_change_24h": 626.0,
+                "price_change_1h": 0.2,
+                "price_change_5m": 3.33,
+                "age": "1.3d",
+                "age_seconds": 115895,
                 "jovx_score": 99,
                 "tag": "HIGH ALPHA",
                 "risk_level": "LOW RISK 🛡️",
                 "lp_locked": True,
                 "liquidity_locked": True,
-                "buy_url": "https://jup.ag/swap/SOL-45VHsie7CwFfPKWCw28PCdZdJWMA5Y6k56wDam9Hpump",
+                "buy_url": "https://jup.ag/swap/SOL-2BVfJ4AHMvHdKtEZNHaBr48dQzTfZvYkjaaxbM6bpump",
                 "dex_platform": "RAYDIUM (SOL)",
-                "pair_url": "https://dexscreener.com/solana/a2asuorcetj9kwkmzhf3pvsslgzrnmnghiqku8uegqmj",
-                "icon": "https://cdn.dexscreener.com/cms/images/KXdS2YaVij7sqGJu?width=800&height=800&quality=95&format=auto",
+                "pair_url": "https://dexscreener.com/solana/69fyvgotxqxbdv7tazd99m1vycwos3pyjkj8rrffzszj",
+                "icon": "https://cdn.dexscreener.com/cms/images/deyGhzFymcTt8_bL?width=800&height=800&quality=95&format=auto",
+            },
+            {
+                "address": "HXqxTwCzREUXNK4CbNDgNEUEh2jLzFKdC4tvTuojpump",
+                "name": "ZK Darkpool",
+                "symbol": "ZKDARK",
+                "chain": "SOLANA",
+                "price_usd": 0.0005429,
+                "market_cap": 535592.0,
+                "liquidity_usd": 66039.29,
+                "volume_24h": 516734.37,
+                "volume_5m": 8995.06,
+                "buys_24h": 3780,
+                "sells_24h": 1057,
+                "price_change_24h": 607.0,
+                "price_change_1h": 35.98,
+                "price_change_5m": -1.19,
+                "age": "2.6h",
+                "age_seconds": 9328,
+                "jovx_score": 99,
+                "tag": "HIGH ALPHA",
+                "risk_level": "LOW RISK 🛡️",
+                "lp_locked": True,
+                "liquidity_locked": True,
+                "buy_url": "https://jup.ag/swap/SOL-HXqxTwCzREUXNK4CbNDgNEUEh2jLzFKdC4tvTuojpump",
+                "dex_platform": "RAYDIUM (SOL)",
+                "pair_url": "https://dexscreener.com/solana/cr5dtgvtddgaqdjp8dghtl51n6pkraxqxfbp9fq5prkn",
+                "icon": "https://cdn.dexscreener.com/cms/images/G0W4qwv5WzsQlpua?width=800&height=800&quality=95&format=auto",
+            },
+            {
+                "address": "0xdc453b1405CfE25e2afBA8E7F4272b0a00437777",
+                "name": "TasQ Network",
+                "symbol": "TASQ",
+                "chain": "ROBINHOOD",
+                "price_usd": 0.000409,
+                "market_cap": 408360.0,
+                "liquidity_usd": 67185.13,
+                "volume_24h": 850731.11,
+                "volume_5m": 0.0,
+                "buys_24h": 2281,
+                "sells_24h": 1746,
+                "price_change_24h": 537.0,
+                "price_change_1h": 3.85,
+                "price_change_5m": 0.0,
+                "age": "8.7h",
+                "age_seconds": 31484,
+                "jovx_score": 99,
+                "tag": "HIGH ALPHA",
+                "risk_level": "LOW RISK 🛡️",
+                "lp_locked": True,
+                "liquidity_locked": True,
+                "buy_url": "https://app.uniswap.org/swap?chain=robinhood&outputCurrency=0xdc453b1405CfE25e2afBA8E7F4272b0a00437777",
+                "dex_platform": "UNISWAP (ROBINHOOD)",
+                "pair_url": "https://dexscreener.com/robinhood/0x16684607c92e1a59302763400cc1641c8f9dbe7e",
+                "icon": "https://cdn.dexscreener.com/cms/images/BqiXSL6Rj5M6NWSU?width=800&height=800&quality=95&format=auto",
             },
             {
                 "address": "0xf9cDf67Dd3dde76a72F37cE4F0A27325Ba25F4D9",
                 "name": "Blokeys",
                 "symbol": "BLOKEYS",
                 "chain": "BASE",
-                "price_usd": 7.395e-07,
-                "market_cap": 73954.0,
-                "liquidity_usd": 61127.75,
-                "volume_24h": 389131.74,
-                "volume_5m": 265.03,
-                "buys_24h": 1039,
-                "sells_24h": 877,
-                "price_change_24h": 190.0,
-                "price_change_1h": -9.24,
-                "price_change_5m": -1.15,
-                "age": "2.6h",
-                "age_seconds": 9420,
+                "price_usd": 9.082e-07,
+                "market_cap": 90825.0,
+                "liquidity_usd": 70652.3,
+                "volume_24h": 419120.92,
+                "volume_5m": 0.0,
+                "buys_24h": 1239,
+                "sells_24h": 976,
+                "price_change_24h": 256.0,
+                "price_change_1h": -2.57,
+                "price_change_5m": 0.0,
+                "age": "10.7h",
+                "age_seconds": 38551,
                 "jovx_score": 99,
                 "tag": "HIGH ALPHA",
                 "risk_level": "LOW RISK 🛡️",
@@ -227,297 +309,81 @@ class JovxScanner:
                 "buy_url": "https://app.uniswap.org/swap?chain=base&outputCurrency=0xf9cDf67Dd3dde76a72F37cE4F0A27325Ba25F4D9",
                 "dex_platform": "UNISWAP (BASE)",
                 "pair_url": "https://dexscreener.com/base/0xcb18c4cf24d8cf14f36b124846a13a249fbd2681022a5b151cc5346e1b42bcbe",
-                "icon": "https://dd.dexscreener.com/ds-data/tokens/base/0xf9cDf67Dd3dde76a72F37cE4F0A27325Ba25F4D9.png",
+                "icon": "https://cdn.dexscreener.com/cms/images/ThQoUDXOwYoYsj8X?width=800&height=800&quality=95&format=auto",
             },
             {
-                "address": "2BVfJ4AHMvHdKtEZNHaBr48dQzTfZvYkjaaxbM6bpump",
-                "name": "swordinu",
-                "symbol": "SWORDINU",
+                "address": "HbPDWSqu8hpVMX6gMjwMDGe5rVgicWo3Qh3Jaojypump",
+                "name": "Frank Ashford",
+                "symbol": "FRANK",
                 "chain": "SOLANA",
-                "price_usd": 0.0035,
-                "market_cap": 3500000,
-                "liquidity_usd": 467391,
-                "volume_24h": 5800000,
-                "volume_5m": 45000,
-                "buys_24h": 25000,
-                "sells_24h": 14000,
-                "price_change_24h": 24000.0,
-                "price_change_1h": 45.0,
-                "price_change_5m": 1.2,
-                "age": "4.2h",
-                "age_seconds": 15120,
-                "jovx_score": 95,
-                "tag": "HIGH ALPHA",
+                "price_usd": 0.0005096,
+                "market_cap": 484431.0,
+                "liquidity_usd": 71696.16,
+                "volume_24h": 1353831.6,
+                "volume_5m": 5289.16,
+                "buys_24h": 14064,
+                "sells_24h": 13491,
+                "price_change_24h": 43.02,
+                "price_change_1h": 19.57,
+                "price_change_5m": -6.47,
+                "age": "3.2d",
+                "age_seconds": 275376,
+                "jovx_score": 92,
+                "tag": "BULLISH TREND",
                 "risk_level": "LOW RISK 🛡️",
                 "lp_locked": True,
                 "liquidity_locked": True,
-                "buy_url": "https://jup.ag/swap/SOL-2BVfJ4AHMvHdKtEZNHaBr48dQzTfZvYkjaaxbM6bpump",
-                "dex_platform": "JUPITER (SOL)",
-                "pair_url": "https://dexscreener.com/solana/69fyvgotxqxbdv7tazd99m1vycwos3pyjkj8rrffzszj",
-                "icon": "https://dd.dexscreener.com/ds-data/tokens/solana/2BVfJ4AHMvHdKtEZNHaBr48dQzTfZvYkjaaxbM6bpump.png",
-            },
-            {
-                "address": "0x40a31c233f808edd2fb3f23f9bcA9Ff29D914c43",
-                "name": "ORBICHAN",
-                "symbol": "ORBICHAN",
-                "chain": "ROBINHOOD",
-                "price_usd": 0.0005232,
-                "market_cap": 523232.0,
-                "liquidity_usd": 70711.98,
-                "volume_24h": 1124296.93,
-                "volume_5m": 82046.72,
-                "buys_24h": 1390,
-                "sells_24h": 821,
-                "price_change_24h": 20313.0,
-                "price_change_1h": 20313.0,
-                "price_change_5m": -22.94,
-                "age": "30m",
-                "age_seconds": 1834,
-                "jovx_score": 95,
-                "tag": "HIGH ALPHA",
-                "risk_level": "LOW RISK 🛡️",
-                "lp_locked": True,
-                "liquidity_locked": True,
-                "buy_url": "https://app.uniswap.org/swap?chain=robinhood&outputCurrency=0x40a31c233f808edd2fb3f23f9bcA9Ff29D914c43",
-                "dex_platform": "UNISWAP (ROBINHOOD)",
-                "pair_url": "https://dexscreener.com/robinhood/0x5183b2850bb856c9ea714e284eb18904284fa413",
-                "icon": "https://cdn.dexscreener.com/cms/images/VRlUOqO6km8JiPYC?width=800&height=800&quality=95&format=auto",
-            },
-            {
-                "address": "Fecv9hvh7yQ2iU1Ju7km5rMPC5iT7LGodXZmP75Apump",
-                "name": "Baby Bought The Dip",
-                "symbol": "BABYDIP",
-                "chain": "SOLANA",
-                "price_usd": 0.0006349,
-                "market_cap": 617720.0,
-                "liquidity_usd": 77273.95,
-                "volume_24h": 3136598.28,
-                "volume_5m": 347716.06,
-                "buys_24h": 7127,
-                "sells_24h": 6281,
-                "price_change_24h": 1185.0,
-                "price_change_1h": 1185.0,
-                "price_change_5m": 31.19,
-                "age": "49m",
-                "age_seconds": 2972,
-                "jovx_score": 95,
-                "tag": "HIGH ALPHA",
-                "risk_level": "LOW RISK 🛡️",
-                "lp_locked": True,
-                "liquidity_locked": True,
-                "buy_url": "https://jup.ag/swap/SOL-Fecv9hvh7yQ2iU1Ju7km5rMPC5iT7LGodXZmP75Apump",
+                "buy_url": "https://jup.ag/swap/SOL-HbPDWSqu8hpVMX6gMjwMDGe5rVgicWo3Qh3Jaojypump",
                 "dex_platform": "RAYDIUM (SOL)",
-                "pair_url": "https://dexscreener.com/solana/b7qcpi3ksavhvn63vogfst7qsv5yb7qjgavc397wv4er",
-                "icon": "https://cdn.dexscreener.com/cms/images/rlCfvln-xJWZwUkQ?width=800&height=800&quality=95&format=auto",
+                "pair_url": "https://dexscreener.com/solana/745atasswxvry5qt1xvv9exug884hdvnjfva2o82dnbi",
+                "icon": "https://cdn.dexscreener.com/cms/images/ogvGp9QEOKif9nk4?width=800&height=800&quality=95&format=auto",
             },
             {
-                "address": "CioPfvQWpVF2eTzpBj72x2zPyqgJRgvi36PqdLCCpump",
-                "name": "TON 618",
-                "symbol": "TON618",
+                "address": "JuprjznTrTSp2UFa3ZBUFgwdAmtZCq4MQCwysN55USD",
+                "name": "Jupiter USD",
+                "symbol": "JUPUSD",
                 "chain": "SOLANA",
-                "price_usd": 0.0005432,
-                "market_cap": 518332.0,
-                "liquidity_usd": 68464.23,
-                "volume_24h": 1197868.16,
-                "volume_5m": 7160.89,
-                "buys_24h": 9630,
-                "sells_24h": 7009,
-                "price_change_24h": 1022.0,
-                "price_change_1h": 41.08,
-                "price_change_5m": -2.18,
-                "age": "23.2h",
-                "age_seconds": 83509,
-                "jovx_score": 95,
-                "tag": "HIGH ALPHA",
+                "price_usd": 0.9962,
+                "market_cap": 48350390.0,
+                "liquidity_usd": 147586.16,
+                "volume_24h": 303195.16,
+                "volume_5m": 34693.53,
+                "buys_24h": 1125,
+                "sells_24h": 937,
+                "price_change_24h": 21.44,
+                "price_change_1h": 21.44,
+                "price_change_5m": -0.36,
+                "age": "1.3h",
+                "age_seconds": 4514,
+                "jovx_score": 92,
+                "tag": "BULLISH TREND",
                 "risk_level": "LOW RISK 🛡️",
                 "lp_locked": True,
                 "liquidity_locked": True,
-                "buy_url": "https://jup.ag/swap/SOL-CioPfvQWpVF2eTzpBj72x2zPyqgJRgvi36PqdLCCpump",
+                "buy_url": "https://jup.ag/swap/SOL-JuprjznTrTSp2UFa3ZBUFgwdAmtZCq4MQCwysN55USD",
                 "dex_platform": "RAYDIUM (SOL)",
-                "pair_url": "https://dexscreener.com/solana/34w9reb7ax8dsv3hizt28nxztkfwwttarw2nwcsxyqrx",
-                "icon": "https://cdn.dexscreener.com/cms/images/oBqgX_Tr90YEXVgJ?width=800&height=800&quality=95&format=auto",
-            },
-            {
-                "address": "AHmD5jaFKqWMGswNkTSwAfvaWNHVY8m6JJro9LFppump",
-                "name": "fly-42 project",
-                "symbol": "FLY",
-                "chain": "SOLANA",
-                "price_usd": 0.000479,
-                "market_cap": 454824.0,
-                "liquidity_usd": 64163.68,
-                "volume_24h": 1236322.45,
-                "volume_5m": 275350.08,
-                "buys_24h": 11115,
-                "sells_24h": 9036,
-                "price_change_24h": 914.0,
-                "price_change_1h": 914.0,
-                "price_change_5m": -16.83,
-                "age": "24m",
-                "age_seconds": 1447,
-                "jovx_score": 95,
-                "tag": "HIGH ALPHA",
-                "risk_level": "LOW RISK 🛡️",
-                "lp_locked": True,
-                "liquidity_locked": True,
-                "buy_url": "https://jup.ag/swap/SOL-AHmD5jaFKqWMGswNkTSwAfvaWNHVY8m6JJro9LFppump",
-                "dex_platform": "RAYDIUM (SOL)",
-                "pair_url": "https://dexscreener.com/solana/j4azhntuxg1nu4boja42kc7rnohqote6epxbauvqzdiy",
-                "icon": "https://cdn.dexscreener.com/cms/images/HGY4RcJt9-SiiLva?width=800&height=800&quality=95&format=auto",
-            },
-            {
-                "address": "BR1HcT9RP6ewqLhhYnhpDaa9Uh3Tj8TSKyS9yTiLpump",
-                "name": "Teenage Mutant Ninja Pepes",
-                "symbol": "TMNP",
-                "chain": "SOLANA",
-                "price_usd": 0.0004913,
-                "market_cap": 491307.0,
-                "liquidity_usd": 64545.8,
-                "volume_24h": 1196215.59,
-                "volume_5m": 244122.15,
-                "buys_24h": 3965,
-                "sells_24h": 3064,
-                "price_change_24h": 905.0,
-                "price_change_1h": 905.0,
-                "price_change_5m": 4.96,
-                "age": "26m",
-                "age_seconds": 1586,
-                "jovx_score": 95,
-                "tag": "HIGH ALPHA",
-                "risk_level": "LOW RISK 🛡️",
-                "lp_locked": True,
-                "liquidity_locked": True,
-                "buy_url": "https://jup.ag/swap/SOL-BR1HcT9RP6ewqLhhYnhpDaa9Uh3Tj8TSKyS9yTiLpump",
-                "dex_platform": "RAYDIUM (SOL)",
-                "pair_url": "https://dexscreener.com/solana/hwvs3tmrhgebmxea69dnw4ksqono3ethuwnzb1s6shdc",
-                "icon": "https://cdn.dexscreener.com/cms/images/wjClISsFYQoix8fH?width=800&height=800&quality=95&format=auto",
-            },
-            {
-                "address": "0x0CA2f986c95D4B2d638a3561d1ee8Fd33B0220D7",
-                "name": "PowerGacha",
-                "symbol": "GACHA",
-                "chain": "ROBINHOOD",
-                "price_usd": 0.000297,
-                "market_cap": 67848.0,
-                "liquidity_usd": 46058.44,
-                "volume_24h": 89797.35,
-                "volume_5m": 0.0,
-                "buys_24h": 131,
-                "sells_24h": 108,
-                "price_change_24h": 709.0,
-                "price_change_1h": 0.0,
-                "price_change_5m": 0.0,
-                "age": "18.9h",
-                "age_seconds": 67912,
-                "jovx_score": 95,
-                "tag": "HIGH ALPHA",
-                "risk_level": "LOW RISK 🛡️",
-                "lp_locked": True,
-                "liquidity_locked": True,
-                "buy_url": "https://app.uniswap.org/swap?chain=robinhood&outputCurrency=0x0CA2f986c95D4B2d638a3561d1ee8Fd33B0220D7",
-                "dex_platform": "UNISWAP (ROBINHOOD)",
-                "pair_url": "https://dexscreener.com/robinhood/0x5f8dfdb5116ec4870aa6d9160828fb4643f462f82ec5c5155d693b5c15fecff7",
-                "icon": "https://dd.dexscreener.com/ds-data/tokens/robinhood/0x0CA2f986c95D4B2d638a3561d1ee8Fd33B0220D7.png",
-            },
-            {
-                "address": "0x5EeEb94A43B72a40166c84c9454Ae75f97793929",
-                "name": "PUMP",
-                "symbol": "PUMP",
-                "chain": "ROBINHOOD",
-                "price_usd": 0.0002707,
-                "market_cap": 61835.0,
-                "liquidity_usd": 43957.62,
-                "volume_24h": 77149.65,
-                "volume_5m": 0.0,
-                "buys_24h": 132,
-                "sells_24h": 105,
-                "price_change_24h": 638.0,
-                "price_change_1h": 0.0,
-                "price_change_5m": 0.0,
-                "age": "20.5h",
-                "age_seconds": 73912,
-                "jovx_score": 95,
-                "tag": "HIGH ALPHA",
-                "risk_level": "LOW RISK 🛡️",
-                "lp_locked": True,
-                "liquidity_locked": True,
-                "buy_url": "https://app.uniswap.org/swap?chain=robinhood&outputCurrency=0x5EeEb94A43B72a40166c84c9454Ae75f97793929",
-                "dex_platform": "UNISWAP (ROBINHOOD)",
-                "pair_url": "https://dexscreener.com/robinhood/0xc1f6bb4d10247bd605479ad661b45a54ba872ee2496a6752aa5a6cfecbf94499",
-                "icon": "https://dd.dexscreener.com/ds-data/tokens/robinhood/0x5EeEb94A43B72a40166c84c9454Ae75f97793929.png",
-            },
-            {
-                "address": "0xB91040F8e25b83b6e8335F4F16DFd53C67Be3c2F",
-                "name": "Digital Gold Rush",
-                "symbol": "GOLD",
-                "chain": "ROBINHOOD",
-                "price_usd": 5.797e-06,
-                "market_cap": 57972.0,
-                "liquidity_usd": 49965.54,
-                "volume_24h": 43125.51,
-                "volume_5m": 0.0,
-                "buys_24h": 167,
-                "sells_24h": 50,
-                "price_change_24h": 439.0,
-                "price_change_1h": 0.0,
-                "price_change_5m": 0.0,
-                "age": "22.7h",
-                "age_seconds": 81550,
-                "jovx_score": 95,
-                "tag": "HIGH ALPHA",
-                "risk_level": "LOW RISK 🛡️",
-                "lp_locked": True,
-                "liquidity_locked": True,
-                "buy_url": "https://app.uniswap.org/swap?chain=robinhood&outputCurrency=0xB91040F8e25b83b6e8335F4F16DFd53C67Be3c2F",
-                "dex_platform": "UNISWAP (ROBINHOOD)",
-                "pair_url": "https://dexscreener.com/robinhood/0x75408fb2d283fe1e35086f1b781a6e7d1bac597b36bc484bc67ea54ac2bbc6da",
-                "icon": "https://dd.dexscreener.com/ds-data/tokens/robinhood/0xB91040F8e25b83b6e8335F4F16DFd53C67Be3c2F.png",
-            },
-            {
-                "address": "J9qzFhTLYnmf3tZYvHBaF96rH3YKToELAAVMzz66pump",
-                "name": "Sand Witch Kitten",
-                "symbol": "SNDWITCH",
-                "chain": "SOLANA",
-                "price_usd": 0.0003469,
-                "market_cap": 343927.0,
-                "liquidity_usd": 61649.56,
-                "volume_24h": 5621630.79,
-                "volume_5m": 40500.87,
-                "buys_24h": 134957,
-                "sells_24h": 59001,
-                "price_change_24h": 419.0,
-                "price_change_1h": 30.34,
-                "price_change_5m": -15.03,
-                "age": "23.0h",
-                "age_seconds": 82963,
-                "jovx_score": 95,
-                "tag": "HIGH ALPHA",
-                "risk_level": "LOW RISK 🛡️",
-                "lp_locked": True,
-                "liquidity_locked": True,
-                "buy_url": "https://jup.ag/swap/SOL-J9qzFhTLYnmf3tZYvHBaF96rH3YKToELAAVMzz66pump",
-                "dex_platform": "RAYDIUM (SOL)",
-                "pair_url": "https://dexscreener.com/solana/hu22ubatza7ajmkdjasyodhtffw6xvs6d9bsxlt9ugdb",
-                "icon": "https://cdn.dexscreener.com/cms/images/MuTi483V4c1C_JTs?width=800&height=800&quality=95&format=auto",
+                "pair_url": "https://dexscreener.com/solana/ekpymqfsqjmqcnq3ccwxg3xszj5crzsftc8g2hvghxk8",
+                "icon": "https://dd.dexscreener.com/ds-data/tokens/solana/JuprjznTrTSp2UFa3ZBUFgwdAmtZCq4MQCwysN55USD.png",
             },
             {
                 "address": "HMYd9tosnUXuNHmq7pXmoePRVBLBBjA3JBfydq6upump",
                 "name": "Super Intelligence SI276",
                 "symbol": "SI276",
                 "chain": "SOLANA",
-                "price_usd": 0.0002171,
-                "market_cap": 214816.0,
-                "liquidity_usd": 42269.79,
-                "volume_24h": 1087844.24,
-                "volume_5m": 2148.29,
-                "buys_24h": 12204,
-                "sells_24h": 8313,
-                "price_change_24h": 337.0,
-                "price_change_1h": 2.69,
-                "price_change_5m": -4.75,
-                "age": "23.2h",
-                "age_seconds": 83670,
-                "jovx_score": 95,
-                "tag": "HIGH ALPHA",
+                "price_usd": 0.0004518,
+                "market_cap": 446943.0,
+                "liquidity_usd": 62342.16,
+                "volume_24h": 704769.61,
+                "volume_5m": 1289.82,
+                "buys_24h": 8369,
+                "sells_24h": 5604,
+                "price_change_24h": 9.44,
+                "price_change_1h": -3.72,
+                "price_change_5m": 0.4,
+                "age": "1.3d",
+                "age_seconds": 112801,
+                "jovx_score": 92,
+                "tag": "BULLISH TREND",
                 "risk_level": "LOW RISK 🛡️",
                 "lp_locked": True,
                 "liquidity_locked": True,
@@ -525,6 +391,33 @@ class JovxScanner:
                 "dex_platform": "RAYDIUM (SOL)",
                 "pair_url": "https://dexscreener.com/solana/12jc1dzjpzbcdakum4brakh9jcfry2tlg1ffgsl4ftcg",
                 "icon": "https://cdn.dexscreener.com/cms/images/C00PG8ebjcD8d36M?width=800&height=800&quality=95&format=auto",
+            },
+            {
+                "address": "0xDEAaCC5DcCE808e1D267e3C65b831f55baf99B2b",
+                "name": "CrawlScan",
+                "symbol": "CRAWLSCAN",
+                "chain": "ROBINHOOD",
+                "price_usd": 0.0002254,
+                "market_cap": 225441.0,
+                "liquidity_usd": 45767.89,
+                "volume_24h": 200660.91,
+                "volume_5m": 23877.54,
+                "buys_24h": 354,
+                "sells_24h": 297,
+                "price_change_24h": 8657.0,
+                "price_change_1h": 8657.0,
+                "price_change_5m": 357.0,
+                "age": "18m",
+                "age_seconds": 1089,
+                "jovx_score": 90,
+                "tag": "HIGH ALPHA",
+                "risk_level": "LOW RISK 🛡️",
+                "lp_locked": True,
+                "liquidity_locked": True,
+                "buy_url": "https://app.uniswap.org/swap?chain=robinhood&outputCurrency=0xDEAaCC5DcCE808e1D267e3C65b831f55baf99B2b",
+                "dex_platform": "UNISWAP (ROBINHOOD)",
+                "pair_url": "https://dexscreener.com/robinhood/0x87bb1c8c46a39fd4bd21f0c06119345f44bb1dda",
+                "icon": "https://cdn.dexscreener.com/cms/images/rpC6t7ePDMYlICBD?width=800&height=800&quality=95&format=auto",
             },
             {
                 "address": "0x29eAc11b6A976928e2acdB8443E06C6c8b7b7777",
@@ -541,9 +434,9 @@ class JovxScanner:
                 "price_change_24h": 296.0,
                 "price_change_1h": 0.0,
                 "price_change_5m": 0.0,
-                "age": "3.3h",
-                "age_seconds": 11957,
-                "jovx_score": 95,
+                "age": "11.4h",
+                "age_seconds": 41088,
+                "jovx_score": 90,
                 "tag": "HIGH ALPHA",
                 "risk_level": "LOW RISK 🛡️",
                 "lp_locked": True,
@@ -554,157 +447,22 @@ class JovxScanner:
                 "icon": "https://dd.dexscreener.com/ds-data/tokens/robinhood/0x29eAc11b6A976928e2acdB8443E06C6c8b7b7777.png",
             },
             {
-                "address": "FAopSovS2WFJK5qEAmcuwAVH98CvmBwT6Lpq4EK2pump",
-                "name": "AIOPAD",
-                "symbol": "A1",
-                "chain": "SOLANA",
-                "price_usd": 0.0004118,
-                "market_cap": 408465.0,
-                "liquidity_usd": 63498.29,
-                "volume_24h": 5260418.55,
-                "volume_5m": 8383.61,
-                "buys_24h": 93314,
-                "sells_24h": 59618,
-                "price_change_24h": 281.0,
-                "price_change_1h": 25.49,
-                "price_change_5m": 2.6,
-                "age": "23.9h",
-                "age_seconds": 85925,
-                "jovx_score": 95,
-                "tag": "HIGH ALPHA",
-                "risk_level": "LOW RISK 🛡️",
-                "lp_locked": True,
-                "liquidity_locked": True,
-                "buy_url": "https://jup.ag/swap/SOL-FAopSovS2WFJK5qEAmcuwAVH98CvmBwT6Lpq4EK2pump",
-                "dex_platform": "RAYDIUM (SOL)",
-                "pair_url": "https://dexscreener.com/solana/f2p22sfcg4gkja2upyqzef9bpw3rsec5q2wmvewuibl7",
-                "icon": "https://cdn.dexscreener.com/cms/images/SKAvObn4w9IqHNgi?width=800&height=800&quality=95&format=auto",
-            },
-            {
-                "address": "0xdc453b1405CfE25e2afBA8E7F4272b0a00437777",
-                "name": "TasQ Network",
-                "symbol": "TASQ",
-                "chain": "ROBINHOOD",
-                "price_usd": 0.0001748,
-                "market_cap": 174872.0,
-                "liquidity_usd": 42832.54,
-                "volume_24h": 195373.8,
-                "volume_5m": 5789.44,
-                "buys_24h": 845,
-                "sells_24h": 501,
-                "price_change_24h": 172.0,
-                "price_change_1h": 172.0,
-                "price_change_5m": 4.93,
-                "age": "39m",
-                "age_seconds": 2353,
-                "jovx_score": 95,
-                "tag": "HIGH ALPHA",
-                "risk_level": "LOW RISK 🛡️",
-                "lp_locked": True,
-                "liquidity_locked": True,
-                "buy_url": "https://app.uniswap.org/swap?chain=robinhood&outputCurrency=0xdc453b1405CfE25e2afBA8E7F4272b0a00437777",
-                "dex_platform": "UNISWAP (ROBINHOOD)",
-                "pair_url": "https://dexscreener.com/robinhood/0x16684607c92e1a59302763400cc1641c8f9dbe7e",
-                "icon": "https://cdn.dexscreener.com/cms/images/BqiXSL6Rj5M6NWSU?width=800&height=800&quality=95&format=auto",
-            },
-            {
-                "address": "2T6Wg3urxPQHaoGh4gqNHyYL6FAfyWA5BaH6Lo37pump",
-                "name": "Miners",
-                "symbol": "MINER",
-                "chain": "SOLANA",
-                "price_usd": 0.000178,
-                "market_cap": 132463.0,
-                "liquidity_usd": 38943.21,
-                "volume_24h": 1457152.83,
-                "volume_5m": 2006.64,
-                "buys_24h": 14514,
-                "sells_24h": 9863,
-                "price_change_24h": 299.0,
-                "price_change_1h": -3.46,
-                "price_change_5m": 16.13,
-                "age": "22.3h",
-                "age_seconds": 80358,
-                "jovx_score": 90,
-                "tag": "HIGH ALPHA",
-                "risk_level": "LOW RISK 🛡️",
-                "lp_locked": True,
-                "liquidity_locked": True,
-                "buy_url": "https://jup.ag/swap/SOL-2T6Wg3urxPQHaoGh4gqNHyYL6FAfyWA5BaH6Lo37pump",
-                "dex_platform": "RAYDIUM (SOL)",
-                "pair_url": "https://dexscreener.com/solana/8j42or3k3kbgnguqr2rbzcrweta7jhrnscjmscipv8in",
-                "icon": "https://cdn.dexscreener.com/cms/images/Ob4hEiorBGqsUkDB?width=800&height=800&quality=95&format=auto",
-            },
-            {
-                "address": "AAYnxkQJySJ4RkTQidjUoi4c7P7RNBHDWgzpHjbapump",
-                "name": "Peak male physique",
-                "symbol": "PEAKMALE",
-                "chain": "SOLANA",
-                "price_usd": 0.0001643,
-                "market_cap": 160191.0,
-                "liquidity_usd": 36070.58,
-                "volume_24h": 674213.83,
-                "volume_5m": 44564.41,
-                "buys_24h": 8479,
-                "sells_24h": 2247,
-                "price_change_24h": 226.0,
-                "price_change_1h": 226.0,
-                "price_change_5m": 35.45,
-                "age": "46m",
-                "age_seconds": 2769,
-                "jovx_score": 90,
-                "tag": "HIGH ALPHA",
-                "risk_level": "LOW RISK 🛡️",
-                "lp_locked": True,
-                "liquidity_locked": True,
-                "buy_url": "https://jup.ag/swap/SOL-AAYnxkQJySJ4RkTQidjUoi4c7P7RNBHDWgzpHjbapump",
-                "dex_platform": "RAYDIUM (SOL)",
-                "pair_url": "https://dexscreener.com/solana/6ksizkgalecrfqlgpyokyfufftyy9fg51nh8zdinfpzq",
-                "icon": "https://cdn.dexscreener.com/cms/images/uaq8JpnEy9lAd1Dc?width=800&height=800&quality=95&format=auto",
-            },
-            {
-                "address": "9BkorQ9bvmbbpUtEMEyYggG8ApSgGfLZVsM9nSbJpump",
-                "name": "ULTRA INU",
-                "symbol": "UI",
-                "chain": "SOLANA",
-                "price_usd": 0.0001222,
-                "market_cap": 116083.0,
-                "liquidity_usd": 30503.68,
-                "volume_24h": 617301.86,
-                "volume_5m": 5659.91,
-                "buys_24h": 9656,
-                "sells_24h": 6466,
-                "price_change_24h": 156.0,
-                "price_change_1h": -46.46,
-                "price_change_5m": -29.0,
-                "age": "4.5h",
-                "age_seconds": 16251,
-                "jovx_score": 90,
-                "tag": "HIGH ALPHA",
-                "risk_level": "LOW RISK 🛡️",
-                "lp_locked": True,
-                "liquidity_locked": True,
-                "buy_url": "https://jup.ag/swap/SOL-9BkorQ9bvmbbpUtEMEyYggG8ApSgGfLZVsM9nSbJpump",
-                "dex_platform": "RAYDIUM (SOL)",
-                "pair_url": "https://dexscreener.com/solana/8sbe1r1tzibgoje85srgpv3pkapntbbj1wn7stoo2wht",
-                "icon": "https://cdn.dexscreener.com/cms/images/31cZijhEMXJfqAUg?width=800&height=800&quality=95&format=auto",
-            },
-            {
                 "address": "F6EDRhRzXGmkBabhSHdAnqx26XLhG6NCa83wwuqFpump",
                 "name": "ECSTASY",
                 "symbol": "ECSTASY",
                 "chain": "SOLANA",
-                "price_usd": 0.0001012,
-                "market_cap": 97889.0,
-                "liquidity_usd": 27176.58,
-                "volume_24h": 200074.85,
-                "volume_5m": 2488.96,
-                "buys_24h": 3217,
-                "sells_24h": 2304,
-                "price_change_24h": 111.0,
-                "price_change_1h": -4.6,
-                "price_change_5m": 3.79,
-                "age": "5.2h",
-                "age_seconds": 18647,
+                "price_usd": 9.89e-05,
+                "market_cap": 95653.0,
+                "liquidity_usd": 27350.2,
+                "volume_24h": 437538.62,
+                "volume_5m": 2575.08,
+                "buys_24h": 8384,
+                "sells_24h": 4608,
+                "price_change_24h": 107.0,
+                "price_change_1h": -2.17,
+                "price_change_5m": -0.67,
+                "age": "13.3h",
+                "age_seconds": 47778,
                 "jovx_score": 90,
                 "tag": "HIGH ALPHA",
                 "risk_level": "LOW RISK 🛡️",
@@ -716,31 +474,301 @@ class JovxScanner:
                 "icon": "https://cdn.dexscreener.com/cms/images/RamMH3aG8--lKUMh?width=800&height=800&quality=95&format=auto",
             },
             {
-                "address": "DwcXyhEcSvzWgakDKpetZLFvbAHutpGpzhbU4iempump",
-                "name": "Bullcraft",
-                "symbol": "BULLCRAFT",
+                "address": "5nkEwLHNagMERJWWuiaFsuRukLvauWkoVTRxZ5TNP4eL",
+                "name": "Super Pepe",
+                "symbol": "SP",
                 "chain": "SOLANA",
-                "price_usd": 0.0001042,
-                "market_cap": 102505.0,
-                "liquidity_usd": 28219.37,
-                "volume_24h": 532338.31,
-                "volume_5m": 1325.37,
-                "buys_24h": 279,
-                "sells_24h": 331,
-                "price_change_24h": 16.19,
-                "price_change_1h": 16.19,
-                "price_change_5m": 3.02,
-                "age": "51m",
-                "age_seconds": 3090,
-                "jovx_score": 80,
+                "price_usd": 0.0002701,
+                "market_cap": 270130.0,
+                "liquidity_usd": 35921.36,
+                "volume_24h": 36962.23,
+                "volume_5m": 231.01,
+                "buys_24h": 497,
+                "sells_24h": 152,
+                "price_change_24h": 104.0,
+                "price_change_1h": -1.02,
+                "price_change_5m": 5.91,
+                "age": "3.1d",
+                "age_seconds": 270654,
+                "jovx_score": 90,
+                "tag": "HIGH ALPHA",
+                "risk_level": "LOW RISK 🛡️",
+                "lp_locked": True,
+                "liquidity_locked": True,
+                "buy_url": "https://jup.ag/swap/SOL-5nkEwLHNagMERJWWuiaFsuRukLvauWkoVTRxZ5TNP4eL",
+                "dex_platform": "RAYDIUM (SOL)",
+                "pair_url": "https://dexscreener.com/solana/gfoqbauawkqfgmdu6xhbeqdlfpq46ped4luy8p6gbpy5",
+                "icon": "https://cdn.dexscreener.com/cms/images/GhOqlMN20IVIqchF?width=800&height=800&quality=95&format=auto",
+            },
+            {
+                "address": "0x833a7fA750628b391c35bf384d7706652c7e8202",
+                "name": "SECONDED",
+                "symbol": "SECONDED",
+                "chain": "ROBINHOOD",
+                "price_usd": 0.0001307,
+                "market_cap": 113968.0,
+                "liquidity_usd": 33987.77,
+                "volume_24h": 70691.44,
+                "volume_5m": 0.0,
+                "buys_24h": 504,
+                "sells_24h": 311,
+                "price_change_24h": 101.0,
+                "price_change_1h": 3.62,
+                "price_change_5m": 0.0,
+                "age": "6.4d",
+                "age_seconds": 554750,
+                "jovx_score": 90,
+                "tag": "HIGH ALPHA",
+                "risk_level": "LOW RISK 🛡️",
+                "lp_locked": True,
+                "liquidity_locked": True,
+                "buy_url": "https://app.uniswap.org/swap?chain=robinhood&outputCurrency=0x833a7fA750628b391c35bf384d7706652c7e8202",
+                "dex_platform": "UNISWAP (ROBINHOOD)",
+                "pair_url": "https://dexscreener.com/robinhood/0x9865755bedaa7af163cf2a0ddf65d6386729f5316ff118fea25168129107cfc2",
+                "icon": "https://cdn.dexscreener.com/cms/images/Eh41fb4sLICdVm70?width=800&height=800&quality=95&format=auto",
+            },
+            {
+                "address": "0x735C974D5AC7BAbc85d6038BC0412C5C062A2b3e",
+                "name": "Bunker Mode",
+                "symbol": "BUNKER",
+                "chain": "ETHEREUM",
+                "price_usd": 0.0002567,
+                "market_cap": 248845.0,
+                "liquidity_usd": 60365.38,
+                "volume_24h": 923979.17,
+                "volume_5m": 9746.36,
+                "buys_24h": 2200,
+                "sells_24h": 1592,
+                "price_change_24h": 5948.0,
+                "price_change_1h": -9.35,
+                "price_change_5m": 23.26,
+                "age": "8.0h",
+                "age_seconds": 28909,
+                "jovx_score": 99,
+                "tag": "HIGH ALPHA",
+                "risk_level": "LOW RISK 🛡️",
+                "lp_locked": True,
+                "liquidity_locked": True,
+                "buy_url": "https://app.uniswap.org/swap?chain=mainnet&outputCurrency=0x735C974D5AC7BAbc85d6038BC0412C5C062A2b3e",
+                "dex_platform": "UNISWAP (ETHEREUM)",
+                "pair_url": "https://dexscreener.com/ethereum/0xf24dc1ca5dfae5edcf61f2af4486388387fcfeffe665d5bdd82417d7154b5b21",
+                "icon": "https://cdn.dexscreener.com/cms/images/tcmTw5MW2kUMQz7u?width=800&height=800&quality=95&format=auto",
+            },
+            {
+                "address": "0xcafE1D64c643AA1B33dcBBD32ABb517EB6FaF2D1",
+                "name": "gem",
+                "symbol": "GEM",
+                "chain": "ROBINHOOD",
+                "price_usd": 0.0001089,
+                "market_cap": 108924.0,
+                "liquidity_usd": 80088.55,
+                "volume_24h": 203603.75,
+                "volume_5m": 0.0,
+                "buys_24h": 310,
+                "sells_24h": 200,
+                "price_change_24h": 298.0,
+                "price_change_1h": 0.0,
+                "price_change_5m": 0.0,
+                "age": "5.5h",
+                "age_seconds": 19978,
+                "jovx_score": 99,
+                "tag": "HIGH ALPHA",
+                "risk_level": "LOW RISK 🛡️",
+                "lp_locked": True,
+                "liquidity_locked": True,
+                "buy_url": "https://app.uniswap.org/swap?chain=robinhood&outputCurrency=0xcafE1D64c643AA1B33dcBBD32ABb517EB6FaF2D1",
+                "dex_platform": "UNISWAP (ROBINHOOD)",
+                "pair_url": "https://dexscreener.com/robinhood/0x58479673b8c611f22105dc864aa99bf0700caf0d33371d5377752ae70827bd6a",
+                "icon": "https://dd.dexscreener.com/ds-data/tokens/robinhood/0xcafE1D64c643AA1B33dcBBD32ABb517EB6FaF2D1.png",
+            },
+            {
+                "address": "0xB91040F8e25b83b6e8335F4F16DFd53C67Be3c2F",
+                "name": "GoldStandard",
+                "symbol": "GOLD",
+                "chain": "ROBINHOOD",
+                "price_usd": 0.000439,
+                "market_cap": 439000.0,
+                "liquidity_usd": 49966.0,
+                "volume_24h": 43126.0,
+                "volume_5m": 1200.0,
+                "buys_24h": 167,
+                "sells_24h": 50,
+                "price_change_24h": 439.0,
+                "price_change_1h": 0.0,
+                "price_change_5m": 0.0,
+                "age": "22.7h",
+                "age_seconds": 81720,
+                "jovx_score": 95,
+                "tag": "HIGH ALPHA",
+                "risk_level": "LOW RISK 🛡️",
+                "lp_locked": True,
+                "liquidity_locked": True,
+                "buy_url": "https://app.uniswap.org/swap?chain=robinhood&outputCurrency=0xB91040F8e25b83b6e8335F4F16DFd53C67Be3c2F",
+                "dex_platform": "UNISWAP (ROBINHOOD)",
+                "pair_url": "https://dexscreener.com/robinhood/0x450b691060eb809074092b3c2c19c9e54a3bfec6",
+                "icon": "https://dd.dexscreener.com/ds-data/tokens/robinhood/0xB91040F8e25b83b6e8335F4F16DFd53C67Be3c2F.png",
+            },
+            {
+                "address": "0x0CA2f986c95D4B2d638a3561d1ee8Fd33B0220D7",
+                "name": "GachaLife",
+                "symbol": "GACHA",
+                "chain": "ROBINHOOD",
+                "price_usd": 0.000709,
+                "market_cap": 709000.0,
+                "liquidity_usd": 46058.0,
+                "volume_24h": 89797.0,
+                "volume_5m": 2100.0,
+                "buys_24h": 131,
+                "sells_24h": 108,
+                "price_change_24h": 709.0,
+                "price_change_1h": 0.0,
+                "price_change_5m": 0.0,
+                "age": "18.9h",
+                "age_seconds": 68040,
+                "jovx_score": 95,
+                "tag": "HIGH ALPHA",
+                "risk_level": "LOW RISK 🛡️",
+                "lp_locked": True,
+                "liquidity_locked": True,
+                "buy_url": "https://app.uniswap.org/swap?chain=robinhood&outputCurrency=0x0CA2f986c95D4B2d638a3561d1ee8Fd33B0220D7",
+                "dex_platform": "UNISWAP (ROBINHOOD)",
+                "pair_url": "https://dexscreener.com/robinhood/0x0CA2f986c95D4B2d638a3561d1ee8Fd33B0220D7",
+                "icon": "https://dd.dexscreener.com/ds-data/tokens/robinhood/0x0CA2f986c95D4B2d638a3561d1ee8Fd33B0220D7.png",
+            },
+            {
+                "address": "0x5EeEb94A43B72a40166c84c9454Ae75f97793929",
+                "name": "PumpFunCoin",
+                "symbol": "PUMP",
+                "chain": "ROBINHOOD",
+                "price_usd": 0.000638,
+                "market_cap": 638000.0,
+                "liquidity_usd": 43958.0,
+                "volume_24h": 77150.0,
+                "volume_5m": 1800.0,
+                "buys_24h": 132,
+                "sells_24h": 105,
+                "price_change_24h": 638.0,
+                "price_change_1h": 0.0,
+                "price_change_5m": 0.0,
+                "age": "20.5h",
+                "age_seconds": 73800,
+                "jovx_score": 95,
+                "tag": "HIGH ALPHA",
+                "risk_level": "LOW RISK 🛡️",
+                "lp_locked": True,
+                "liquidity_locked": True,
+                "buy_url": "https://app.uniswap.org/swap?chain=robinhood&outputCurrency=0x5EeEb94A43B72a40166c84c9454Ae75f97793929",
+                "dex_platform": "UNISWAP (ROBINHOOD)",
+                "pair_url": "https://dexscreener.com/robinhood/0x5EeEb94A43B72a40166c84c9454Ae75f97793929",
+                "icon": "https://dd.dexscreener.com/ds-data/tokens/robinhood/0x5EeEb94A43B72a40166c84c9454Ae75f97793929.png",
+            },
+            {
+                "address": "kZXneJiCtqsgjN9kgMLVhsjuieYs1LdrBASTXwnpump",
+                "name": "fomo",
+                "symbol": "FOMO",
+                "chain": "SOLANA",
+                "price_usd": 0.005668,
+                "market_cap": 5665667.0,
+                "liquidity_usd": 221872.0,
+                "volume_24h": 265269.0,
+                "volume_5m": 616.0,
+                "buys_24h": 2161,
+                "sells_24h": 1433,
+                "price_change_24h": 12231.0,
+                "price_change_1h": 1.76,
+                "price_change_5m": 0.18,
+                "age": "1d",
+                "age_seconds": 86400,
+                "jovx_score": 99,
+                "tag": "HIGH ALPHA",
+                "risk_level": "LOW RISK 🛡️",
+                "lp_locked": True,
+                "liquidity_locked": True,
+                "buy_url": "https://jup.ag/swap/SOL-kZXneJiCtqsgjN9kgMLVhsjuieYs1LdrBASTXwnpump",
+                "dex_platform": "JUPITER (SOL)",
+                "pair_url": "https://dexscreener.com/solana/29z86z5yffuk4w5t5z4eec6sgh2d69f2q2tqg7z1gqms",
+                "icon": "https://dd.dexscreener.com/ds-data/tokens/solana/kZXneJiCtqsgjN9kgMLVhsjuieYs1LdrBASTXwnpump.png",
+            },
+            {
+                "address": "0x53df63071253a6639b7bf60f1ad92500be8f02b9",
+                "name": "MemeProtocol",
+                "symbol": "MEME",
+                "chain": "ROBINHOOD",
+                "price_usd": 0.001245,
+                "market_cap": 1245000.0,
+                "liquidity_usd": 124557.0,
+                "volume_24h": 333550.0,
+                "volume_5m": 4200.0,
+                "buys_24h": 412,
+                "sells_24h": 321,
+                "price_change_24h": 60.9,
+                "price_change_1h": 0.0,
+                "price_change_5m": 0.0,
+                "age": "1.2d",
+                "age_seconds": 103680,
+                "jovx_score": 92,
                 "tag": "BULLISH TREND",
                 "risk_level": "LOW RISK 🛡️",
                 "lp_locked": True,
                 "liquidity_locked": True,
-                "buy_url": "https://jup.ag/swap/SOL-DwcXyhEcSvzWgakDKpetZLFvbAHutpGpzhbU4iempump",
-                "dex_platform": "RAYDIUM (SOL)",
-                "pair_url": "https://dexscreener.com/solana/eghzxfbbb6gkwl9m7zenzn2s1bejjvafyexkat5ghfsf",
-                "icon": "https://cdn.dexscreener.com/cms/images/JoEkYOrOAqhG-gX5?width=800&height=800&quality=95&format=auto",
+                "buy_url": "https://app.uniswap.org/swap?chain=robinhood&outputCurrency=0x53df63071253a6639b7bf60f1ad92500be8f02b9",
+                "dex_platform": "UNISWAP (ROBINHOOD)",
+                "pair_url": "https://dexscreener.com/robinhood/0x53df63071253a6639b7bf60f1ad92500be8f02b9",
+                "icon": "https://dd.dexscreener.com/ds-data/tokens/robinhood/0x53df63071253a6639b7bf60f1ad92500be8f02b9.png",
+            },
+            {
+                "address": "0x0989b52a4cf548079bfab84b3ca48efbf98ba298",
+                "name": "ChadArmy",
+                "symbol": "CHAD",
+                "chain": "ROBINHOOD",
+                "price_usd": 0.00053,
+                "market_cap": 530000.0,
+                "liquidity_usd": 53003.0,
+                "volume_24h": 57147.0,
+                "volume_5m": 1100.0,
+                "buys_24h": 122,
+                "sells_24h": 87,
+                "price_change_24h": 293.0,
+                "price_change_1h": 0.0,
+                "price_change_5m": 0.0,
+                "age": "1.1d",
+                "age_seconds": 95040,
+                "jovx_score": 90,
+                "tag": "BULLISH TREND",
+                "risk_level": "LOW RISK 🛡️",
+                "lp_locked": True,
+                "liquidity_locked": True,
+                "buy_url": "https://app.uniswap.org/swap?chain=robinhood&outputCurrency=0x0989b52a4cf548079bfab84b3ca48efbf98ba298",
+                "dex_platform": "UNISWAP (ROBINHOOD)",
+                "pair_url": "https://dexscreener.com/robinhood/0x0989b52a4cf548079bfab84b3ca48efbf98ba298",
+                "icon": "https://dd.dexscreener.com/ds-data/tokens/robinhood/0x0989b52a4cf548079bfab84b3ca48efbf98ba298.png",
+            },
+            {
+                "address": "0x89980d0d82626e254ff9cb0df57e3f8373cb7462",
+                "name": "BunkerCoin",
+                "symbol": "BUNKER",
+                "chain": "ETHEREUM",
+                "price_usd": 0.006036,
+                "market_cap": 603650.0,
+                "liquidity_usd": 60365.0,
+                "volume_24h": 923979.0,
+                "volume_5m": 15000.0,
+                "buys_24h": 1200,
+                "sells_24h": 850,
+                "price_change_24h": 5948.0,
+                "price_change_1h": 2.5,
+                "price_change_5m": 0.4,
+                "age": "1.8d",
+                "age_seconds": 155520,
+                "jovx_score": 96,
+                "tag": "HIGH ALPHA",
+                "risk_level": "LOW RISK 🛡️",
+                "lp_locked": True,
+                "liquidity_locked": True,
+                "buy_url": "https://app.uniswap.org/swap?chain=mainnet&outputCurrency=0x89980d0d82626e254ff9cb0df57e3f8373cb7462",
+                "dex_platform": "UNISWAP (ETH)",
+                "pair_url": "https://dexscreener.com/ethereum/0x89980d0d82626e254ff9cb0df57e3f8373cb7462",
+                "icon": "https://dd.dexscreener.com/ds-data/tokens/ethereum/0x89980d0d82626e254ff9cb0df57e3f8373cb7462.png",
             },
         ]
         with self.lock:
@@ -918,161 +946,160 @@ class JovxScanner:
             time.sleep(15)
 
     def _run_scan_cycle(self):
-        """Executa um ciclo rápido de coleta em lote e auditoria de contratos"""
+        """Executa auditoria prioritária ao vivo das moedas na tela e caça novas oportunidades"""
+        now = time.time()
+
+        # =========================================================================
+        # ETAPA 1: AUDITORIA AO VIVO PRIORITÁRIA DAS MOEDAS NA TELA (Lotes de 6 tokens)
+        # =========================================================================
+        # As moedas ativas na tela (cached_list), pool e reserva são consultadas em lotes pequenos
+        # de no máximo 6 tokens para NUNCA bater o teto de 30 pares por requisição da DexScreener.
+        # Isso garante que 100% das moedas na tela tenham seus dados atualizados a cada 15 segundos!
+        active_addrs = []
+        with self.lock:
+            for t in self.cached_list:
+                if t.get("address"): active_addrs.append(t["address"])
+            for addr in list(self.pool.keys()):
+                active_addrs.append(addr)
+            for fb in self.fallback_reserve:
+                if fb.get("address"): active_addrs.append(fb["address"])
+
+        unique_active_addrs = list(dict.fromkeys(active_addrs))
+        active_best_pairs = {}
+
+        for i in range(0, len(unique_active_addrs), 6):
+            chunk = unique_active_addrs[i:i+6]
+            try:
+                r_act = requests.get(self.tokens_batch_url + ",".join(chunk), headers=self.headers, timeout=5)
+                if r_act.status_code == 200:
+                    for p in r_act.json().get("pairs", []):
+                        base_a = p.get("baseToken", {}).get("address")
+                        if not base_a: continue
+                        vol = float(p.get("volume", {}).get("h24", 0) or 0)
+                        if base_a not in active_best_pairs or vol > float(active_best_pairs[base_a].get("volume", {}).get("h24", 0) or 0):
+                            active_best_pairs[base_a] = p
+            except Exception:
+                pass
+
+        # =========================================================================
+        # ETAPA 2: PURGA IMEDIATA ANTI-DUMP / ANTI-RUG
+        # =========================================================================
+        with self.lock:
+            tokens_to_kill = set()
+
+            for addr in unique_active_addrs:
+                # 1. Se já está na blacklist permanente
+                if addr in self.blacklisted_dumped_addrs:
+                    tokens_to_kill.add(addr)
+                    continue
+
+                if addr in active_best_pairs:
+                    pair = active_best_pairs[addr]
+                    liq = float(pair.get("liquidity", {}).get("usd", 0) or 0)
+                    pc24 = float(pair.get("priceChange", {}).get("h24", 0) or 0)
+                    pc1h = float(pair.get("priceChange", {}).get("h1", 0) or 0)
+                    vol24 = float(pair.get("volume", {}).get("h24", 0) or 0)
+
+                    # KILL SWITCHES ANTI-DERRETIMENTO (Tolerância Zero):
+                    # - Liquidez derreteu abaixo de $20.000
+                    # - Variação 24h ficou negativa
+                    # - Crash repentino de mais de 15% em 1 hora
+                    # - Volume 24h abaixo de $20.000
+                    if liq < 20000 or pc24 < 0.0 or pc1h < -15.0 or vol24 < 20000:
+                        sym = pair.get("baseToken", {}).get("symbol", addr[:8])
+                        logger.warning(f"[ANTI-DUMP KILL] Moeda derreteu ao vivo: {sym} (Liq: ${liq:.0f}, 24h: {pc24}%, 1h: {pc1h}%) -> BANINDO!")
+                        tokens_to_kill.add(addr)
+                    else:
+                        # Moeda saudável: atualiza métricas ao vivo imediatamente no pool!
+                        audited = self._audit_and_score_pair(pair)
+                        if audited:
+                            self.pool[addr] = audited
+
+            for bad_addr in tokens_to_kill:
+                self.blacklisted_dumped_addrs.add(bad_addr)
+                if bad_addr in self.pool:
+                    del self.pool[bad_addr]
+                self.fallback_reserve = [r for r in self.fallback_reserve if r.get("address") != bad_addr]
+                self.cached_list = [t for t in self.cached_list if t.get("address") != bad_addr]
+
+        # =========================================================================
+        # ETAPA 3: DESCOBERTA DE NOVAS GEMAS (Profiles, Boosts, Search)
+        # =========================================================================
         candidate_addrs = []
 
-        # 0. Smart Pulse Helius (Pulso a cada 6 minutos, alternando 1 programa por vez, com trava de segurança de 20k/dia)
-        now = time.time()
-        if HELIUS_API_KEY and not self.helius_disabled and (now - self.last_helius_fetch >= self.helius_interval):
-            current_day = time.strftime("%Y-%m-%d")
-            if current_day != self.helius_day_tracker:
-                self.helius_day_tracker = current_day
-                self.helius_daily_credits = 0
-
-            if self.helius_daily_credits >= self.helius_daily_limit:
-                logger.info("[HELIUS GUARD] Limite diário de segurança (20k créditos) atingido. Preservando cota e operando 100% via DexScreener gratuito.")
-            else:
-                sol_programs = [
-                    "675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8",  # Raydium AMM v4
-                    "6EF8rrecthR5Dkzon8Nwu78hRvfCKubJ14M5uBEwF6P",   # Pump.fun
-                    "CPMMoo8L3F4NbTegBCKVNunggL7H1ZpdTHKxQB5qKP1C"   # Raydium CPMM
-                ]
-                prog = sol_programs[self.helius_prog_index % len(sol_programs)]
-                self.helius_prog_index += 1
-                self.last_helius_fetch = now
-
-                try:
-                    helius_url = f"https://api.helius.xyz/v0/addresses/{prog}/transactions?api-key={HELIUS_API_KEY}&limit=20"
-                    r_h = requests.get(helius_url, timeout=3)
-                    if r_h.status_code == 200:
-                        self.helius_daily_credits += 100
-                        txs = r_h.json()
-                        for tx in txs:
-                            for token_trans in tx.get("tokenTransfers", []):
-                                mint = token_trans.get("mint")
-                                if mint and mint not in EXCLUDED_SYMBOLS and len(mint) >= 32:
-                                    candidate_addrs.append(mint)
-                    elif r_h.status_code in (402, 429):
-                        logger.warning(f"[HELIUS FALLBACK] Status {r_h.status_code} recebido. Ativando fallback automático 100% DexScreener gratuito.")
-                        self.helius_disabled = True
-                except Exception as e:
-                    logger.error(f"[HELIUS FETCH ERROR]: {e}")
-
-        # 1. Puxar os perfis mais recentes da DexScreener
+        # 3.1. Perfis recentes
         try:
             r = requests.get(self.profiles_url, headers=self.headers, timeout=4)
             if r.status_code == 200:
                 profiles = r.json()
                 if isinstance(profiles, list):
-                    for p in profiles[:30]:
+                    for p in profiles[:20]:
                         addr = p.get("tokenAddress")
-                        if addr: candidate_addrs.append(addr)
+                        if addr and addr not in self.blacklisted_dumped_addrs:
+                            candidate_addrs.append(addr)
         except Exception:
             pass
 
-        # 2. Puxar os boosts mais recentes e os Top boosts
+        # 3.2. Boosts recentes
         for b_url in [self.boosts_url, self.boosts_top_url]:
             try:
                 r_b = requests.get(b_url, headers=self.headers, timeout=4)
                 if r_b.status_code == 200:
                     boosts = r_b.json()
                     if isinstance(boosts, list):
-                        for b in boosts[:25]:
+                        for b in boosts[:20]:
                             addr = b.get("tokenAddress")
-                            if addr: candidate_addrs.append(addr)
+                            if addr and addr not in self.blacklisted_dumped_addrs:
+                                candidate_addrs.append(addr)
             except Exception:
                 pass
 
-        # 3. AUDITORIA PRIORITÁRIA ANTI-DUMP AO VIVO:
-        # Puxa OBRIGATORIAMENTE todas as moedas na tela (cached_list), no pool e na reserva para checar se derreteram
-        with self.lock:
-            for t in self.cached_list:
-                if t.get("address"): candidate_addrs.append(t["address"])
-            for addr in list(self.pool.keys()):
-                candidate_addrs.append(addr)
-            for fb in self.fallback_reserve:
-                if fb.get("address"): candidate_addrs.append(fb["address"])
+        # 3.3. Busca de mercado alternada
+        kw = self.search_keywords[self.search_index % len(self.search_keywords)]
+        self.search_index += 1
+        try:
+            r_s = requests.get(f"{self.search_url}?q={kw}", headers=self.headers, timeout=4)
+            if r_s.status_code == 200:
+                pairs = r_s.json().get("pairs", [])
+                for pair in pairs[:10]:
+                    addr = pair.get("baseToken", {}).get("address")
+                    if addr and addr not in self.blacklisted_dumped_addrs:
+                        candidate_addrs.append(addr)
+        except Exception:
+            pass
 
-        # 4. Puxar palavras-chave de busca alternadas (incluindo FOMO)
-        for _ in range(2):
-            kw = self.search_keywords[self.search_index % len(self.search_keywords)]
-            self.search_index += 1
+        unique_discover = list(dict.fromkeys(candidate_addrs))[:40]
+        discover_best_pairs = {}
+
+        for i in range(0, len(unique_discover), 6):
+            chunk = unique_discover[i:i+6]
             try:
-                r_s = requests.get(f"{self.search_url}?q={kw}", headers=self.headers, timeout=4)
-                if r_s.status_code == 200:
-                    pairs = r_s.json().get("pairs", [])
-                    for pair in pairs[:10]:
-                        addr = pair.get("baseToken", {}).get("address")
-                        if addr: candidate_addrs.append(addr)
+                r_disc = requests.get(self.tokens_batch_url + ",".join(chunk), headers=self.headers, timeout=5)
+                if r_disc.status_code == 200:
+                    for p in r_disc.json().get("pairs", []):
+                        base_a = p.get("baseToken", {}).get("address")
+                        if not base_a: continue
+                        vol = float(p.get("volume", {}).get("h24", 0) or 0)
+                        if base_a not in discover_best_pairs or vol > float(discover_best_pairs[base_a].get("volume", {}).get("h24", 0) or 0):
+                            discover_best_pairs[base_a] = p
             except Exception:
                 pass
 
-        unique_addrs = list(dict.fromkeys(candidate_addrs))[:120]
-        if not unique_addrs:
-            return
-
-        # 5. Consultar em lotes (batch de 30 tokens por requisição HTTP)
-        all_pairs = []
-        for i in range(0, len(unique_addrs), 30):
-            chunk = unique_addrs[i:i+30]
-            try:
-                r_batch = requests.get(self.tokens_batch_url + ",".join(chunk), headers=self.headers, timeout=5)
-                if r_batch.status_code == 200:
-                    all_pairs.extend(r_batch.json().get("pairs", []))
-            except Exception:
-                pass
-
-        if not all_pairs:
-            return
-
-        # 6. Agrupar pares pelo par de maior volume 24h
-        token_best_pair = {}
-        for p in all_pairs:
-            base = p.get("baseToken", {})
-            addr = base.get("address")
-            if not addr:
+        # Auditar novas gemas descobertas
+        fresh_new_tokens = []
+        for addr, pair in discover_best_pairs.items():
+            if addr in self.blacklisted_dumped_addrs:
                 continue
-            vol = float(p.get("volume", {}).get("h24", 0) or 0)
-            if addr not in token_best_pair or vol > float(token_best_pair[addr].get("volume", {}).get("h24", 0) or 0):
-                token_best_pair[addr] = p
-
-        # 7. Auditar cada token
-        fresh_valid_tokens = []
-        for addr, pair in token_best_pair.items():
             audited = self._audit_and_score_pair(pair)
             if audited:
-                fresh_valid_tokens.append(audited)
-            else:
-                # Se falhou especificamente por ser rugpull/derretido (24h negativo ou sem liquidez), marca na blacklist
-                liq = float(pair.get("liquidity", {}).get("usd", 0) or 0)
-                pc24 = float(pair.get("priceChange", {}).get("h24", 0) or 0)
-                if pc24 < 0.0 or liq < 15000:
-                    self.blacklisted_dumped_addrs.add(addr)
+                fresh_new_tokens.append(audited)
 
-        # 8. Atualizar a piscina com auditoria Anti-Dump em tempo real
         with self.lock:
-            # 8.1. PURGA INSTANTÂNEA ANTI-DUMP DAS MOEDAS ATIVAS E RESERVA:
-            # Pega qualquer moeda que derreteu (24h negativo, liquidez < 20k ou na blacklist)
-            dumped_in_memory = set()
-            for addr, t in list(self.pool.items()):
-                if addr in self.blacklisted_dumped_addrs or t.get("price_change_24h", 0) < 0.0 or t.get("liquidity_usd", 0) < 20000 or t.get("volume_24h", 0) < 20000 or t.get("sells_24h", 0) < 2:
-                    dumped_in_memory.add(addr)
-
-            for bad_addr in dumped_in_memory:
-                self.blacklisted_dumped_addrs.add(bad_addr)
-                if bad_addr in self.pool:
-                    logger.warning(f"[ANTI-DUMP KILL] Eliminando e banindo token derretido: {self.pool[bad_addr].get('symbol')}")
-                    del self.pool[bad_addr]
-                self.fallback_reserve = [r for r in self.fallback_reserve if r.get("address") != bad_addr]
-                self.cached_list = [t for t in self.cached_list if t.get("address") != bad_addr]
-
-            # 8.2. Atualizar/Inserir tokens saudáveis aprovados (NUNCA banidos)
-            for t in fresh_valid_tokens:
-                if t["address"] in self.blacklisted_dumped_addrs:
-                    continue
-                self.pool[t["address"]] = t
-                if hasattr(self, 'fallback_reserve') and t["address"] not in {r.get("address") for r in self.fallback_reserve}:
-                    self.fallback_reserve.append(t)
+            for t in fresh_new_tokens:
+                if t["address"] not in self.blacklisted_dumped_addrs:
+                    self.pool[t["address"]] = t
+                    if hasattr(self, 'fallback_reserve') and t["address"] not in {r.get("address") for r in self.fallback_reserve}:
+                        self.fallback_reserve.append(t)
 
             if hasattr(self, 'fallback_reserve'):
                 self.fallback_reserve = [
@@ -1080,6 +1107,7 @@ class JovxScanner:
                     if r.get("address") not in self.blacklisted_dumped_addrs 
                     and r.get("liquidity_usd", 0) >= 20000 
                     and r.get("price_change_24h", 0) >= 0.0 
+                    and r.get("volume_24h", 0) >= 20000
                     and r.get("age_seconds", 0) <= MAX_TOKEN_AGE_SECONDS
                 ][:50]
 
