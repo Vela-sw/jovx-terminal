@@ -961,12 +961,14 @@ class JovxScanner:
 
         unique_active_addrs = list(dict.fromkeys(active_addrs))
         active_best_pairs = {}
+        successfully_queried_addrs = set()
 
         for i in range(0, len(unique_active_addrs), 6):
             chunk = unique_active_addrs[i:i+6]
             try:
                 r_act = requests.get(self.tokens_batch_url + ",".join(chunk), headers=self.headers, timeout=5)
                 if r_act.status_code == 200:
+                    successfully_queried_addrs.update(chunk)
                     for p in r_act.json().get("pairs", []):
                         base_a = p.get("baseToken", {}).get("address")
                         if not base_a: continue
@@ -986,6 +988,14 @@ class JovxScanner:
             for addr in unique_active_addrs:
                 # 1. Se já está na blacklist permanente
                 if addr in self.blacklisted_dumped_addrs:
+                    tokens_to_kill_permanently.add(addr)
+                    continue
+
+                # 2. AUTO-BAN 100% AUTOMÁTICO PARA PARES INEXISTENTES / 404 NO DEXSCREENER:
+                # Se a consulta foi realizada com sucesso mas a DexScreener não encontrou nenhum par
+                # para o endereço, a moeda é banida permanentemente de forma 100% automática!
+                if addr in successfully_queried_addrs and addr not in active_best_pairs:
+                    logger.warning(f"[AUTO-BAN 404] Moeda sem par no DexScreener: {addr} -> BANINDO AUTOMATICAMENTE!")
                     tokens_to_kill_permanently.add(addr)
                     continue
 
@@ -1164,6 +1174,12 @@ class JovxScanner:
 
             # FILTRO ANTI-DUMP PERMANENTE: Rejeita imediatamente moedas da blacklist
             if address in self.blacklisted_dumped_addrs:
+                return None
+
+            # FILTRO ANTI-404: Rejeita qualquer par que não possua endereço de par ou URL canônica da DexScreener
+            pair_url = active_pair.get("url", "")
+            pair_addr = active_pair.get("pairAddress", "")
+            if not pair_addr or not pair_url or "dexscreener.com" not in pair_url:
                 return None
 
             # FILTRO 1: Moedas Nativas Proibidas
