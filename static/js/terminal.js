@@ -208,7 +208,10 @@ function renderTokens() {
         // Filtro de Rede
         if (currentChain !== 'ALL') {
             if (currentChain === 'FOMO') {
-                const isFomo = t.chain === 'FOMO' || t.chain === 'ROBINHOOD' || (t.dex_platform && t.dex_platform.includes('FOMO')) || (t.tag && t.tag.includes('FOMO'));
+                const isFomo = t.chain === 'FOMO' || t.chain === 'ROBINHOOD' || 
+                               t.symbol === 'FOMO' || (t.name && t.name.toLowerCase().includes('fomo')) ||
+                               (t.dex_platform && t.dex_platform.includes('FOMO')) || 
+                               (t.tag && t.tag.includes('FOMO'));
                 if (!isFomo) return false;
             } else if (currentChain === 'SOLANA') {
                 if (t.chain !== 'SOLANA' && (!t.dex_platform || !t.dex_platform.includes('SOL'))) return false;
@@ -230,7 +233,10 @@ function renderTokens() {
         if (currentFilter === 'EARLY') return t.market_cap < 500000;
         if (currentFilter === 'WHALE') return (t.buys_24h / (t.sells_24h || 1)) >= 1.25;
         if (currentFilter === 'FOMO') {
-            return t.chain === 'FOMO' || t.chain === 'ROBINHOOD' || (t.dex_platform && t.dex_platform.includes('FOMO')) || (t.tag && t.tag.includes('FOMO'));
+            return t.chain === 'FOMO' || t.chain === 'ROBINHOOD' || 
+                   t.symbol === 'FOMO' || (t.name && t.name.toLowerCase().includes('fomo')) ||
+                   (t.dex_platform && t.dex_platform.includes('FOMO')) || 
+                   (t.tag && t.tag.includes('FOMO'));
         }
 
         return true;
