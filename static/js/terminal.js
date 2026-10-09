@@ -384,9 +384,11 @@ function renderTokens() {
             `;
         }
 
+        const chartUrl = (t.pair_url && t.pair_url.startsWith('http') && !t.pair_url.includes('undefined')) ? t.pair_url : `https://dexscreener.com/solana/${t.address}`;
+
         // Renderização para Tokens Abertos (Rank #6 ao #20, ou TODOS se PRO)
         return `
-            <tr class="hover:bg-surfaceBorder/40 transition cursor-pointer" onclick="window.open('${t.pair_url}', '_blank')">
+            <tr class="hover:bg-surfaceBorder/40 transition cursor-pointer" onclick="window.open('${chartUrl}', '_blank')">
                 <td class="py-3 px-4 text-center font-mono text-slate-500 font-bold">${displayRank}</td>
                 
                 <!-- TOKEN IDENTIFIER -->
@@ -480,7 +482,7 @@ function renderTokens() {
                         </a>
 
                         <!-- ATALHO DEXSCREENER -->
-                        <a href="${t.pair_url}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()" class="p-1.5 rounded bg-surface border border-surfaceBorder hover:border-jovxPurple text-slate-400 hover:text-white transition" title="Open Chart">
+                        <a href="${chartUrl}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()" class="p-1.5 rounded bg-surface border border-surfaceBorder hover:border-jovxPurple text-slate-400 hover:text-white transition" title="Open Chart">
                             <i data-lucide="bar-chart-2" class="w-3.5 h-3.5"></i>
                         </a>
                     </div>
