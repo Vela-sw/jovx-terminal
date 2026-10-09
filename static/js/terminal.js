@@ -131,7 +131,11 @@ async function fetchTokens(manual = false) {
         const data = await res.json();
         
         if (data.status === 'success' && data.tokens && data.tokens.length > 0) {
-            allTokens = data.tokens;
+            allTokens = data.tokens.map((t, idx) => ({
+                ...t,
+                master_rank: t.master_rank || (idx + 1),
+                is_top_5: t.is_top_5 !== undefined ? t.is_top_5 : (idx < 5)
+            }));
 
             // Toca o alarme sonoro APENAS se houver uma NOVA moeda com Score >= 90
             let hasNewAlpha = false;
@@ -254,7 +258,10 @@ function renderTokens() {
     }
 
     tbody.innerHTML = filtered.map((t, idx) => {
-        const isLocked = !isProUser && idx < 5;
+        // Trava Absoluta Anti-Bypass: Moedas pertencentes ao Top 5 (#1 ao #5) NUNCA podem ser reveladas
+        // para usuários Free Tier, mesmo se filtradas por FOMO, Alpha, Early, Whale ou Busca!
+        const isLocked = !isProUser && (t.is_top_5 === true || (t.master_rank && t.master_rank <= 5));
+        const displayRank = t.master_rank || (idx + 1);
         const isTopScore = t.jovx_score >= 88;
         const scoreColor = isTopScore ? 'text-jovxNeon font-bold' : (t.jovx_score >= 75 ? 'text-alphaGreen' : 'text-warningAmber');
         const scoreBadgeBg = isTopScore ? 'bg-jovxPurple/20 border-jovxPurple pulse-alpha' : (t.jovx_score >= 75 ? 'bg-emerald-500/15 border-emerald-500/40' : 'bg-amber-500/15 border-amber-500/40');
@@ -273,10 +280,10 @@ function renderTokens() {
         // Renderização para Token Bloqueado (Top 5 Free Tier)
         if (isLocked) {
             return `
-                <tr class="pro-row-locked hover:bg-surfaceBorder/40 transition">
+                <tr class="pro-row-locked hover:bg-surfaceBorder/40 transition cursor-pointer" onclick="startStripeCheckout()" title="VIP Alpha Gem — Click to Unlock with PRO Pass">
                     <td class="py-3 px-4 text-center font-mono">
                         <span class="px-2 py-0.5 rounded bg-jovxPurple/25 border border-jovxPurple text-jovxNeon font-mono text-xs font-black shadow-md shadow-purple-900/40">
-                            #${idx + 1} 🔥
+                            #${displayRank} 🔥
                         </span>
                     </td>
                     
@@ -380,7 +387,7 @@ function renderTokens() {
         // Renderização para Tokens Abertos (Rank #6 ao #20, ou TODOS se PRO)
         return `
             <tr class="hover:bg-surfaceBorder/40 transition cursor-pointer" onclick="window.open('${t.pair_url}', '_blank')">
-                <td class="py-3 px-4 text-center font-mono text-slate-500 font-bold">${idx + 1}</td>
+                <td class="py-3 px-4 text-center font-mono text-slate-500 font-bold">${displayRank}</td>
                 
                 <!-- TOKEN IDENTIFIER -->
                 <td class="py-3 px-4">

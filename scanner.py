@@ -798,6 +798,8 @@ class JovxScanner:
                             break
 
             for idx, token in enumerate(self.cached_list[:20]):
+                token["master_rank"] = idx + 1
+                token["is_top_5"] = (idx < 5)
                 if idx < 5:
                     token["risk_level"] = "PRIME ALPHA 🚀"
                     token["tag"] = "PRIME ALPHA"
