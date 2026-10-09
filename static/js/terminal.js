@@ -233,10 +233,10 @@ function renderTokens() {
         if (currentFilter === 'EARLY') return t.market_cap < 500000;
         if (currentFilter === 'WHALE') return (t.buys_24h / (t.sells_24h || 1)) >= 1.25;
         if (currentFilter === 'FOMO') {
-            return t.chain === 'FOMO' || t.chain === 'ROBINHOOD' || 
-                   t.symbol === 'FOMO' || (t.name && t.name.toLowerCase().includes('fomo')) ||
-                   (t.dex_platform && t.dex_platform.includes('FOMO')) || 
-                   (t.tag && t.tag.includes('FOMO'));
+            const hasFomoTheme = t.symbol === 'FOMO' || (t.name && t.name.toLowerCase().includes('fomo')) ||
+                                 (t.tag && t.tag.includes('FOMO'));
+            const isRocketSurge = (t.price_change_24h >= 50.0) || ((t.buys_24h / (t.sells_24h || 1)) >= 1.5 && t.price_change_24h > 10.0);
+            return hasFomoTheme || isRocketSurge;
         }
 
         return true;
