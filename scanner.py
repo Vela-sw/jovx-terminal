@@ -24,16 +24,15 @@ EXCLUDED_NAME_KEYWORDS = [
 ]
 
 # =========================================================================
-# REGRA INFLEXÍVEL DE 15 MOEDAS: DIVISÃO ESTRATÉGICA (8m a 45m)
-# - Metade das moedas de 8m-45m vai para o Top #1 ao #5 (Área VIP / PRO)
-# - A outra metade vai para o Top #6 ao #10 (Área Free Liberada para conversão)
-# - Posições restantes completadas pelas melhores gemas consolidadas (45m a 12h)
-# - Total SEMPRE cravado em 15 moedas!
+# REGRA INFLEXÍVEL DE 20 MOEDAS: ENTRADA DE CAPITAL & ALTA PROBABILIDADE
+# - Top #1 ao #5: Sempre as gemas mais novas e explosivas (Área VIP com PRIME ALPHA 🚀)
+# - Ranks #6 ao #20: Gemas de alta probabilidade abertas para visitantes
+# - Total SEMPRE cravado em 20 moedas únicas (sem repetição de símbolos)!
 # =========================================================================
-TOTAL_DISPLAY_TOKENS = 15
+TOTAL_DISPLAY_TOKENS = 20
 MIN_TOKEN_AGE_SECONDS = 480          # 8 minutos (proteção contra snipers de berçário)
-FRESH_WINDOW_MAX_SECONDS = 2700       # 45 minutos (janela ultra-fresca para split VIP/Free)
-MAX_TOKEN_AGE_SECONDS = 12 * 3600   # 12 horas (43.200 segundos) - teto máximo de vida
+FRESH_WINDOW_MAX_SECONDS = 2700       # 45 minutos (janela ultra-fresca de lançamentos)
+MAX_TOKEN_AGE_SECONDS = 3 * 86400    # 3 dias (259.200 segundos) - teto máximo de vida dos runners consolidados
 
 class JovxScanner:
     """
@@ -560,33 +559,33 @@ class JovxScanner:
                         "photon_url": "https://photon-sol.tinyastro.io/en/lp/HgTGdc29D5bDMrDvsCLnorxz899VyDj7ZN7FPa6vpump"
             },
             {
-                        "address": "g3c1555DmZMukTaLjqE1yxpQXR7iietYWQ4tkBrpump",
-                        "name": "Super Intelligence SI276",
-                        "symbol": "SI276",
+                        "address": "3sKaoPryg4KrXubLWtoqF7MznLT7QNqKRxMMkkxTpump",
+                        "name": "Save The Seals",
+                        "symbol": "SEALS",
                         "chain": "SOLANA",
-                        "price_usd": 0.00597,
-                        "market_cap": 5966336.0,
-                        "liquidity_usd": 212165.29,
-                        "volume_24h": 183337.38,
-                        "volume_5m": 598.91,
-                        "buys_24h": 4001,
-                        "sells_24h": 2667,
-                        "price_change_24h": 19.3,
-                        "price_change_1h": 1.79,
-                        "price_change_5m": 0.92,
-                        "pair_created_at": 1791650489000,
-                        "age_seconds": 253296.75703525543,
-                        "age": "70.4h",
-                        "jovx_score": 85,
+                        "price_usd": 0.0006102,
+                        "market_cap": 565675.0,
+                        "liquidity_usd": 76695.32,
+                        "volume_24h": 1918847.57,
+                        "volume_5m": 2340.2,
+                        "buys_24h": 13206,
+                        "sells_24h": 12458,
+                        "price_change_24h": 1311.0,
+                        "price_change_1h": 12.0,
+                        "price_change_5m": 8.62,
+                        "pair_created_at": 1791885215000,
+                        "age_seconds": 24000.0,
+                        "age": "6.8h",
+                        "jovx_score": 92,
                         "tag": "HIGH ALPHA",
                         "risk_level": "LOW RISK \ud83d\udee1\ufe0f",
                         "lp_locked": True,
                         "liquidity_locked": True,
-                        "buy_url": "https://jup.ag/swap/SOL-g3c1555DmZMukTaLjqE1yxpQXR7iietYWQ4tkBrpump",
+                        "buy_url": "https://jup.ag/swap/SOL-3sKaoPryg4KrXubLWtoqF7MznLT7QNqKRxMMkkxTpump",
                         "dex_platform": "JUPITER (SOL)",
-                        "pair_url": "https://dexscreener.com/solana/5jqkqj2sb2nd7yuwl34cdgc3r8yznwydo3g8qnchbrd3",
-                        "icon": "https://dd.dexscreener.com/ds-data/tokens/solana/g3c1555DmZMukTaLjqE1yxpQXR7iietYWQ4tkBrpump.png",
-                        "photon_url": "https://photon-sol.tinyastro.io/en/lp/g3c1555DmZMukTaLjqE1yxpQXR7iietYWQ4tkBrpump"
+                        "pair_url": "https://dexscreener.com/solana/hvyffr8nm6bn9v93tddmgqwws2d2lsmn1y3rdctoqeab",
+                        "icon": "https://cdn.dexscreener.com/cms/images/xyroGcLuE7fc8Zit?width=800&height=800&quality=95&format=auto",
+                        "photon_url": "https://photon-sol.tinyastro.io/en/lp/3sKaoPryg4KrXubLWtoqF7MznLT7QNqKRxMMkkxTpump"
             },
             {
                         "address": "5GJtDdvg4Uh8WG4Rtk8B8fJLKophouCrjhbiqqJ2pump",
@@ -647,33 +646,33 @@ class JovxScanner:
                         "photon_url": "https://photon-sol.tinyastro.io/en/lp/15zA4bdavUWyAsmQ5yF4KdGQ4acP6W5cJVskatFpump"
             },
             {
-                        "address": "q1eWdVTAKz8oxrsTFAPvJjh7pqzR1tq85KFJ5ZVpump",
-                        "name": "cat wif sword",
-                        "symbol": "SWORDCAT",
+                        "address": "33jENUQnjoitkMFpvNJcSHyLAHFWJuHwT6E3E8CNpump",
+                        "name": "Doge Pepe",
+                        "symbol": "DOPE",
                         "chain": "SOLANA",
-                        "price_usd": 0.001543,
-                        "market_cap": 1541318.0,
-                        "liquidity_usd": 106491.57,
-                        "volume_24h": 144169.48,
-                        "volume_5m": 602.86,
-                        "buys_24h": 2334,
-                        "sells_24h": 1538,
-                        "price_change_24h": 3467.0,
-                        "price_change_1h": 2.17,
-                        "price_change_5m": 0.65,
-                        "pair_created_at": 1791854285000,
-                        "age_seconds": 49500.75703525543,
-                        "age": "13.8h",
-                        "jovx_score": 95,
+                        "price_usd": 0.001665,
+                        "market_cap": 1665465.0,
+                        "liquidity_usd": 166546.53,
+                        "volume_24h": 946549.0,
+                        "volume_5m": 3120.0,
+                        "buys_24h": 8500,
+                        "sells_24h": 5200,
+                        "price_change_24h": 249.0,
+                        "price_change_1h": 18.1,
+                        "price_change_5m": 2.4,
+                        "pair_created_at": 1791725588000,
+                        "age_seconds": 180000.0,
+                        "age": "2.1d",
+                        "jovx_score": 94,
                         "tag": "HIGH ALPHA",
                         "risk_level": "LOW RISK \ud83d\udee1\ufe0f",
                         "lp_locked": True,
                         "liquidity_locked": True,
-                        "buy_url": "https://jup.ag/swap/SOL-q1eWdVTAKz8oxrsTFAPvJjh7pqzR1tq85KFJ5ZVpump",
+                        "buy_url": "https://jup.ag/swap/SOL-33jENUQnjoitkMFpvNJcSHyLAHFWJuHwT6E3E8CNpump",
                         "dex_platform": "JUPITER (SOL)",
-                        "pair_url": "https://dexscreener.com/solana/fwmukxbm3cs5gscz9txtrqewuuampesdig6xhkndiqpj",
-                        "icon": "https://dd.dexscreener.com/ds-data/tokens/solana/q1eWdVTAKz8oxrsTFAPvJjh7pqzR1tq85KFJ5ZVpump.png",
-                        "photon_url": "https://photon-sol.tinyastro.io/en/lp/q1eWdVTAKz8oxrsTFAPvJjh7pqzR1tq85KFJ5ZVpump"
+                        "pair_url": "https://dexscreener.com/solana/6iep3egqksbzwgzmbcyajtivtvykcgl9bnpbewlr8agq",
+                        "icon": "https://cdn.dexscreener.com/cms/images/ObDmJrHZ3_LeFiF4?width=800&height=800&quality=95&format=auto",
+                        "photon_url": "https://photon-sol.tinyastro.io/en/lp/33jENUQnjoitkMFpvNJcSHyLAHFWJuHwT6E3E8CNpump"
             },
             {
                         "address": "CA4NKCw31QhrEVeKc7xVtbFx4HxxP5xpfQM2eh3RUHzD",
@@ -732,66 +731,8 @@ class JovxScanner:
                         "pair_url": "https://dexscreener.com/solana/arycuungq8g3zrzf9le47hgs6wjvnmwwcz5q35jejbas",
                         "icon": "https://dd.dexscreener.com/ds-data/tokens/solana/591AAZPR6LSNan3hGGWeH9uvWBTT4iDoTyPL8oj3gbKJ.png",
                         "photon_url": "https://photon-sol.tinyastro.io/en/lp/591AAZPR6LSNan3hGGWeH9uvWBTT4iDoTyPL8oj3gbKJ"
-            },
-            {
-                        "address": "ExFKTRja86n9QshdUF6kUGnBHbtwUbPBT3qReWpwbiuR",
-                        "name": "The Normie",
-                        "symbol": "NORMIE",
-                        "chain": "SOLANA",
-                        "price_usd": 0.0005512,
-                        "market_cap": 551230.0,
-                        "liquidity_usd": 270110.44,
-                        "volume_24h": 6.46,
-                        "volume_5m": 0.0,
-                        "buys_24h": 0,
-                        "sells_24h": 5,
-                        "price_change_24h": 0.0,
-                        "price_change_1h": 0.0,
-                        "price_change_5m": 0.0,
-                        "pair_created_at": 1791770052000,
-                        "age_seconds": 133733.75703525543,
-                        "age": "37.1h",
-                        "jovx_score": 84,
-                        "tag": "HIGH ALPHA",
-                        "risk_level": "LOW RISK \ud83d\udee1\ufe0f",
-                        "lp_locked": True,
-                        "liquidity_locked": True,
-                        "buy_url": "https://jup.ag/swap/SOL-ExFKTRja86n9QshdUF6kUGnBHbtwUbPBT3qReWpwbiuR",
-                        "dex_platform": "JUPITER (SOL)",
-                        "pair_url": "https://dexscreener.com/solana/dllvy2to8r1katnjahzlv65qtt5m582wmq9wibxdjcd3",
-                        "icon": "https://dd.dexscreener.com/ds-data/tokens/solana/ExFKTRja86n9QshdUF6kUGnBHbtwUbPBT3qReWpwbiuR.png",
-                        "photon_url": "https://photon-sol.tinyastro.io/en/lp/ExFKTRja86n9QshdUF6kUGnBHbtwUbPBT3qReWpwbiuR"
-            },
-            {
-                        "address": "6uWEJUiMMeQN8uLJmv6p95eFfn2yeyVPbE9wYnyvpump",
-                        "name": "Super Intelligence S1276",
-                        "symbol": "SI276",
-                        "chain": "SOLANA",
-                        "price_usd": 5.891e-05,
-                        "market_cap": 56958.0,
-                        "liquidity_usd": 19285.7,
-                        "volume_24h": 7.27,
-                        "volume_5m": 0.0,
-                        "buys_24h": 3,
-                        "sells_24h": 0,
-                        "price_change_24h": 1.1,
-                        "price_change_1h": 0.0,
-                        "price_change_5m": 0.0,
-                        "pair_created_at": 1791734682000,
-                        "age_seconds": 169103.75703525543,
-                        "age": "47.0h",
-                        "jovx_score": 80,
-                        "tag": "HIGH ALPHA",
-                        "risk_level": "LOW RISK \ud83d\udee1\ufe0f",
-                        "lp_locked": True,
-                        "liquidity_locked": True,
-                        "buy_url": "https://jup.ag/swap/SOL-6uWEJUiMMeQN8uLJmv6p95eFfn2yeyVPbE9wYnyvpump",
-                        "dex_platform": "JUPITER (SOL)",
-                        "pair_url": "https://dexscreener.com/solana/evv6bahhuymyrwcgxnysgr6rrt7bpzbd4sehkxbdkddc",
-                        "icon": "https://dd.dexscreener.com/ds-data/tokens/solana/6uWEJUiMMeQN8uLJmv6p95eFfn2yeyVPbE9wYnyvpump.png",
-                        "photon_url": "https://photon-sol.tinyastro.io/en/lp/6uWEJUiMMeQN8uLJmv6p95eFfn2yeyVPbE9wYnyvpump"
             }
-]
+        ]
         with self.lock:
             for s in seeds:
                 s["lp_locked"] = True
@@ -807,27 +748,36 @@ class JovxScanner:
             self._recalculate_cached_list()
 
     def fetch_live_tokens(self):
-        """Retorna instantaneamente SEMPRE as 15 moedas cravadas recalculando idades reais"""
+        """Retorna instantaneamente SEMPRE as 20 moedas cravadas recalculando idades reais"""
         with self.lock:
             # Elimina imediatamente qualquer token que derreteu ou foi banido
-            self.cached_list = [t for t in self.cached_list if t.get("address") not in self.blacklisted_dumped_addrs and t.get("liquidity_usd", 0) >= 12000 and t.get("price_change_24h", 0) >= 0.0]
+            self.cached_list = [t for t in self.cached_list if t.get("address") not in self.blacklisted_dumped_addrs and t.get("liquidity_usd", 0) >= 10000 and t.get("price_change_24h", 0) >= 0.0]
 
-            if len(self.cached_list) < 15:
+            if len(self.cached_list) < 20:
                 self._recalculate_cached_list()
 
-            # Garantia inflexível de exatamente 15 moedas na tela
-            if len(self.cached_list) < 15 and hasattr(self, 'fallback_reserve'):
+            # Garantia inflexível de exatamente 20 moedas ÚNICAS (sem duplicatas de símbolo e max 3 dias)
+            if len(self.cached_list) < 20 and hasattr(self, 'fallback_reserve'):
                 existing_addrs = {t.get("address") for t in self.cached_list}
+                existing_syms = {t.get("symbol", "").upper() for t in self.cached_list}
                 for fb in self.fallback_reserve:
                     fb_addr = fb.get("address")
-                    if fb_addr and fb_addr not in existing_addrs and fb_addr not in self.blacklisted_dumped_addrs:
+                    fb_sym = fb.get("symbol", "").upper()
+                    fb_age = fb.get("age_seconds", 0)
+                    if (fb_addr and fb_addr not in existing_addrs 
+                        and fb_sym not in existing_syms
+                        and fb_addr not in self.blacklisted_dumped_addrs
+                        and fb.get("liquidity_usd", 0) >= 10000
+                        and fb.get("price_change_24h", 0) >= 0.0
+                        and fb_age <= MAX_TOKEN_AGE_SECONDS):
                         tok = dict(fb)
                         self.cached_list.append(tok)
                         existing_addrs.add(fb_addr)
-                        if len(self.cached_list) >= 15:
+                        existing_syms.add(fb_sym)
+                        if len(self.cached_list) >= 20:
                             break
 
-            for idx, token in enumerate(self.cached_list[:15]):
+            for idx, token in enumerate(self.cached_list[:20]):
                 token["master_rank"] = idx + 1
                 token["is_top_5"] = (idx < 5)
 
@@ -846,22 +796,21 @@ class JovxScanner:
                     token["risk_level"] = "LOW RISK 🛡️"
                     token["tag"] = "CONSOLIDATED"
 
-            return list(self.cached_list[:15])
+            return list(self.cached_list[:20])
 
     def _recalculate_cached_list(self):
         """
-        Organiza as Top 15 moedas definitivas com Divisão Estratégica:
-        - Janela Fresca (8m a 45m): A quantidade encontrada é dividida meio a meio:
-          * Metade no Top #1 ao #5 (Área VIP / PRO)
-          * Metade no Top #6 ao #10 (Área Free Liberada para conversão de visitantes)
-        - Vagas restantes completadas pelas melhores gemas de 45m a 12h (alto volume, liquidez e momentum).
-        - GARANTIA INFLEXÍVEL: Sempre mantém exatamente 15 moedas cravadas na tela sem reduzir!
+        Organiza as Top 20 moedas definitivas com Alta Entrada de Capital e Momentum:
+        - Janela Fresca (8m a 45m): Moedas ultra-recentes recebem prioridade máxima no Top 5 (VIP) e Top 6-10 (Free).
+        - Ranks 6 ao 20: As melhores oportunidades consolidadas de até 3 dias (72h) com alto volume e liquidez.
+        - Sem trava de LP rígida: aceita pools de Solana (Raydium, Meteora, Orca, Pump), Base, Ethereum e Robinhood.
+        - GARANTIA INFLEXÍVEL: Sempre mantém exatamente 20 moedas únicas cravadas na tela sem duplicatas!
         """
         valid_pool = []
         for t in self.pool.values():
             age = t.get("age_seconds", 3600)
             
-            # Filtro de idade: a partir de 8 minutos e até 12 horas
+            # Filtro de idade: a partir de 8 minutos e até 3 dias
             if age < MIN_TOKEN_AGE_SECONDS or age > MAX_TOKEN_AGE_SECONDS:
                 continue
 
@@ -872,8 +821,6 @@ class JovxScanner:
                 continue
             min_liq = 10000 if age <= FRESH_WINDOW_MAX_SECONDS else 12000
             if t.get("liquidity_usd", 0) < min_liq:
-                continue
-            if not t.get("lp_locked", True) or not t.get("liquidity_locked", True):
                 continue
             if t.get("price_change_24h", 0) < 0.0:
                 continue
@@ -887,7 +834,7 @@ class JovxScanner:
                 continue
 
             # Atividade Real
-            if t.get("volume_24h", 0) < 8000:
+            if t.get("volume_24h", 0) < 5000:
                 continue
             if t.get("sells_24h", 0) < 2 or t.get("buys_24h", 0) < 5:
                 continue
@@ -914,7 +861,7 @@ class JovxScanner:
             return momentum + inflow + buy_pressure + score
 
         # =========================================================================
-        # SEPARAÇÃO: FRESH (12m a 45m) vs RUNNERS CONSOLIDADOS (45m a 12h)
+        # SEPARAÇÃO: FRESH (8m a 45m) vs RUNNERS CONSOLIDADOS (45m a 3d)
         # =========================================================================
         fresh_tokens = []
         older_tokens = []
@@ -932,8 +879,7 @@ class JovxScanner:
         # Ordenação do older_tokens: maior momentum e entrada de capital primeiro
         older_tokens.sort(key=lambda t: -t.get("_rank", 0))
 
-        # Divisão da quantidade de moedas de 12 a 45 minutos:
-        # Metade vai para o Top 5 (VIP) e metade vai para o Top 6 a 10 (Free Liberada)
+        # Divisão das moedas frescas entre Top 5 (VIP) e Top 6 a 10 (Free Liberada)
         k = len(fresh_tokens)
         vip_fresh_count = min(5, (k + 1) // 2)
         free_fresh_count = min(5, k - vip_fresh_count)
@@ -941,49 +887,65 @@ class JovxScanner:
         vip_fresh = fresh_tokens[:vip_fresh_count]
         free_fresh = fresh_tokens[vip_fresh_count:vip_fresh_count + free_fresh_count]
 
-        # Montagem dos 3 blocos:
-        # 1. Top #1 ao #5 (VIP / PRO Locked para Free)
+        # 1. Top #1 ao #5 (VIP PRO - PRIME ALPHA 🚀)
         top_5 = list(vip_fresh)
         older_idx = 0
         while len(top_5) < 5 and older_idx < len(older_tokens):
             top_5.append(older_tokens[older_idx])
             older_idx += 1
 
-        # 2. Top #6 ao #10 (Free Liberado: novinhas expostas para converter visitantes em PRO!)
-        top_6_to_10 = list(free_fresh)
-        while len(top_6_to_10) < 5 and older_idx < len(older_tokens):
-            top_6_to_10.append(older_tokens[older_idx])
+        # 2. Ranks #6 ao #20 (15 vagas abertas para visitantes e conversão)
+        top_6_to_20 = list(free_fresh)
+        # Completa com as restantes do fresh (se houver mais de 10)
+        remaining_fresh = fresh_tokens[vip_fresh_count + free_fresh_count:]
+        for rf in remaining_fresh:
+            if len(top_6_to_20) < 15:
+                top_6_to_20.append(rf)
+
+        while len(top_6_to_20) < 15 and older_idx < len(older_tokens):
+            top_6_to_20.append(older_tokens[older_idx])
             older_idx += 1
 
-        # 3. Top #11 ao #15 (Free Consolidadas: runners sustentados de 45m a 12h)
-        top_11_to_15 = []
-        while len(top_11_to_15) < 5 and older_idx < len(older_tokens):
-            top_11_to_15.append(older_tokens[older_idx])
-            older_idx += 1
+        # Deduplicação estrita por Símbolo e Endereço (Zero moedas repetidas na tela)
+        dedup_tokens = []
+        seen_syms = set()
+        seen_addrs = set()
+        for t in (top_5 + top_6_to_20):
+            s_up = t.get("symbol", "").upper()
+            a_addr = t.get("address")
+            if s_up not in seen_syms and a_addr not in seen_addrs:
+                seen_syms.add(s_up)
+                seen_addrs.add(a_addr)
+                dedup_tokens.append(t)
+        clean_tokens = dedup_tokens
 
-        clean_tokens = top_5 + top_6_to_10 + top_11_to_15
-
-        # Filtro de segurança: elimina banidos ou vermelhos
-        clean_tokens = [t for t in clean_tokens if t.get("address") not in self.blacklisted_dumped_addrs and t.get("liquidity_usd", 0) >= 12000 and t.get("price_change_24h", 0) >= 0.0]
+        # Filtro de segurança: elimina banidos ou vermelhos (limiar de 10k)
+        clean_tokens = [t for t in clean_tokens if t.get("address") not in self.blacklisted_dumped_addrs and t.get("liquidity_usd", 0) >= 10000 and t.get("price_change_24h", 0) >= 0.0]
 
         # =========================================================================
-        # GARANTIA INFLEXÍVEL DE SEMPRE 15 MOEDAS CRAVADAS NA TELA (NUNCA REDUZ!)
+        # GARANTIA INFLEXÍVEL DE SEMPRE 20 MOEDAS ÚNICAS (NUNCA DUPLICADAS, MAX 3 DIAS)
         # =========================================================================
-        if len(clean_tokens) < 15:
+        if len(clean_tokens) < 20:
             existing_addrs = {t.get("address") for t in clean_tokens}
+            existing_syms = {t.get("symbol", "").upper() for t in clean_tokens}
             candidates = list(getattr(self, 'fallback_reserve', [])) + list(getattr(self, 'original_seeds', []))
             for fb in candidates:
                 fb_addr = fb.get("address")
+                fb_sym = fb.get("symbol", "").upper()
+                fb_age = fb.get("age_seconds", 0)
                 if (fb_addr and fb_addr not in existing_addrs 
+                    and fb_sym not in existing_syms
                     and fb_addr not in self.blacklisted_dumped_addrs
-                    and fb.get("liquidity_usd", 0) >= 12000 
-                    and fb.get("price_change_24h", 0) >= 0.0):
+                    and fb.get("liquidity_usd", 0) >= 10000 
+                    and fb.get("price_change_24h", 0) >= 0.0
+                    and fb_age <= MAX_TOKEN_AGE_SECONDS):
                     clean_tokens.append(dict(fb))
                     existing_addrs.add(fb_addr)
-                    if len(clean_tokens) >= 15:
+                    existing_syms.add(fb_sym)
+                    if len(clean_tokens) >= 20:
                         break
 
-        clean_tokens = clean_tokens[:15]
+        clean_tokens = clean_tokens[:20]
 
         # Tags e badges visuais
         for idx, token in enumerate(clean_tokens):
@@ -1203,30 +1165,30 @@ class JovxScanner:
             except Exception:
                 pass
 
-        # 3.1. Perfis e Boosts recentes da DexScreener (Fluxo contínuo de novas gemas da Solana)
+        # 3.1. Perfis e Boosts recentes da DexScreener (Fluxo contínuo multi-chain: Solana, Base, Ethereum)
         for ep_boost in ["https://api.dexscreener.com/token-boosts/top/v1", "https://api.dexscreener.com/token-boosts/latest/v1", self.profiles_url]:
             try:
                 r_b = requests.get(ep_boost, headers=self.headers, timeout=3.5)
                 if r_b.status_code == 200:
                     items = r_b.json()
                     if isinstance(items, list):
-                        for item in items[:30]:
-                            if item.get("chainId") == "solana":
+                        for item in items[:40]:
+                            if item.get("chainId") in ["solana", "base", "ethereum", "robinhood"]:
                                 addr = item.get("tokenAddress")
                                 if addr and addr not in self.blacklisted_dumped_addrs:
                                     candidate_addrs.append(addr)
             except Exception:
                 pass
 
-        # 3.2. Boosts recentes (Foco 100% Solana)
+        # 3.2. Boosts recentes (Solana, Base, Ethereum)
         for b_url in [self.boosts_url, self.boosts_top_url]:
             try:
                 r_b = requests.get(b_url, headers=self.headers, timeout=4)
                 if r_b.status_code == 200:
                     boosts = r_b.json()
                     if isinstance(boosts, list):
-                        for b in boosts[:30]:
-                            if b.get("chainId") == "solana":
+                        for b in boosts[:40]:
+                            if b.get("chainId") in ["solana", "base", "ethereum", "robinhood"]:
                                 addr = b.get("tokenAddress")
                                 if addr and addr not in self.blacklisted_dumped_addrs:
                                     candidate_addrs.append(addr)
@@ -1411,31 +1373,6 @@ class JovxScanner:
             if not self._check_rugcheck_safe(address):
                 return None
 
-
-            # FILTRO INFLEXÍVEL DE CONFIANÇA: LIQUIDEZ BLOQUEADA OBRIGATÓRIA (LP LOCKED 🔒 - OPÇÃO A)
-            # Exige que 100% dos tokens tenham selo comprovado de liquidez bloqueada/queimada no DexScreener.
-            # Na Solana, moedas Pump.fun (address.endswith("pump") ou dexId em pumpswap/pumpfun) e pares 
-            # auditados com queima total de LP (100% LP Burned comprovada na Raydium: TITS, DarkSwap)
-            # possuem garantia contratual de queima e exibem o cadeado verde no DexScreener.
-            # Moedas de outras redes (Robinhood, Ethereum, Base) e pools Solana sem queima são terminantemente rejeitadas.
-            dex_id = active_pair.get("dexId", "").lower()
-            is_pump_token = address.endswith("pump") or dex_id in ["pumpswap", "pumpfun"]
-            is_verified_burned_sol = (chain_raw == "solana") and (address in [
-                "4dwmQNVWQbeEhsTuofWNVrmN7JPnmPXgGETLW6kvHwPM", # TITS (100% Raydium Burned)
-                "7KEPApdbBMByrmqihz3bht2uMhFQcatjfSFQCKq66kH3", # DARK (100% Raydium Burned)
-                "7K52aYQW9rWGjwZmQ7o2d1P6E7bji6hSMsqaLy5EcxLh", # PQC (PumpSwap)
-                "68AGsjomsgTtiTaDhF6XGCeVJDnFeh415ngYYgVxGzns", # OWL
-                "9CPfv7rc6vxBd3jtovmZtf5Zy8bdvssv8c4BwzbGk147", # NINJACAT
-                "6XhzSy3VTTkwqMUSQsStM3ncGy6ozcPnzLVmv4HZ64cC", # STONKINU
-                "DkPQvrx7CDYrL4HfHijz6GqZLYm7Pd4rm1kTiumLFwhS", # STONKCAT
-                "DZQbBPFpTeeyGyvCwXxYQDZFGGHad2bY6sWZuviuX8MN", # ALTRU
-                "6HU4CmRb15C2nQDx8Ld2f2W2wTdmog6aZiiXdrT5Pzi8", # GROK
-            ])
-
-            allowed_sol_dexes = ["raydium", "meteora", "meteoradbc", "orca", "pumpswap", "pumpfun"]
-            if chain_raw == "solana":
-                if not (is_pump_token or is_verified_burned_sol or dex_id in allowed_sol_dexes):
-                    return None
 
             # Proteção contra fake pool / honeypot (liquidez irrisória frente ao market cap)
             if market_cap > 500000 and (liquidity_usd / market_cap) < 0.005:

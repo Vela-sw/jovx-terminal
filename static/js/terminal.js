@@ -386,7 +386,7 @@ function renderTokens() {
 
         const chartUrl = (t.pair_url && t.pair_url.startsWith('http') && !t.pair_url.includes('undefined')) ? t.pair_url : `https://dexscreener.com/solana/${t.address}`;
 
-        // Renderização para Tokens Abertos (Rank #6 ao #15, ou TODOS se PRO)
+        // Renderização para Tokens Abertos (Rank #6 ao #20, ou TODOS se PRO)
         return `
             <tr class="hover:bg-surfaceBorder/40 transition cursor-pointer" onclick="window.open('${chartUrl}', '_blank')">
                 <td class="py-3 px-4 text-center font-mono text-slate-500 font-bold">${displayRank}</td>
