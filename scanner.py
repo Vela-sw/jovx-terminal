@@ -29,7 +29,7 @@ EXCLUDED_NAME_KEYWORDS = [
 # - Posições #11 ao #20: Gemas consolidadas de 20 minutos até 12 horas no máximo
 # - Moedas com mais de 12 horas ficam 100% FORA do radar e da tabela!
 # =========================================================================
-MAX_TOKEN_AGE_SECONDS = 12 * 3600  # 43.200 segundos (Exatamente 12 horas)
+MAX_TOKEN_AGE_SECONDS = 24 * 3600  # 86.400 segundos (Piso de segurança máximo de 24 horas)
 
 class JovxScanner:
     """
@@ -149,6 +149,60 @@ class JovxScanner:
         - ZERO tolerância para tokens derretidos
         """
         seeds = [
+            {
+                "address": "GU5NkUVLzmJQxJKuho5dG4d1owChpcSQnhARrjYQpump",
+                "name": "YiLong Ma",
+                "symbol": "YILONGMA",
+                "chain": "SOLANA",
+                "price_usd": 0.00028,
+                "market_cap": 275500.0,
+                "liquidity_usd": 46000.0,
+                "volume_24h": 115000.0,
+                "volume_5m": 8400.0,
+                "buys_24h": 2100,
+                "sells_24h": 1780,
+                "price_change_24h": 460.0,
+                "price_change_1h": 460.0,
+                "price_change_5m": 2.5,
+                "pair_created_at": 1791885900000,
+                "jovx_score": 99,
+                "tag": "PRIME ALPHA",
+                "risk_level": "PRIME ALPHA 🚀",
+                "lp_locked": True,
+                "liquidity_locked": True,
+                "buy_url": "https://jup.ag/swap/SOL-GU5NkUVLzmJQxJKuho5dG4d1owChpcSQnhARrjYQpump",
+                "dex_platform": "JUPITER (SOL)",
+                "pair_url": "https://dexscreener.com/solana/gu5nkuvlzmjqxkuho5dg4d1owchpcsqnharrjyqpump",
+                "icon": "https://dd.dexscreener.com/ds-data/tokens/solana/GU5NkUVLzmJQxJKuho5dG4d1owChpcSQnhARrjYQpump.png",
+                "photon_url": "https://photon-sol.tinyastro.io/en/lp/GU5NkUVLzmJQxJKuho5dG4d1owChpcSQnhARrjYQpump"
+            },
+            {
+                "address": "9PC1XE4jzKZdga9CsWSKuCL7pawMeppuVTxCM11kpump",
+                "name": "Hate Sol",
+                "symbol": "$HATE",
+                "chain": "SOLANA",
+                "price_usd": 0.00029,
+                "market_cap": 296000.0,
+                "liquidity_usd": 29600.0,
+                "volume_24h": 418000.0,
+                "volume_5m": 5200.0,
+                "buys_24h": 3400,
+                "sells_24h": 2800,
+                "price_change_24h": 175.0,
+                "price_change_1h": 3.0,
+                "price_change_5m": 1.2,
+                "pair_created_at": 1791864000000,
+                "jovx_score": 97,
+                "tag": "HIGH ALPHA",
+                "risk_level": "LOW RISK 🛡️",
+                "lp_locked": True,
+                "liquidity_locked": True,
+                "buy_url": "https://jup.ag/swap/SOL-9PC1XE4jzKZdga9CsWSKuCL7pawMeppuVTxCM11kpump",
+                "dex_platform": "JUPITER (SOL)",
+                "pair_url": "https://dexscreener.com/solana/9pc1xe4jzkzdga9cswskucl7pawmeppuvtxcm11kpump",
+                "icon": "https://dd.dexscreener.com/ds-data/tokens/solana/9PC1XE4jzKZdga9CsWSKuCL7pawMeppuVTxCM11kpump.png",
+                "photon_url": "https://photon-sol.tinyastro.io/en/lp/9PC1XE4jzKZdga9CsWSKuCL7pawMeppuVTxCM11kpump"
+            },
             {
                         "address": "291HZmFgynd2MY2YTzbZ7sjoZbKnuZgdJAi9oq7Kpump",
                         "name": "AMD Advanced Micro",
@@ -736,17 +790,23 @@ class JovxScanner:
 
     def _recalculate_cached_list(self):
         """
-        Organiza o Top 20 definitivo com teto rígido de 12 horas:
-        - Top #1 ao #10: Gemas recém-nascidas de 12 a 20 minutos (720s a 1200s, até 1800s)
-          * Ranqueado pelo frescor extremo, maior Score JOVX e momentum (5m + 1h)
-        - Ranks #11 ao #20: Moedas consolidadas de 20 minutos até 12 horas no máximo (1800s a 43.200s)
-        - REGRA INFLEXÍVEL: Moedas com mais de 12 horas ficam 100% FORA!
+        Organiza o Ranking com Deslocamento Automático em Cascata e Piso Mínimo Garantido:
+        - TIER 1 (Fresh Rockets): 12 min a 1 hora (foco máximo no sweet spot de 12 a 25 min).
+          * Prioridade 1 absoluta: Entram direto no Topo #1 ao #5 com a tag PRIME ALPHA 🚀.
+        - TIER 2 (Maturing Alpha): 1 hora a 12 horas.
+          * Prioridade 2: Ocupam o meio da tabela.
+        - TIER 3 (Runners de Segurança / Piso): 12 horas a 24 horas.
+          * Prioridade 3: Moedas verdes e ultra-líquidas (> $15k) que garantem que o terminal
+            nunca fique deserto (mantendo piso de no mínimo 10 a 15 moedas).
+        - DESLOCAMENTO AUTOMÁTICO EM CASCATA:
+          * Conforme novas moedas da Faixa 1 nascem durante o dia, elas entram no topo e
+            empurram as mais velhas para baixo, até que as da rabeira saem da tela naturalmente!
         """
         valid_pool = []
         for t in self.pool.values():
             age = t.get("age_seconds", 3600)
             
-            # REGRA MÁXIMA INFLEXÍVEL DE 12 HORAS (43.200s) PARA TODAS AS 20 MOEDAS (SEM EXCEÇÃO)
+            # Teto global do piso (24h)
             if age > MAX_TOKEN_AGE_SECONDS:
                 continue
 
@@ -755,7 +815,7 @@ class JovxScanner:
                 continue
             if t.get("price_change_1h", 0) < -8.0:
                 continue
-            if t.get("liquidity_usd", 0) < 20000:
+            if t.get("liquidity_usd", 0) < 12000:
                 continue
             # FILTRO INFLEXÍVEL DE CONFIANÇA: LIQUIDEZ BLOQUEADA (LP LOCKED 🔒)
             if not t.get("lp_locked", True) or not t.get("liquidity_locked", True):
@@ -767,11 +827,12 @@ class JovxScanner:
             vol_tok = t.get("volume_24h", 0)
             if mc_tok >= 1000000 and (vol_tok / max(1, mc_tok)) < 0.05:
                 continue
-            if mc_tok >= 500000 and vol_tok < 30000:
+            if mc_tok >= 500000 and vol_tok < 20000:
                 continue
 
-            # FILTRO DE VOLUME E ATIVIDADE REAL (Elimina moedas fantasmas com 0 volume ou 0 vendas)
-            if t.get("volume_24h", 0) < 20000:
+            # FILTRO DE VOLUME E ATIVIDADE REAL (Calibrado para novos lançamentos)
+            min_v = 8000 if age <= 3600 else 15000
+            if t.get("volume_24h", 0) < min_v:
                 continue
             if t.get("sells_24h", 0) < 2 or t.get("buys_24h", 0) < 5:
                 continue
@@ -781,114 +842,61 @@ class JovxScanner:
             valid_pool.append(t)
 
         # =========================================================================
-        # HIERARQUIA INTELIGENTE DE RANQUEAMENTO:
-        # TOP #1 AO #10: Gemas de 12 a 20 minutos (720s a 1200s, até 1800s)
-        # TOP #11 AO #20: Gemas de 20 minutos até 12 horas no máximo (1800s a 43200s)
-        # TETO GLOBAL: MÁXIMO 12 HORAS (43.200s). NENHUMA moeda > 12h entra!
+        # HIERARQUIA DE PRIORIDADE EM CASCATA:
+        # - Tier 1 (< 1h): Sweet spot 12m a 25m tem pontuação 1.0 (topo supremo)
+        # - Tier 2 (1h a 12h): Pontuação 2.0 (meio de tabela)
+        # - Tier 3 (12h a 24h): Pontuação 3.0 (piso de estabilidade na base)
         # =========================================================================
-        fresh_rockets = []   # 12 min a 20-30 min (720s a 1800s)
-        young_mature = []    # 20 min até 12 horas (1800s a 43200s)
-
-        for t in valid_pool:
+        def cascade_sort_key(t):
             age = t.get("age_seconds", 3600)
-            if age <= 1800:
-                fresh_rockets.append(t)
+            if age <= 3600:
+                tier = 1.0 if (720 <= age <= 1500) else 1.2
+            elif age <= 43200:
+                tier = 2.0
             else:
-                young_mature.append(t)
+                tier = 3.0
 
-        # Ordenação de Fresh Rockets (Top 1 ao 10):
-        # 1. Ponto doce de 12 a 20 min (720s a 1200s) tem prioridade máxima
-        # 2. Maior Jovx Score
-        # 3. Maior momentum recente (5m + 1h)
-        # 4. Maior proporção de compras sobre vendas (buys / sells)
-        def fresh_sort_key(t):
             score = t.get("jovx_score", 0)
-            age = t.get("age_seconds", 3600)
-            sweet_spot = 1 if (720 <= age <= 1200) else 0
             m5 = t.get("price_change_5m", 0)
             h1 = t.get("price_change_1h", 0)
             buys = t.get("buys_24h", 0)
             sells = max(1, t.get("sells_24h", 0))
             ratio = buys / sells
-            return (-sweet_spot, -score, -(m5 + h1), -ratio)
-
-        fresh_rockets.sort(key=fresh_sort_key)
-
-        # Ordenação de Young Mature (Posições 11 a 20, ou para completar o Top 10 se faltar):
-        # 1. Maior Jovx Score
-        # 2. Maior proporção de compras sobre vendas
-        # 3. Maior liquidez
-        # 4. Mais jovem dentro de 12h
-        def young_sort_key(t):
-            score = t.get("jovx_score", 0)
-            buys = t.get("buys_24h", 0)
-            sells = max(1, t.get("sells_24h", 0))
-            ratio = buys / sells
             liq = t.get("liquidity_usd", 0)
-            age = t.get("age_seconds", 3600)
-            return (-score, -ratio, -liq, age)
+            return (tier, -score, -(m5 + h1), -ratio, -liq)
 
-        young_mature.sort(key=young_sort_key)
+        valid_pool.sort(key=cascade_sort_key)
+        clean_tokens = list(valid_pool)
 
-        # MONTAGEM DAS POSIÇÕES #1 AO #10:
-        # Prioridade Máxima para as moedas de 12 a 20 minutos!
-        # A melhor moeda vai para a posição #1, a segunda para a #2, etc.
-        # Se houver menos de 10 moedas de 12-20m, completa com as melhores moedas <= 12h.
-        top10 = []
-        top10.extend(fresh_rockets[:10])
-        leftover_fresh = fresh_rockets[10:]
+        # Filtro de segurança: elimina banidos ou vermelhos
+        clean_tokens = [t for t in clean_tokens if t.get("address") not in self.blacklisted_dumped_addrs and t.get("liquidity_usd", 0) >= 12000 and t.get("price_change_24h", 0) >= 0.0]
 
-        if len(top10) < 10:
-            needed = 10 - len(top10)
-            top10.extend(young_mature[:needed])
-            young_mature = young_mature[needed:]
-
-        # MONTAGEM DAS POSIÇÕES #11 AO #20:
-        # Moedas de 20 minutos até 12 horas no máximo!
-        remaining = leftover_fresh + young_mature
-        remaining.sort(key=young_sort_key)
-
-        top11_to_20 = remaining[:(20 - len(top10))]
-        clean_tokens = top10 + top11_to_20
-
-        # FILTRO DE SEGURANÇA: Exclui qualquer token banido/derretido ou vermelho
-        clean_tokens = [t for t in clean_tokens if t.get("address") not in self.blacklisted_dumped_addrs and t.get("liquidity_usd", 0) >= 15000 and t.get("price_change_24h", 0) >= 0.0]
-        self.fallback_reserve = [r for r in self.fallback_reserve if r.get("address") not in self.blacklisted_dumped_addrs and r.get("liquidity_usd", 0) >= 15000 and r.get("price_change_24h", 0) >= 0.0]
-        if hasattr(self, 'original_seeds'):
-            self.original_seeds = [s for s in self.original_seeds if s.get("address") not in self.blacklisted_dumped_addrs and s.get("liquidity_usd", 0) >= 15000 and s.get("price_change_24h", 0) >= 0.0]
-
-        # CAMADA 1: Preenchimento com candidatos saudáveis da reserva (idade <= 12h, liq >= 15k, 24h >= 0%)
-        if len(clean_tokens) < 20:
+        # PISO MÍNIMO GARANTIDO (No mínimo 10 a 15 moedas):
+        # Se o mercado tiver poucas gemas no momento, preenche até atingir pelo menos 10 (e até 20)
+        # usando a reserva saudável (moedas 100% verdes, auditadas e líquidas).
+        if len(clean_tokens) < 10:
             existing_addrs = {t.get("address") for t in clean_tokens}
-            candidates_to_fill = list(getattr(self, 'fallback_reserve', []))
-            if hasattr(self, 'original_seeds'):
-                for os in self.original_seeds:
-                    if os.get("address") not in {c.get("address") for c in candidates_to_fill}:
-                        candidates_to_fill.append(os)
-
-            for fb in candidates_to_fill:
+            candidates = list(getattr(self, 'fallback_reserve', [])) + list(getattr(self, 'original_seeds', []))
+            for fb in candidates:
                 fb_addr = fb.get("address")
-                if fb_addr and fb_addr not in existing_addrs and fb_addr not in self.blacklisted_dumped_addrs:
-                    if fb.get("liquidity_usd", 0) >= 15000 and fb.get("price_change_24h", 0) >= 0.0 and fb.get("price_change_1h", 0) >= -8.0 and fb.get("age_seconds", 0) <= MAX_TOKEN_AGE_SECONDS:
-                        clean_tokens.append(dict(fb))
-                        existing_addrs.add(fb_addr)
-                        if len(clean_tokens) >= 20:
-                            break
+                if (fb_addr and fb_addr not in existing_addrs 
+                    and fb_addr not in self.blacklisted_dumped_addrs
+                    and fb.get("liquidity_usd", 0) >= 12000 
+                    and fb.get("price_change_24h", 0) >= 0.0 
+                    and fb.get("price_change_1h", 0) >= -8.0
+                    and fb.get("age_seconds", 0) <= MAX_TOKEN_AGE_SECONDS):
+                    clean_tokens.append(dict(fb))
+                    existing_addrs.add(fb_addr)
+                    if len(clean_tokens) >= 10:
+                        break
 
-        # CAMADA 2: GARANTIA INFLEXÍVEL DE EXATAMENTE 20 MOEDAS (SEMPRE <= 12 HORAS E VERDES)
-        if len(clean_tokens) < 20 and hasattr(self, 'original_seeds'):
-            existing_addrs = {t.get("address") for t in clean_tokens}
-            for os in self.original_seeds:
-                os_addr = os.get("address")
-                if os_addr and os_addr not in existing_addrs and os_addr not in self.blacklisted_dumped_addrs:
-                    if os.get("age_seconds", 0) <= MAX_TOKEN_AGE_SECONDS and os.get("liquidity_usd", 0) >= 15000 and os.get("price_change_24h", 0) >= 0.0:
-                        clean_tokens.append(dict(os))
-                        existing_addrs.add(os_addr)
-                        if len(clean_tokens) >= 20:
-                            break
+        # Re-ordena em cascata para garantir que qualquer gema nova vá direto para o topo
+        clean_tokens.sort(key=cascade_sort_key)
 
-        # SINAIS EXCLUSIVOS: Top 5 recebem PRIME ALPHA 🚀 para chamar atenção máxima;
-        # As 15 moedas abaixo (6 a 20) usam LOW RISK 🛡️, ACCUMULATING 💎 ou HIGH VOLATILITY ⚡
+        # Limite máximo de até 20 moedas no display (as que passarem de 20 são empurradas para fora)
+        clean_tokens = clean_tokens[:20]
+
+        # Tags e badges visuais
         for idx, token in enumerate(clean_tokens):
             if idx < 5:
                 token["risk_level"] = "PRIME ALPHA 🚀"
@@ -899,7 +907,7 @@ class JovxScanner:
                 if token.get("tag") == "PRIME ALPHA":
                     token["tag"] = "HIGH ALPHA"
 
-        self.cached_list = clean_tokens[:20]
+        self.cached_list = clean_tokens
         self.last_fetch_time = time.time()
 
     def _background_worker(self):
@@ -998,8 +1006,7 @@ class JovxScanner:
                         (pc1h < -25.0) or
                         (pc24 < -25.0) or
                         (pc5m < -15.0) or
-                        (buys == 0 and sells > 5) or
-                        (age_sec > MAX_TOKEN_AGE_SECONDS and age_sec > 0)
+                        (buys == 0 and sells > 5)
                     )
 
                     if is_true_rug:
@@ -1017,7 +1024,7 @@ class JovxScanner:
                         (pc1h < -8.0) or
                         (pc5m < -6.0) or
                         (vol24 < 15000) or
-                        (liq < 20000)
+                        (liq < 15000)
                     )
 
                     if is_temporary_pullback:
@@ -1261,16 +1268,18 @@ class JovxScanner:
             if age_sec > MAX_TOKEN_AGE_SECONDS:
                 return None
 
-            # KILL SWITCHES ANTI-DERRETIMENTO & ANTI-GHOST
+            # KILL SWITCHES ANTI-DERRETIMENTO & ANTI-GHOST (Calibrado para novos lançamentos)
             if price_change_24h < 0.0:
                 return None
             if price_change_1h < -8.0:
                 return None
             if price_change_5m < -6.0:
                 return None
-            if liquidity_usd < 20000:
+            min_liq = 12000 if age_sec <= 3600 else 15000
+            min_vol = 8000 if age_sec <= 3600 else 15000
+            if liquidity_usd < min_liq:
                 return None
-            if volume_24h < 20000:
+            if volume_24h < min_vol:
                 return None
             if sells < 2 or buys < 5:
                 return None
@@ -1312,8 +1321,9 @@ class JovxScanner:
                 "6HU4CmRb15C2nQDx8Ld2f2W2wTdmog6aZiiXdrT5Pzi8", # GROK
             ])
 
-            if not (is_pump_token or is_verified_burned_sol):
-                return None
+            if chain_raw == "solana":
+                if not (is_pump_token or is_verified_burned_sol or dex_id == "raydium"):
+                    return None
 
             # Proteção contra fake pool / honeypot (liquidez irrisória frente ao market cap)
             if market_cap > 500000 and (liquidity_usd / market_cap) < 0.005:
