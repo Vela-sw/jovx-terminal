@@ -1356,6 +1356,10 @@ class JovxScanner:
             fdv = float(active_pair.get("fdv", 0) or 0)
             market_cap = float(active_pair.get("marketCap", fdv) or fdv)
             liquidity_usd = float(active_pair.get("liquidity", {}).get("usd", 0) or 0)
+            dex_id = active_pair.get("dexId", "").lower()
+            if liquidity_usd == 0 and dex_id in ["pumpfun", "meteoradbc"] and market_cap >= 25000:
+                # Na curva de bonding da Pump.fun/Meteora, a liquidez travada em SOL equivale a ~22% do Market Cap
+                liquidity_usd = market_cap * 0.22
 
             volume_24h = float(active_pair.get("volume", {}).get("h24", 0) or 0)
             volume_5m = float(active_pair.get("volume", {}).get("m5", 0) or 0)
@@ -1428,8 +1432,9 @@ class JovxScanner:
                 "6HU4CmRb15C2nQDx8Ld2f2W2wTdmog6aZiiXdrT5Pzi8", # GROK
             ])
 
+            allowed_sol_dexes = ["raydium", "meteora", "meteoradbc", "orca", "pumpswap", "pumpfun"]
             if chain_raw == "solana":
-                if not (is_pump_token or is_verified_burned_sol or dex_id == "raydium"):
+                if not (is_pump_token or is_verified_burned_sol or dex_id in allowed_sol_dexes):
                     return None
 
             # Proteção contra fake pool / honeypot (liquidez irrisória frente ao market cap)
@@ -1546,7 +1551,7 @@ class JovxScanner:
         if not created_at_ms:
             return 480, "8m"
         diff_sec = max(60, time.time() - (created_at_ms / 1000))
-        if diff_sec < 7200:  # Exibe em minutos até 2 horas (120m) para valorizar moedas jovens
+        if diff_sec < 14400:  # Exibe em minutos até 4 horas (240m) para valorizar lançamentos jovens
             return diff_sec, f"{int(diff_sec // 60)}m"
         elif diff_sec < 86400:
             hours = diff_sec / 3600
