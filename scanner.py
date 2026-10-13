@@ -843,18 +843,24 @@ class JovxScanner:
 
         # =========================================================================
         # HIERARQUIA DE PRIORIDADE EM CASCATA:
-        # - Tier 1 (< 1h): Sweet spot 12m a 25m tem pontuação 1.0 (topo supremo)
-        # - Tier 2 (1h a 12h): Pontuação 2.0 (meio de tabela)
-        # - Tier 3 (12h a 24h): Pontuação 3.0 (piso de estabilidade na base)
+        # - Tier 1.0: Ponto Doce de 12 a 20 minutos (720s a 1200s) -> Vão direto para #1 ao #10!
+        # - Tier 1.5: Tolerância de 20 a 30 minutos (1201s a 1800s)
+        # - Tier 2.0: Moedas de 20-30 min até 12 horas (1801s a 43.200s) -> Ocupam #11 ao #20!
+        # - Tier 3.0: Piso de emergência de 12h a 24h -> Ficam na rabeira temporária
+        #   e são EMPURRADAS PARA FORA do painel conforme as novas entram!
         # =========================================================================
         def cascade_sort_key(t):
             age = t.get("age_seconds", 3600)
-            if age <= 3600:
-                tier = 1.0 if (720 <= age <= 1500) else 1.2
+            if 720 <= age <= 1200:
+                tier = 1.0  # 12 min a 20 min (Topo absoluto: #1 ao #10)
+            elif age < 720:
+                tier = 1.3  # Menos de 12 min (ainda ganhando liquidez e validação)
+            elif age <= 1800:
+                tier = 1.5  # 20 min a 30 min (transição)
             elif age <= 43200:
-                tier = 2.0
+                tier = 2.0  # 30 min até 12 horas (#11 ao #20)
             else:
-                tier = 3.0
+                tier = 3.0  # 12h a 24h (Piso temporário na rabeira)
 
             score = t.get("jovx_score", 0)
             m5 = t.get("price_change_5m", 0)
