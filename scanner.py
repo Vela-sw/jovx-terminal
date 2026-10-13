@@ -30,7 +30,7 @@ EXCLUDED_NAME_KEYWORDS = [
 # - Moedas com mais de 12 horas ficam 100% FORA do radar e da tabela!
 # =========================================================================
 MIN_TOKEN_AGE_SECONDS = 720          # 12 minutos (proteção contra snipers de berçário)
-MAX_TOKEN_AGE_SECONDS = 72 * 3600   # 3 dias (259.200 segundos) para ampla cobertura de gemas
+MAX_TOKEN_AGE_SECONDS = 12 * 3600   # 12 horas (43.200 segundos) - prioridade máxima de moedas novas
 
 class JovxScanner:
     """
@@ -891,9 +891,21 @@ class JovxScanner:
             valid_pool.append(t)
 
         # =========================================================================
-        # CRITÉRIO DE RANQUEAMENTO: ENTRADA DE DINHEIRO & EXPLOSIVIDADE
+        # CRITÉRIO DE RANQUEAMENTO: PRIORIDADE MÁXIMA PARA MOEDAS NOVAS (< 12 HORAS)
+        # + MAIOR ENTRADA DE DINHEIRO & EXPLOSIVIDADE
         # =========================================================================
         def explosive_sort_key(t):
+            age = t.get("age_seconds", 3600)
+            # Prioridade absoluta para as mais novas (< 12 horas):
+            if age <= 3600:
+                age_tier = 1.0  # Menos de 1 hora (Topo absoluto)
+            elif age <= 14400:
+                age_tier = 1.5  # 1h a 4 horas
+            elif age <= 43200:
+                age_tier = 2.0  # 4h a 12 horas
+            else:
+                age_tier = 3.0  # Acima de 12 horas (amortecedor de piso na rabeira para garantir 20)
+
             buys = t.get("buys_24h", 0)
             sells = max(1, t.get("sells_24h", 0))
             buy_ratio = buys / sells
@@ -909,7 +921,7 @@ class JovxScanner:
             
             score = t.get("jovx_score", 0)
             total_rank = momentum + inflow + buy_pressure + score
-            return -total_rank
+            return (age_tier, -total_rank)
 
         valid_pool.sort(key=explosive_sort_key)
         clean_tokens = list(valid_pool)
