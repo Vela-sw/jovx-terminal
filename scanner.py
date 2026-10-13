@@ -24,13 +24,16 @@ EXCLUDED_NAME_KEYWORDS = [
 ]
 
 # =========================================================================
-# REGRA INFLEXÍVEL DE IDADE: TETO MÁXIMO GLOBAL DE 12 HORAS (43.200 SEGUNDOS)
-# - Top #1 ao #10: Gemas recém-nascidas de 12 a 20 minutos (alta explosiva e frescor)
-# - Posições #11 ao #20: Gemas consolidadas de 20 minutos até 12 horas no máximo
-# - Moedas com mais de 12 horas ficam 100% FORA do radar e da tabela!
+# REGRA INFLEXÍVEL DE 15 MOEDAS: DIVISÃO ESTRATÉGICA (12m a 45m)
+# - Metade das moedas de 12m-45m vai para o Top #1 ao #5 (Área VIP / PRO)
+# - A outra metade vai para o Top #6 ao #10 (Área Free Liberada para conversão)
+# - Posições restantes completadas pelas melhores gemas consolidadas (45m a 12h)
+# - Total SEMPRE cravado em 15 moedas!
 # =========================================================================
+TOTAL_DISPLAY_TOKENS = 15
 MIN_TOKEN_AGE_SECONDS = 720          # 12 minutos (proteção contra snipers de berçário)
-MAX_TOKEN_AGE_SECONDS = 12 * 3600   # 12 horas (43.200 segundos) - prioridade máxima de moedas novas
+FRESH_WINDOW_MAX_SECONDS = 2700       # 45 minutos (janela ultra-fresca para split VIP/Free)
+MAX_TOKEN_AGE_SECONDS = 12 * 3600   # 12 horas (43.200 segundos) - teto máximo de vida
 
 class JovxScanner:
     """
@@ -804,16 +807,16 @@ class JovxScanner:
             self._recalculate_cached_list()
 
     def fetch_live_tokens(self):
-        """Retorna instantaneamente SEMPRE as 20 moedas cravadas recalculando idades reais"""
+        """Retorna instantaneamente SEMPRE as 15 moedas cravadas recalculando idades reais"""
         with self.lock:
             # Elimina imediatamente qualquer token que derreteu ou foi banido
             self.cached_list = [t for t in self.cached_list if t.get("address") not in self.blacklisted_dumped_addrs and t.get("liquidity_usd", 0) >= 12000 and t.get("price_change_24h", 0) >= 0.0]
 
-            if len(self.cached_list) < 20:
+            if len(self.cached_list) < 15:
                 self._recalculate_cached_list()
 
-            # Garantia inflexível de exatamente 20 moedas na tela
-            if len(self.cached_list) < 20 and hasattr(self, 'fallback_reserve'):
+            # Garantia inflexível de exatamente 15 moedas na tela
+            if len(self.cached_list) < 15 and hasattr(self, 'fallback_reserve'):
                 existing_addrs = {t.get("address") for t in self.cached_list}
                 for fb in self.fallback_reserve:
                     fb_addr = fb.get("address")
@@ -821,10 +824,10 @@ class JovxScanner:
                         tok = dict(fb)
                         self.cached_list.append(tok)
                         existing_addrs.add(fb_addr)
-                        if len(self.cached_list) >= 20:
+                        if len(self.cached_list) >= 15:
                             break
 
-            for idx, token in enumerate(self.cached_list[:20]):
+            for idx, token in enumerate(self.cached_list[:15]):
                 token["master_rank"] = idx + 1
                 token["is_top_5"] = (idx < 5)
 
@@ -836,27 +839,29 @@ class JovxScanner:
                 if idx < 5:
                     token["risk_level"] = "PRIME ALPHA 🚀"
                     token["tag"] = "PRIME ALPHA"
+                elif idx < 10:
+                    token["risk_level"] = "HOT RUNNER 🔥"
+                    token["tag"] = "HOT RUNNER"
                 else:
-                    if "PRIME ALPHA" in str(token.get("risk_level", "")):
-                        token["risk_level"] = "LOW RISK 🛡️"
-                    if token.get("tag") == "PRIME ALPHA":
-                        token["tag"] = "HIGH ALPHA"
+                    token["risk_level"] = "LOW RISK 🛡️"
+                    token["tag"] = "CONSOLIDATED"
 
-            return list(self.cached_list[:20])
+            return list(self.cached_list[:15])
 
     def _recalculate_cached_list(self):
         """
-        Organiza as Top 20 moedas definitivas com Alta Entrada de Dinheiro e Explosividade:
-        - Janela de Idade: A partir de 12 minutos (720s) até 3 dias (72h / 259.200s).
-        - Ranqueamento: Maior entrada de capital (Volume / Inflow), maior momentum explosivo e mais compras.
-        - Não sendo golpe: LP bloqueada/queimada (LP LOCKED 🔒) e sem derretimentos.
-        - GARANTIA INFLEXÍVEL: Sempre mantém exatamente 20 moedas cravadas na tela sem reduzir!
+        Organiza as Top 15 moedas definitivas com Divisão Estratégica:
+        - Janela Fresca (12m a 45m): A quantidade encontrada é dividida meio a meio:
+          * Metade no Top #1 ao #5 (Área VIP / PRO)
+          * Metade no Top #6 ao #10 (Área Free Liberada para conversão de visitantes)
+        - Vagas restantes completadas pelas melhores gemas de 45m a 12h (alto volume, liquidez e momentum).
+        - GARANTIA INFLEXÍVEL: Sempre mantém exatamente 15 moedas cravadas na tela sem reduzir!
         """
         valid_pool = []
         for t in self.pool.values():
             age = t.get("age_seconds", 3600)
             
-            # Filtro de idade: a partir de 12 minutos e até 3 dias
+            # Filtro de idade: a partir de 12 minutos e até 12 horas
             if age < MIN_TOKEN_AGE_SECONDS or age > MAX_TOKEN_AGE_SECONDS:
                 continue
 
@@ -890,49 +895,80 @@ class JovxScanner:
 
             valid_pool.append(t)
 
-        # =========================================================================
-        # CRITÉRIO DE RANQUEAMENTO: PRIORIDADE MÁXIMA PARA MOEDAS NOVAS (< 12 HORAS)
-        # + MAIOR ENTRADA DE DINHEIRO & EXPLOSIVIDADE
-        # =========================================================================
-        def explosive_sort_key(t):
-            age = t.get("age_seconds", 3600)
-            # Prioridade absoluta para as mais novas (< 12 horas):
-            if age <= 3600:
-                age_tier = 1.0  # Menos de 1 hora (Topo absoluto)
-            elif age <= 14400:
-                age_tier = 1.5  # 1h a 4 horas
-            elif age <= 43200:
-                age_tier = 2.0  # 4h a 12 horas
-            else:
-                age_tier = 3.0  # Acima de 12 horas (amortecedor de piso na rabeira para garantir 20)
-
+        def token_momentum_rank(t):
             buys = t.get("buys_24h", 0)
             sells = max(1, t.get("sells_24h", 0))
             buy_ratio = buys / sells
             
-            # Momentum de alta recente (1h e 5m com peso maior)
+            # Momentum recente (1h e 5m com peso maior)
             momentum = t.get("price_change_1h", 0) * 2.0 + t.get("price_change_5m", 0) * 3.0 + min(50.0, t.get("price_change_24h", 0) / 10.0)
             
             # Entrada de capital (Volume 24h e Liquidez real)
             inflow = min(50.0, t.get("volume_24h", 0) / 20000.0) + min(30.0, t.get("liquidity_usd", 0) / 10000.0)
             
-            # Bônus de pressão compradora
+            # Pressão compradora
             buy_pressure = 25.0 if buy_ratio >= 1.25 else (12.0 if buy_ratio >= 1.0 else 0.0)
             
             score = t.get("jovx_score", 0)
-            total_rank = momentum + inflow + buy_pressure + score
-            return (age_tier, -total_rank)
+            return momentum + inflow + buy_pressure + score
 
-        valid_pool.sort(key=explosive_sort_key)
-        clean_tokens = list(valid_pool)
+        # =========================================================================
+        # SEPARAÇÃO: FRESH (12m a 45m) vs RUNNERS CONSOLIDADOS (45m a 12h)
+        # =========================================================================
+        fresh_tokens = []
+        older_tokens = []
+        for t in valid_pool:
+            age = t.get("age_seconds", 3600)
+            t["_rank"] = token_momentum_rank(t)
+            if age <= FRESH_WINDOW_MAX_SECONDS:
+                fresh_tokens.append(t)
+            else:
+                older_tokens.append(t)
+
+        # Ordenação do fresh_tokens: mais nova primeiro (com desempate por momentum)
+        fresh_tokens.sort(key=lambda t: (t.get("age_seconds", 3600), -t.get("_rank", 0)))
+
+        # Ordenação do older_tokens: maior momentum e entrada de capital primeiro
+        older_tokens.sort(key=lambda t: -t.get("_rank", 0))
+
+        # Divisão da quantidade de moedas de 12 a 45 minutos:
+        # Metade vai para o Top 5 (VIP) e metade vai para o Top 6 a 10 (Free Liberada)
+        k = len(fresh_tokens)
+        vip_fresh_count = min(5, (k + 1) // 2)
+        free_fresh_count = min(5, k - vip_fresh_count)
+
+        vip_fresh = fresh_tokens[:vip_fresh_count]
+        free_fresh = fresh_tokens[vip_fresh_count:vip_fresh_count + free_fresh_count]
+
+        # Montagem dos 3 blocos:
+        # 1. Top #1 ao #5 (VIP / PRO Locked para Free)
+        top_5 = list(vip_fresh)
+        older_idx = 0
+        while len(top_5) < 5 and older_idx < len(older_tokens):
+            top_5.append(older_tokens[older_idx])
+            older_idx += 1
+
+        # 2. Top #6 ao #10 (Free Liberado: novinhas expostas para converter visitantes em PRO!)
+        top_6_to_10 = list(free_fresh)
+        while len(top_6_to_10) < 5 and older_idx < len(older_tokens):
+            top_6_to_10.append(older_tokens[older_idx])
+            older_idx += 1
+
+        # 3. Top #11 ao #15 (Free Consolidadas: runners sustentados de 45m a 12h)
+        top_11_to_15 = []
+        while len(top_11_to_15) < 5 and older_idx < len(older_tokens):
+            top_11_to_15.append(older_tokens[older_idx])
+            older_idx += 1
+
+        clean_tokens = top_5 + top_6_to_10 + top_11_to_15
 
         # Filtro de segurança: elimina banidos ou vermelhos
         clean_tokens = [t for t in clean_tokens if t.get("address") not in self.blacklisted_dumped_addrs and t.get("liquidity_usd", 0) >= 12000 and t.get("price_change_24h", 0) >= 0.0]
 
         # =========================================================================
-        # GARANTIA INFLEXÍVEL DE SEMPRE 20 MOEDAS CRAVADAS NA TELA (NUNCA REDUZ!)
+        # GARANTIA INFLEXÍVEL DE SEMPRE 15 MOEDAS CRAVADAS NA TELA (NUNCA REDUZ!)
         # =========================================================================
-        if len(clean_tokens) < 20:
+        if len(clean_tokens) < 15:
             existing_addrs = {t.get("address") for t in clean_tokens}
             candidates = list(getattr(self, 'fallback_reserve', [])) + list(getattr(self, 'original_seeds', []))
             for fb in candidates:
@@ -943,29 +979,28 @@ class JovxScanner:
                     and fb.get("price_change_24h", 0) >= 0.0):
                     clean_tokens.append(dict(fb))
                     existing_addrs.add(fb_addr)
-                    if len(clean_tokens) >= 20:
+                    if len(clean_tokens) >= 15:
                         break
 
-        # Re-ordena e limita em exatamente 20 moedas
-        clean_tokens.sort(key=explosive_sort_key)
-        clean_tokens = clean_tokens[:20]
+        clean_tokens = clean_tokens[:15]
 
         # Tags e badges visuais
         for idx, token in enumerate(clean_tokens):
             if idx < 5:
                 token["risk_level"] = "PRIME ALPHA 🚀"
                 token["tag"] = "PRIME ALPHA"
+            elif idx < 10:
+                token["risk_level"] = "HOT RUNNER 🔥"
+                token["tag"] = "HOT RUNNER"
             else:
-                if "PRIME ALPHA" in str(token.get("risk_level", "")):
-                    token["risk_level"] = "LOW RISK 🛡️"
-                if token.get("tag") == "PRIME ALPHA":
-                    token["tag"] = "HIGH ALPHA"
+                token["risk_level"] = "LOW RISK 🛡️"
+                token["tag"] = "CONSOLIDATED"
 
         self.cached_list = clean_tokens
         self.last_fetch_time = time.time()
 
     def _background_worker(self):
-        """Worker assíncrono que roda no background mantendo os 20 tokens sempre frescos e verdes"""
+        """Worker assíncrono que roda no background mantendo os 15 tokens sempre frescos e verdes"""
         time.sleep(2)
         logger.info("[JOVX WORKER] Background scanner online com suporte FOMO e Anti-Dump.")
 
@@ -1153,6 +1188,20 @@ class JovxScanner:
                 except Exception as e:
                     logger.error(f"[HELIUS FETCH ERROR]: {e}")
 
+        # 3.0. GeckoTerminal New Pools (Descoberta instantânea de moedas frescas de 12m a 45m na fonte)
+        for page in range(1, 4):
+            try:
+                r_gecko = requests.get(f"https://api.geckoterminal.com/api/v2/networks/solana/new_pools?page={page}", headers=self.headers, timeout=3.5)
+                if r_gecko.status_code == 200:
+                    for p in r_gecko.json().get("data", []):
+                        bid = p.get("relationships", {}).get("base_token", {}).get("data", {}).get("id", "")
+                        if bid.startswith("solana_"):
+                            c_addr = bid.replace("solana_", "")
+                            if c_addr and c_addr not in self.blacklisted_dumped_addrs:
+                                candidate_addrs.append(c_addr)
+            except Exception:
+                pass
+
         # 3.1. Perfis e Boosts recentes da DexScreener (Fluxo contínuo de novas gemas da Solana)
         for ep_boost in ["https://api.dexscreener.com/token-boosts/top/v1", "https://api.dexscreener.com/token-boosts/latest/v1", self.profiles_url]:
             try:
@@ -1197,11 +1246,11 @@ class JovxScanner:
         except Exception:
             pass
 
-        unique_discover = list(dict.fromkeys(candidate_addrs))[:40]
+        unique_discover = list(dict.fromkeys(candidate_addrs))[:120]
         discover_best_pairs = {}
 
-        for i in range(0, len(unique_discover), 6):
-            chunk = unique_discover[i:i+6]
+        for i in range(0, len(unique_discover), 30):
+            chunk = unique_discover[i:i+30]
             try:
                 r_disc = requests.get(self.tokens_batch_url + ",".join(chunk), headers=self.headers, timeout=5)
                 if r_disc.status_code == 200:

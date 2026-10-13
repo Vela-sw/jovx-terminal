@@ -16,7 +16,7 @@ def index():
 
 @app.route("/api/tokens/live")
 def get_live_tokens():
-    """Retorna os Top 20 tokens filtrados em tempo real pelo algoritmo JOVX"""
+    """Retorna os Top 15 tokens filtrados em tempo real pelo algoritmo JOVX"""
     try:
         tokens = scanner.fetch_live_tokens()
         return jsonify({
@@ -35,8 +35,8 @@ def get_stats():
         "status": "online",
         "protocol": "JOVX-CORE-V2",
         "scanned_24h": 24890,
-        "filtered_out": 24870,
-        "active_alpha_signals": len(scanner.cached_list) if scanner.cached_list else 20,
+        "filtered_out": 24875,
+        "active_alpha_signals": len(scanner.cached_list) if scanner.cached_list else 15,
         "solana_tps": 2845,
         "gas_price_sol": "0.000005 SOL"
     })
