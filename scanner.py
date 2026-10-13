@@ -24,14 +24,14 @@ EXCLUDED_NAME_KEYWORDS = [
 ]
 
 # =========================================================================
-# REGRA INFLEXÍVEL DE 15 MOEDAS: DIVISÃO ESTRATÉGICA (12m a 45m)
-# - Metade das moedas de 12m-45m vai para o Top #1 ao #5 (Área VIP / PRO)
+# REGRA INFLEXÍVEL DE 15 MOEDAS: DIVISÃO ESTRATÉGICA (8m a 45m)
+# - Metade das moedas de 8m-45m vai para o Top #1 ao #5 (Área VIP / PRO)
 # - A outra metade vai para o Top #6 ao #10 (Área Free Liberada para conversão)
 # - Posições restantes completadas pelas melhores gemas consolidadas (45m a 12h)
 # - Total SEMPRE cravado em 15 moedas!
 # =========================================================================
 TOTAL_DISPLAY_TOKENS = 15
-MIN_TOKEN_AGE_SECONDS = 720          # 12 minutos (proteção contra snipers de berçário)
+MIN_TOKEN_AGE_SECONDS = 480          # 8 minutos (proteção contra snipers de berçário)
 FRESH_WINDOW_MAX_SECONDS = 2700       # 45 minutos (janela ultra-fresca para split VIP/Free)
 MAX_TOKEN_AGE_SECONDS = 12 * 3600   # 12 horas (43.200 segundos) - teto máximo de vida
 
@@ -851,7 +851,7 @@ class JovxScanner:
     def _recalculate_cached_list(self):
         """
         Organiza as Top 15 moedas definitivas com Divisão Estratégica:
-        - Janela Fresca (12m a 45m): A quantidade encontrada é dividida meio a meio:
+        - Janela Fresca (8m a 45m): A quantidade encontrada é dividida meio a meio:
           * Metade no Top #1 ao #5 (Área VIP / PRO)
           * Metade no Top #6 ao #10 (Área Free Liberada para conversão de visitantes)
         - Vagas restantes completadas pelas melhores gemas de 45m a 12h (alto volume, liquidez e momentum).
@@ -861,7 +861,7 @@ class JovxScanner:
         for t in self.pool.values():
             age = t.get("age_seconds", 3600)
             
-            # Filtro de idade: a partir de 12 minutos e até 12 horas
+            # Filtro de idade: a partir de 8 minutos e até 12 horas
             if age < MIN_TOKEN_AGE_SECONDS or age > MAX_TOKEN_AGE_SECONDS:
                 continue
 
@@ -1544,9 +1544,9 @@ class JovxScanner:
 
     def _calculate_age(self, created_at_ms):
         if not created_at_ms:
-            return 1200, "20m"
+            return 480, "8m"
         diff_sec = max(60, time.time() - (created_at_ms / 1000))
-        if diff_sec < 3600:
+        if diff_sec < 7200:  # Exibe em minutos até 2 horas (120m) para valorizar moedas jovens
             return diff_sec, f"{int(diff_sec // 60)}m"
         elif diff_sec < 86400:
             hours = diff_sec / 3600

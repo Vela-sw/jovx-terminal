@@ -15,9 +15,9 @@ STRIPE_PRICE_ID_PRO = os.environ.get("STRIPE_PRICE_ID_PRO", "price_pro_monthly_1
 PRO_PRICE_USD = 19.90
 PRO_ACCESS_MONTHS = 1
 
-# Regras do Algoritmo de Probabilidade JOVX (15 Moedas: Split 12m-45m entre VIP e Free)
+# Regras do Algoritmo de Probabilidade JOVX (15 Moedas: Split 8m-45m entre VIP e Free)
 TOTAL_DISPLAY_TOKENS = 15             # 15 moedas cravadas no total
-MIN_TOKEN_AGE_SECONDS = 720          # 12 minutos (proteção contra snipers de berçário)
+MIN_TOKEN_AGE_SECONDS = 480          # 8 minutos (proteção contra snipers de berçário)
 FRESH_WINDOW_MAX_SECONDS = 2700       # 45 minutos (janela de moedas ultra-frescas)
 MAX_TOKEN_AGE_HOURS = 12             # Máximo de 12 horas para moedas em exibição
 MAX_TOKEN_AGE_SECONDS = 12 * 3600   # 43.200 segundos
