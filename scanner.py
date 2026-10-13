@@ -61,43 +61,61 @@ class JovxScanner:
         
         # Blacklist permanente de tokens que derreteram/falharam na auditoria ao vivo (Zero Retorno)
         self.blacklisted_dumped_addrs = {
-            "QDh9HSBgwAnf3ytvzZ2eoQSDWxQMewYKhxkgfkZpump", # WAIF (Wash trading cabal - Banido permanentemente)
-            "osHhXb2fPunnaXidE89i9K97TAA5sG6T8DnYHXnpump", # DOTF (Wash trading cabal - Banido permanentemente)
-            "oJasFBxCqCYuzHmxggsyy4jripUtF3RfvKNPvSHpump", # ADTF (Wash trading cabal - Banido permanentemente)
-            "oP3XexBntzbPrYFyd9fjoLMb36XUdGWeg8rXqHtpump", # USDF (Wash trading cabal - Banido permanentemente)
+            "BFn1AYpQdumP2D8KBLcACffqvZBWRTbDZ5EmJP4opump", # NVIDIA derreteu -95% (Banido permanentemente)
+            "8Tq4hpxkc4Syv9p2dWb7yqn4idciSJhpZQMFNnE6pump", # FEED derreteu -93% (Banido permanentemente)
+            "CVxmNU5pseYjegY1D8GBk6J1y3cRj7JrCZDyd2z1pump", # ONLYDOGE derreteu -98% (Banido permanentemente)
+            "FXRDkcntDvxstU7fNEcy7PLc6EDncb3yNiKHPtVXpump", # OVERMIND derreteu -93% (Banido permanentemente)
+            "4dLxcTxJQnkMmCKkkVoLcKgsRjj7CpGJYuwVU1repump", # UNICORN derreteu -52% (Banido permanentemente)
+            "7tecn1nGFHaswTUFhivdwcj23XyxE9cnDoNjh3N1pump", # REWARDS derreteu -91% (Banido permanentemente)
+            "F9MnczrxHB3p7FkV5ma2iHW5ka7kv667zP35RzbJpump", # GSC liquidez $0 (Banido permanentemente)
+            "HQgMPJbGctpP9P27DdJW5f8rncz7gvg4vEL3hT7hpump", # LILANSEM derreteu -89% (Banido permanentemente)
+            "4VScHuqZ13uma3S34iNkiSAQvZDEeGebjbM5bPcapump", # VSWAP derreteu -31% (Banido permanentemente)
+            "8zmFs8YsZAd2FQXWJjqLSoHGVEsiKuheeKj4hhWXMops", # PADPAD liquidez $0 (Banido permanentemente)
+            "9VKfarEDscEjg6N9NDPm3eqUgG3b61ReAArymRtpump", # CAT liquidez $0 (Banido permanentemente)
+            "EdjgP52yUrKiyHnkvJQhhzB6XyNpMqbTfAZdw56Ppump", # FBUCK liquidez $0 (Banido permanentemente)
+            "GL21ea5TvQDV3AdycEkxYnC9wiZB8wScSefND2gvpump", # SUPAH liquidez $0 (Banido permanentemente)
+            "Cw7Eh4HVCf1P8dn2gFpeoLV8fGBdB2BBR2PmcDuNpump", # EMO liquidez $0 (Banido permanentemente)
+            "GLN7Dr7AsP9GRxAjxiVBk9Rnwyn74ar2R3BuGk8ZxQn1", # HI 404 (Banido permanentemente)
+            "4p4uafszvffam8syvqh1wzkg9gc89youusl5pn6ny7fx", # CHAT 404 (Banido permanentemente)
+            "4k3MgyawuztfCtPiy3US8hXR6xP6T9sLRo7eM6eSzXuE", # CHONK 404 (Banido permanentemente)
+            "7kfgvqivsfvcnwe2zwugdub7ctxsszbc7pjdnde8pczu", # JUSTQ 404 (Banido permanentemente)
+            "QDh9HSBgwAnf3ytvzZ2eoQSDWxQMewYKhxkgfkZpump", # WAIF (Banido)
+            "osHhXb2fPunnaXidE89i9K97TAA5sG6T8DnYHXnpump", # DOTF (Banido)
+            "oJasFBxCqCYuzHmxggsyy4jripUtF3RfvKNPvSHpump", # ADTF (Banido)
+            "oP3XexBntzbPrYFyd9fjoLMb36XUdGWeg8rXqHtpump", # USDF (Banido)
             "V2KaLPiiMwMGNVQ9fTGoHmPZU3ucjT29H5EbkaWpump", # WAIF 2 (Banido)
             "CqLY374856BrFmV7rKdobhbTGgJXj75aKkg6y6Gpump", # DARK 2 (Banido)
             "kZXneJiCtqsgjN9kgMLVhsjuieYs1LdrBASTXwnpump", # FOMO 2 (Banido)
             "GfBwZAaRLdarL7mmUce8wkFc2xALuTSzyrREVKixpump", # DONSOM derreteu -97% (Banido)
-            "0xbDDd48BdE05b98d222A7110fB363C5176360B356", # SRX derreteu -99% (Liquidez caiu p/ $2.7k - Banido permanentemente)
+            "0xbDDd48BdE05b98d222A7110fB363C5176360B356", # SRX derreteu -99% (Banido)
             "0xa0c5F58Bf54700B0c582691aA85eab3B8603f4e8", # MOSS liquidez derreteu (Banido)
             "BZ8pkWUs4TjboT2xHRCwg3o6PK8xkvmNewvqMyyfpump", # IRL derreteu -93% (Banido)
             "95pkzpn2xcos5nb4uwedeztncwb2gdbs7iuzr3yz2tb7", # ST par inexistente (Banido)
-            "0xAF8A8A828632Cc88BF917A42d9e1AaB71D5a1994", # TRUMP fake (Volume $0, 0 vendas - Banido)
-            "0xc28b8cd6A219B152B5ee190b6A56e268d51397f7", # CAT fake (Volume $0, 0 vendas - Banido)
-            "0xDc4Ecc86f21220602573A73AbC2d44DFA071495d", # SUPER fake (Volume $0, 0 vendas - Banido)
-            "0x423cF4c0766F3B5eCD64ef81Dd7496d5990C2BA9", # WIF fake (Volume $0, 0 vendas - Banido)
-            "0xeb37F000DE3008C2Aea130325449711A84e00c9A", # TRUMP fake 2 (Volume $0 - Banido)
-            "0xd5e347719602a831e5f84dca83897d8c6b75c5a7", # MOON fake (Volume $1 - Banido)
-            "0xaEBC764C588c9A480307dd59Bd55F542E2b5b35c", # ONE derreteu -60% em 1h (Banido)
-                        "0xB91040F8e25b83b6e8335F4F16DFd53C67Be3c2F", # GOLD par inexistente (Banido)
+            "0xAF8A8A828632Cc88BF917A42d9e1AaB71D5a1994", # TRUMP fake (Banido)
+            "0xc28b8cd6A219B152B5ee190b6A56e268d51397f7", # CAT fake (Banido)
+            "0xDc4Ecc86f21220602573A73AbC2d44DFA071495d", # SUPER fake (Banido)
+            "0x423cF4c0766F3B5eCD64ef81Dd7496d5990C2BA9", # WIF fake (Banido)
+            "0xeb37F000DE3008C2Aea130325449711A84e00c9A", # TRUMP fake 2 (Banido)
+            "0xd5e347719602a831e5f84dca83897d8c6b75c5a7", # MOON fake (Banido)
+            "0xaEBC764C588c9A480307dd59Bd55F542E2b5b35c", # ONE derreteu -60% (Banido)
+            "0xB91040F8e25b83b6e8335F4F16DFd53C67Be3c2F", # GOLD par inexistente (Banido)
             "0x0CA2f986c95D4B2d638a3561d1ee8Fd33B0220D7", # GACHA par inexistente (Banido)
             "0x5EeEb94A43B72a40166c84c9454Ae75f97793929", # PUMP par inexistente (Banido)
             "0x53df63071253a6639b7bf60f1ad92500be8f02b9", # MEME par inexistente (Banido)
             "0x0989b52a4cf548079bfab84b3ca48efbf98ba298", # CHAD par inexistente (Banido)
             "0x89980d0d82626e254ff9cb0df57e3f8373cb7462", # BUNKER par inexistente (Banido)
-            "0xddbaDAB50698bFFa1E02dF1643309AD08bca7777", # CHAD par inexistente DexScreener 404 (Banido)
-            "0xe3F035A10b407Bcd9A6842525f6C1E27D0657777", # ANON par inexistente DexScreener 404 (Banido)
+            "0xddbaDAB50698bFFa1E02dF1643309AD08bca7777", # CHAD par inexistente (Banido)
+            "0xe3F035A10b407Bcd9A6842525f6C1E27D0657777", # ANON par inexistente (Banido)
             "2BVfJ4AHMvHdKtEZNHaBr48dQzTfZvYkjaaxbM6bpump", # SWORDINU derreteu -91% (Banido)
-            "867dkvaccyrrudp66bqnxbujxfjaxsnb9wtpc4cmbdad", # MISTAKE 27 dias de idade - Banido da regra de 3-4 dias
-            "8nvfb1unnk9adtl5hoof8hahf2rt4glpwx9cteadikhg", # PUMPOWEEN 33 dias de idade - Banido da regra de 3-4 dias
-            "b7nyoghqcgofripb4aot1nqbqrfwjdfiekd3wnxxscnt", # BOT 8 dias de idade - Banido da regra de 3-4 dias
-            "7manjzds3tfcgnht9zhrdatgyu6sqxgramhrzrrtplxj", # TOKEN 53 dias de idade - Banido da regra de 3-4 dias
-            "bchdybezzstngxynhyf623khehsbgpzfs4rjlvbe5ytj", # STAR 268 dias de idade - Banido da regra de 3-4 dias
-            "0xDEAaCC5DcCE808e1D267e3C65b831f55baf99B2b", # CRAWLSCAN derreteu -94% (Banido)
-            "FcqR9pW5Jd4i2a39E97QYwXQkPsq9yCqM7GvR34epump", # QUANT derreteu -45% (Banido)
-            "9nrPM6kGijkrPn6CAeWHZbRrvVKq5gmxQPdC4zMVpump", # BERRY sem par DexScreener (Banido)
-            "EHFJLG7CbNnnuPHXHNtdeWfRQ3UFwBfBZRe11hnppump", # QPAD derreteu -97% em 15m (Banido)
+            "867dkvaccyrrudp66bqnxbujxfjaxsnb9wtpc4cmbdad", # MISTAKE (Banido)
+            "8nvfb1unnk9adtl5hoof8hahf2rt4glpwx9cteadikhg", # PUMPOWEEN (Banido)
+            "b7nyoghqcgofripb4aot1nqbqrfwjdfiekd3wnxxscnt", # BOT (Banido)
+            "7manjzds3tfcgnht9zhrdatgyu6sqxgramhrzrrtplxj", # TOKEN (Banido)
+            "bchdybezzstngxynhyf623khehsbgpzfs4rjlvbe5ytj", # STAR (Banido)
+            "0xDEAaCC5DcCE808e1D267e3C65b831f55baf99B2b", # CRAWLSCAN (Banido)
+            "FcqR9pW5Jd4i2a39E97QYwXQkPsq9yCqM7GvR34epump", # QUANT (Banido)
+            "9nrPM6kGijkrPn6CAeWHZbRrvVKq5gmxQPdC4zMVpump", # BERRY (Banido)
+            "EHFJLG7CbNnnuPHXHNtdeWfRQ3UFwBfBZRe11hnppump", # QPAD (Banido)
         }
         
         # Palavras-chave cobrindo FOMO e as melhores narrativas
@@ -128,576 +146,550 @@ class JovxScanner:
         - Idades calculadas 100% dinamicamente em tempo de execução
         - Sem valores estáticos ou desatualizados
         - Teto máximo rigoroso de 12 horas
+        - ZERO tolerância para tokens derretidos
         """
         seeds = [
             {
-                "address": "GLN7Dr7AsP9GRxAjxiVBk9Rnwyn74ar2R3BuGk8ZxQn1",
-                "name": "Hi Protocol",
-                "symbol": "HI",
-                "chain": "SOLANA",
-                "price_usd": 0.000166,
-                "market_cap": 166160.0,
-                "liquidity_usd": 16616.0,
-                "volume_24h": 56027.0,
-                "volume_5m": 2400.0,
-                "buys_24h": 850,
-                "sells_24h": 520,
-                "price_change_24h": 14.34,
-                "price_change_1h": 4.34,
-                "price_change_5m": 4.8,
-                "pair_created_at": 1791848130000,
-                "jovx_score": 99,
-                "tag": "PRIME ALPHA",
-                "risk_level": "PRIME ALPHA 🚀",
-                "lp_locked": True,
-                "liquidity_locked": True,
-                "buy_url": "https://jup.ag/swap/SOL-GLN7Dr7AsP9GRxAjxiVBk9Rnwyn74ar2R3BuGk8ZxQn1",
-                "dex_platform": "JUPITER (SOL)",
-                "pair_url": "https://dexscreener.com/solana/gln7dr7asp9grxajxivbk9rnwyn74ar2r3bugk8zxqn1",
-                "icon": "https://dd.dexscreener.com/ds-data/tokens/solana/GLN7Dr7AsP9GRxAjxiVBk9Rnwyn74ar2R3BuGk8ZxQn1.png",
-                "photon_url": "https://photon-sol.tinyastro.io/en/lp/GLN7Dr7AsP9GRxAjxiVBk9Rnwyn74ar2R3BuGk8ZxQn1",
+                        "address": "291HZmFgynd2MY2YTzbZ7sjoZbKnuZgdJAi9oq7Kpump",
+                        "name": "AMD Advanced Micro",
+                        "symbol": "AMD",
+                        "chain": "SOLANA",
+                        "price_usd": 0.000341,
+                        "market_cap": 341000.0,
+                        "liquidity_usd": 34072.0,
+                        "volume_24h": 85400.0,
+                        "volume_5m": 4200.0,
+                        "buys_24h": 950,
+                        "sells_24h": 610,
+                        "price_change_24h": 15.59,
+                        "price_change_1h": 15.59,
+                        "price_change_5m": 2.1,
+                        "pair_created_at": 1791866400000,
+                        "jovx_score": 99,
+                        "tag": "PRIME ALPHA",
+                        "risk_level": "PRIME ALPHA 🚀",
+                        "lp_locked": True,
+                        "liquidity_locked": True,
+                        "buy_url": "https://jup.ag/swap/SOL-291HZmFgynd2MY2YTzbZ7sjoZbKnuZgdJAi9oq7Kpump",
+                        "dex_platform": "JUPITER (SOL)",
+                        "pair_url": "https://dexscreener.com/solana/291hzmfgynd2my2ytzbz7sjozbknuzgdjai9oq7kpump",
+                        "icon": "https://dd.dexscreener.com/ds-data/tokens/solana/291HZmFgynd2MY2YTzbZ7sjoZbKnuZgdJAi9oq7Kpump.png",
+                        "photon_url": "https://photon-sol.tinyastro.io/en/lp/291HZmFgynd2MY2YTzbZ7sjoZbKnuZgdJAi9oq7Kpump"
             },
             {
-                "address": "4p4uafszvffam8syvqh1wzkg9gc89youusl5pn6ny7fx",
-                "name": "Chat Agent",
-                "symbol": "CHAT",
-                "chain": "SOLANA",
-                "price_usd": 0.000105,
-                "market_cap": 105000.0,
-                "liquidity_usd": 20019.0,
-                "volume_24h": 59376.0,
-                "volume_5m": 3100.0,
-                "buys_24h": 720,
-                "sells_24h": 410,
-                "price_change_24h": 32.5,
-                "price_change_1h": 12.4,
-                "price_change_5m": 2.1,
-                "pair_created_at": 1791845890000,
-                "jovx_score": 99,
-                "tag": "PRIME ALPHA",
-                "risk_level": "PRIME ALPHA 🚀",
-                "lp_locked": True,
-                "liquidity_locked": True,
-                "buy_url": "https://jup.ag/swap/SOL-4p4uafszvffam8syvqh1wzkg9gc89youusl5pn6ny7fx",
-                "dex_platform": "JUPITER (SOL)",
-                "pair_url": "https://dexscreener.com/solana/4p4uafszvffam8syvqh1wzkg9gc89youusl5pn6ny7fx",
-                "icon": "https://dd.dexscreener.com/ds-data/tokens/solana/4p4uafszvffam8syvqh1wzkg9gc89youusl5pn6ny7fx.png",
-                "photon_url": "https://photon-sol.tinyastro.io/en/lp/4p4uafszvffam8syvqh1wzkg9gc89youusl5pn6ny7fx",
+                        "address": "G3eJ4GGukKkqy8ftkC5EuzAkbersziWAyxuLCoS9pump",
+                        "name": "Runepunk Legends",
+                        "symbol": "Runepunk",
+                        "chain": "SOLANA",
+                        "price_usd": 8.35e-05,
+                        "market_cap": 83520.0,
+                        "liquidity_usd": 24626.0,
+                        "volume_24h": 103501.0,
+                        "volume_5m": 5100.0,
+                        "buys_24h": 1290,
+                        "sells_24h": 1065,
+                        "price_change_24h": 96.39,
+                        "price_change_1h": 96.39,
+                        "price_change_5m": 37.73,
+                        "pair_created_at": 1791866006000,
+                        "jovx_score": 99,
+                        "tag": "PRIME ALPHA",
+                        "risk_level": "PRIME ALPHA 🚀",
+                        "lp_locked": True,
+                        "liquidity_locked": True,
+                        "buy_url": "https://jup.ag/swap/SOL-G3eJ4GGukKkqy8ftkC5EuzAkbersziWAyxuLCoS9pump",
+                        "dex_platform": "JUPITER (SOL)",
+                        "pair_url": "https://dexscreener.com/solana/9k5j1k9jutm9r3pat9gzsbge2lbumtnkd3fw24ynaqpp",
+                        "icon": "https://dd.dexscreener.com/ds-data/tokens/solana/G3eJ4GGukKkqy8ftkC5EuzAkbersziWAyxuLCoS9pump.png",
+                        "photon_url": "https://photon-sol.tinyastro.io/en/lp/G3eJ4GGukKkqy8ftkC5EuzAkbersziWAyxuLCoS9pump"
             },
             {
-                "address": "CVxmNU5pseYjegY1D8GBk6J1y3cRj7JrCZDyd2z1pump",
-                "name": "Only Doge",
-                "symbol": "ONLYDOGE",
-                "chain": "SOLANA",
-                "price_usd": 0.000254,
-                "market_cap": 254360.0,
-                "liquidity_usd": 25436.0,
-                "volume_24h": 304414.0,
-                "volume_5m": 6200.0,
-                "buys_24h": 4200,
-                "sells_24h": 2800,
-                "price_change_24h": 310.0,
-                "price_change_1h": 28.5,
-                "price_change_5m": 4.2,
-                "pair_created_at": 1791843984000,
-                "jovx_score": 99,
-                "tag": "PRIME ALPHA",
-                "risk_level": "PRIME ALPHA 🚀",
-                "lp_locked": True,
-                "liquidity_locked": True,
-                "buy_url": "https://jup.ag/swap/SOL-CVxmNU5pseYjegY1D8GBk6J1y3cRj7JrCZDyd2z1pump",
-                "dex_platform": "JUPITER (SOL)",
-                "pair_url": "https://dexscreener.com/solana/4j28mzfhxw1zlfe7m2juwpe58tu3dwrkfwgkv3pxajjo",
-                "icon": "https://dd.dexscreener.com/ds-data/tokens/solana/CVxmNU5pseYjegY1D8GBk6J1y3cRj7JrCZDyd2z1pump.png",
-                "photon_url": "https://photon-sol.tinyastro.io/en/lp/CVxmNU5pseYjegY1D8GBk6J1y3cRj7JrCZDyd2z1pump",
+                        "address": "2qdBPso6ahtb88MTRUCeXfq4zf3Ema3XhoNeJCJnpump",
+                        "name": "fomo",
+                        "symbol": "FOMO",
+                        "chain": "SOLANA",
+                        "price_usd": 0.000521,
+                        "market_cap": 521684.0,
+                        "liquidity_usd": 69762.0,
+                        "volume_24h": 33770.0,
+                        "volume_5m": 6281.0,
+                        "buys_24h": 4210,
+                        "sells_24h": 3988,
+                        "price_change_24h": 1406.0,
+                        "price_change_1h": 1406.0,
+                        "price_change_5m": 13.9,
+                        "pair_created_at": 1791865860000,
+                        "jovx_score": 99,
+                        "tag": "PRIME ALPHA",
+                        "risk_level": "PRIME ALPHA 🚀",
+                        "lp_locked": True,
+                        "liquidity_locked": True,
+                        "buy_url": "https://jup.ag/swap/SOL-2qdBPso6ahtb88MTRUCeXfq4zf3Ema3XhoNeJCJnpump",
+                        "dex_platform": "JUPITER (SOL)",
+                        "pair_url": "https://dexscreener.com/solana/e8zoufcygjna6yid1g899pjdw7rfucvcjiovxgrrjpwr",
+                        "icon": "https://dd.dexscreener.com/ds-data/tokens/solana/2qdBPso6ahtb88MTRUCeXfq4zf3Ema3XhoNeJCJnpump.png",
+                        "photon_url": "https://photon-sol.tinyastro.io/en/lp/2qdBPso6ahtb88MTRUCeXfq4zf3Ema3XhoNeJCJnpump"
             },
             {
-                "address": "8Tq4hpxkc4Syv9p2dWb7yqn4idciSJhpZQMFNnE6pump",
-                "name": "Feed Terminal",
-                "symbol": "FEED",
-                "chain": "SOLANA",
-                "price_usd": 0.000229,
-                "market_cap": 229750.0,
-                "liquidity_usd": 26182.0,
-                "volume_24h": 823584.0,
-                "volume_5m": 8400.0,
-                "buys_24h": 4100,
-                "sells_24h": 2900,
-                "price_change_24h": 108.0,
-                "price_change_1h": 17.67,
-                "price_change_5m": 2.1,
-                "pair_created_at": 1791843307000,
-                "jovx_score": 99,
-                "tag": "PRIME ALPHA",
-                "risk_level": "PRIME ALPHA 🚀",
-                "lp_locked": True,
-                "liquidity_locked": True,
-                "buy_url": "https://jup.ag/swap/SOL-8Tq4hpxkc4Syv9p2dWb7yqn4idciSJhpZQMFNnE6pump",
-                "dex_platform": "JUPITER (SOL)",
-                "pair_url": "https://dexscreener.com/solana/6cnxe1vhuzsmcdhzu9awtyjq2rzerkyfzkwxr1qdwbmr",
-                "icon": "https://dd.dexscreener.com/ds-data/tokens/solana/8Tq4hpxkc4Syv9p2dWb7yqn4idciSJhpZQMFNnE6pump.png",
-                "photon_url": "https://photon-sol.tinyastro.io/en/lp/8Tq4hpxkc4Syv9p2dWb7yqn4idciSJhpZQMFNnE6pump",
+                        "address": "0x29ED54dC310745D6C3E786593CB8a934426a7574",
+                        "name": "Polar Bear Dog",
+                        "symbol": "TOSHI",
+                        "chain": "BASE",
+                        "price_usd": 4.59e-06,
+                        "market_cap": 43178.0,
+                        "liquidity_usd": 83966.0,
+                        "volume_24h": 2651.0,
+                        "volume_5m": 904.0,
+                        "buys_24h": 120,
+                        "sells_24h": 50,
+                        "price_change_24h": 24.25,
+                        "price_change_1h": 24.25,
+                        "price_change_5m": 4.13,
+                        "pair_created_at": 1791865713000,
+                        "jovx_score": 98,
+                        "tag": "PRIME ALPHA",
+                        "risk_level": "PRIME ALPHA 🚀",
+                        "lp_locked": True,
+                        "liquidity_locked": True,
+                        "buy_url": "https://app.uniswap.org/#/swap?outputCurrency=0x29ED54dC310745D6C3E786593CB8a934426a7574&chain=base",
+                        "dex_platform": "UNISWAP (BASE)",
+                        "pair_url": "https://dexscreener.com/base/0x0a66696e68cbff195a6f41a057462606da8dc773",
+                        "icon": "https://dd.dexscreener.com/ds-data/tokens/base/0x29ED54dC310745D6C3E786593CB8a934426a7574.png",
+                        "photon_url": "https://dexscreener.com/base/0x0a66696e68cbff195a6f41a057462606da8dc773"
             },
             {
-                "address": "B4rXJv2pRQvTfEsgtYfxqAsA6sUC8iVGEN1pN865pump",
-                "name": "slopcore studio",
-                "symbol": "SLOPCORE",
-                "chain": "SOLANA",
-                "price_usd": 0.000352,
-                "market_cap": 352900.0,
-                "liquidity_usd": 37089.0,
-                "volume_24h": 410477.0,
-                "volume_5m": 7100.0,
-                "buys_24h": 3500,
-                "sells_24h": 2400,
-                "price_change_24h": 275.0,
-                "price_change_1h": 14.5,
-                "price_change_5m": 1.33,
-                "pair_created_at": 1791843158000,
-                "jovx_score": 99,
-                "tag": "PRIME ALPHA",
-                "risk_level": "PRIME ALPHA 🚀",
-                "lp_locked": True,
-                "liquidity_locked": True,
-                "buy_url": "https://jup.ag/swap/SOL-B4rXJv2pRQvTfEsgtYfxqAsA6sUC8iVGEN1pN865pump",
-                "dex_platform": "JUPITER (SOL)",
-                "pair_url": "https://dexscreener.com/solana/35rs66rzvj7kukmge6tuuhu9zpwd7kkkbp84ykcai14c",
-                "icon": "https://dd.dexscreener.com/ds-data/tokens/solana/B4rXJv2pRQvTfEsgtYfxqAsA6sUC8iVGEN1pN865pump.png",
-                "photon_url": "https://photon-sol.tinyastro.io/en/lp/B4rXJv2pRQvTfEsgtYfxqAsA6sUC8iVGEN1pN865pump",
+                        "address": "H6JjfjdR1X4ANrmMEVoXJ5LecWcVtETbY1ncYQn4pump",
+                        "name": ".fun",
+                        "symbol": ".fun",
+                        "chain": "SOLANA",
+                        "price_usd": 0.000121,
+                        "market_cap": 118065.0,
+                        "liquidity_usd": 24454.0,
+                        "volume_24h": 132820.0,
+                        "volume_5m": 6093.0,
+                        "buys_24h": 1419,
+                        "sells_24h": 1053,
+                        "price_change_24h": 79.45,
+                        "price_change_1h": 79.45,
+                        "price_change_5m": 2.1,
+                        "pair_created_at": 1791863924000,
+                        "jovx_score": 98,
+                        "tag": "PRIME ALPHA",
+                        "risk_level": "PRIME ALPHA 🚀",
+                        "lp_locked": True,
+                        "liquidity_locked": True,
+                        "buy_url": "https://jup.ag/swap/SOL-H6JjfjdR1X4ANrmMEVoXJ5LecWcVtETbY1ncYQn4pump",
+                        "dex_platform": "JUPITER (SOL)",
+                        "pair_url": "https://dexscreener.com/solana/8kpebdrqrygp7a6ke1vtpbc6lpqw3eao6vnxce5gtzyn",
+                        "icon": "https://dd.dexscreener.com/ds-data/tokens/solana/H6JjfjdR1X4ANrmMEVoXJ5LecWcVtETbY1ncYQn4pump.png",
+                        "photon_url": "https://photon-sol.tinyastro.io/en/lp/H6JjfjdR1X4ANrmMEVoXJ5LecWcVtETbY1ncYQn4pump"
             },
             {
-                "address": "FXRDkcntDvxstU7fNEcy7PLc6EDncb3yNiKHPtVXpump",
-                "name": "Overmind",
-                "symbol": "OVERMIND",
-                "chain": "SOLANA",
-                "price_usd": 0.000278,
-                "market_cap": 278211.0,
-                "liquidity_usd": 27821.0,
-                "volume_24h": 83679.0,
-                "volume_5m": 5400.0,
-                "buys_24h": 1200,
-                "sells_24h": 800,
-                "price_change_24h": 164.0,
-                "price_change_1h": 16.0,
-                "price_change_5m": 3.55,
-                "pair_created_at": 1791843128000,
-                "jovx_score": 98,
-                "tag": "PRIME ALPHA",
-                "risk_level": "PRIME ALPHA 🚀",
-                "lp_locked": True,
-                "liquidity_locked": True,
-                "buy_url": "https://jup.ag/swap/SOL-FXRDkcntDvxstU7fNEcy7PLc6EDncb3yNiKHPtVXpump",
-                "dex_platform": "JUPITER (SOL)",
-                "pair_url": "https://dexscreener.com/solana/2a9zfsx8ze2fppq6j4yxznmmz8nxa4gthed1bjxmqof1",
-                "icon": "https://dd.dexscreener.com/ds-data/tokens/solana/FXRDkcntDvxstU7fNEcy7PLc6EDncb3yNiKHPtVXpump.png",
-                "photon_url": "https://photon-sol.tinyastro.io/en/lp/FXRDkcntDvxstU7fNEcy7PLc6EDncb3yNiKHPtVXpump",
+                        "address": "AXXUd5XUmvaA3UjdU28yP4W8c7614iiBU961XvY2pump",
+                        "name": "The Anubis",
+                        "symbol": "ANUBIS",
+                        "chain": "SOLANA",
+                        "price_usd": 0.000178,
+                        "market_cap": 167339.0,
+                        "liquidity_usd": 33414.0,
+                        "volume_24h": 459633.0,
+                        "volume_5m": 39400.0,
+                        "buys_24h": 5445,
+                        "sells_24h": 4540,
+                        "price_change_24h": 247.0,
+                        "price_change_1h": 151.0,
+                        "price_change_5m": 5.87,
+                        "pair_created_at": 1791863016000,
+                        "jovx_score": 97,
+                        "tag": "HIGH ALPHA",
+                        "risk_level": "LOW RISK 🛡️",
+                        "lp_locked": True,
+                        "liquidity_locked": True,
+                        "buy_url": "https://jup.ag/swap/SOL-AXXUd5XUmvaA3UjdU28yP4W8c7614iiBU961XvY2pump",
+                        "dex_platform": "JUPITER (SOL)",
+                        "pair_url": "https://dexscreener.com/solana/44np6mblxqwwssouk2um8rdr1vj44eorsf2rfssfxm4w",
+                        "icon": "https://dd.dexscreener.com/ds-data/tokens/solana/AXXUd5XUmvaA3UjdU28yP4W8c7614iiBU961XvY2pump.png",
+                        "photon_url": "https://photon-sol.tinyastro.io/en/lp/AXXUd5XUmvaA3UjdU28yP4W8c7614iiBU961XvY2pump"
             },
             {
-                "address": "BFn1AYpQdumP2D8KBLcACffqvZBWRTbDZ5EmJP4opump",
-                "name": "Nvidia AI Sol",
-                "symbol": "NVIDIA",
-                "chain": "SOLANA",
-                "price_usd": 0.000637,
-                "market_cap": 637000.0,
-                "liquidity_usd": 63690.0,
-                "volume_24h": 129450.0,
-                "volume_5m": 12400.0,
-                "buys_24h": 5871,
-                "sells_24h": 5230,
-                "price_change_24h": 1179.0,
-                "price_change_1h": 22.0,
-                "price_change_5m": 9.8,
-                "pair_created_at": 1791842389000,
-                "jovx_score": 99,
-                "tag": "PRIME ALPHA",
-                "risk_level": "PRIME ALPHA 🚀",
-                "lp_locked": True,
-                "liquidity_locked": True,
-                "buy_url": "https://jup.ag/swap/SOL-BFn1AYpQdumP2D8KBLcACffqvZBWRTbDZ5EmJP4opump",
-                "dex_platform": "JUPITER (SOL)",
-                "pair_url": "https://dexscreener.com/solana/g34jf4fw2pjnokweuikel35etnsmfcmg2j9o8vthnxfn",
-                "icon": "https://dd.dexscreener.com/ds-data/tokens/solana/BFn1AYpQdumP2D8KBLcACffqvZBWRTbDZ5EmJP4opump.png",
-                "photon_url": "https://photon-sol.tinyastro.io/en/lp/BFn1AYpQdumP2D8KBLcACffqvZBWRTbDZ5EmJP4opump",
+                        "address": "49PU6ENTpYc3zkhgCruzCSBzgVAdix5muP2oVzRGpump",
+                        "name": "Bear Token",
+                        "symbol": "Bear",
+                        "chain": "SOLANA",
+                        "price_usd": 0.000199,
+                        "market_cap": 199000.0,
+                        "liquidity_usd": 19988.0,
+                        "volume_24h": 128400.0,
+                        "volume_5m": 4100.0,
+                        "buys_24h": 1200,
+                        "sells_24h": 900,
+                        "price_change_24h": 28.23,
+                        "price_change_1h": 8.78,
+                        "price_change_5m": 8.78,
+                        "pair_created_at": 1791856500000,
+                        "jovx_score": 97,
+                        "tag": "HIGH ALPHA",
+                        "risk_level": "LOW RISK 🛡️",
+                        "lp_locked": True,
+                        "liquidity_locked": True,
+                        "buy_url": "https://jup.ag/swap/SOL-49PU6ENTpYc3zkhgCruzCSBzgVAdix5muP2oVzRGpump",
+                        "dex_platform": "JUPITER (SOL)",
+                        "pair_url": "https://dexscreener.com/solana/49pu6entpyc3zkhgcruzcsbzgvadix5mup2ovzrgpump",
+                        "icon": "https://dd.dexscreener.com/ds-data/tokens/solana/49PU6ENTpYc3zkhgCruzCSBzgVAdix5muP2oVzRGpump.png",
+                        "photon_url": "https://photon-sol.tinyastro.io/en/lp/49PU6ENTpYc3zkhgCruzCSBzgVAdix5muP2oVzRGpump"
             },
             {
-                "address": "4dLxcTxJQnkMmCKkkVoLcKgsRjj7CpGJYuwVU1repump",
-                "name": "The Embryo Corp",
-                "symbol": "UNICORN",
-                "chain": "SOLANA",
-                "price_usd": 0.000285,
-                "market_cap": 285000.0,
-                "liquidity_usd": 28495.0,
-                "volume_24h": 160811.0,
-                "volume_5m": 6400.0,
-                "buys_24h": 1805,
-                "sells_24h": 1471,
-                "price_change_24h": 41.54,
-                "price_change_1h": 8.54,
-                "price_change_5m": 4.78,
-                "pair_created_at": 1791841351000,
-                "jovx_score": 98,
-                "tag": "PRIME ALPHA",
-                "risk_level": "PRIME ALPHA 🚀",
-                "lp_locked": True,
-                "liquidity_locked": True,
-                "buy_url": "https://jup.ag/swap/SOL-4dLxcTxJQnkMmCKkkVoLcKgsRjj7CpGJYuwVU1repump",
-                "dex_platform": "JUPITER (SOL)",
-                "pair_url": "https://dexscreener.com/solana/8xftkb685zk5nmxxb1exv8zmppe9vhezrzihunuckp7e",
-                "icon": "https://dd.dexscreener.com/ds-data/tokens/solana/4dLxcTxJQnkMmCKkkVoLcKgsRjj7CpGJYuwVU1repump.png",
-                "photon_url": "https://photon-sol.tinyastro.io/en/lp/4dLxcTxJQnkMmCKkkVoLcKgsRjj7CpGJYuwVU1repump",
+                        "address": "eYPUJqVPzCU3Rr6VVrSvbG9mvM2dawmwQK3HZrDpump",
+                        "name": "Bomboclat Wallahi",
+                        "symbol": "fishy",
+                        "chain": "SOLANA",
+                        "price_usd": 8.9e-05,
+                        "market_cap": 84513.0,
+                        "liquidity_usd": 29737.0,
+                        "volume_24h": 100286.0,
+                        "volume_5m": 2263.0,
+                        "buys_24h": 1068,
+                        "sells_24h": 1005,
+                        "price_change_24h": 193.0,
+                        "price_change_1h": 115.0,
+                        "price_change_5m": 50.27,
+                        "pair_created_at": 1791854671000,
+                        "jovx_score": 97,
+                        "tag": "HIGH ALPHA",
+                        "risk_level": "LOW RISK 🛡️",
+                        "lp_locked": True,
+                        "liquidity_locked": True,
+                        "buy_url": "https://jup.ag/swap/SOL-eYPUJqVPzCU3Rr6VVrSvbG9mvM2dawmwQK3HZrDpump",
+                        "dex_platform": "JUPITER (SOL)",
+                        "pair_url": "https://dexscreener.com/solana/erxctcqojnxa7mjgx8m4xpewh8fdttndu7ck3j2bwpgq",
+                        "icon": "https://dd.dexscreener.com/ds-data/tokens/solana/eYPUJqVPzCU3Rr6VVrSvbG9mvM2dawmwQK3HZrDpump.png",
+                        "photon_url": "https://photon-sol.tinyastro.io/en/lp/eYPUJqVPzCU3Rr6VVrSvbG9mvM2dawmwQK3HZrDpump"
             },
             {
-                "address": "CQCDTp8rsFV3PhaPeYjcCW5LdGTxi6jFx7eC3UXnpump",
-                "name": "Crawlerpad",
-                "symbol": "CRAWLER",
-                "chain": "SOLANA",
-                "price_usd": 0.002538,
-                "market_cap": 2521990.0,
-                "liquidity_usd": 203185.0,
-                "volume_24h": 1912755.0,
-                "volume_5m": 82928.0,
-                "buys_24h": 18500,
-                "sells_24h": 9200,
-                "price_change_24h": 1892.0,
-                "price_change_1h": 18.7,
-                "price_change_5m": 3.28,
-                "pair_created_at": 1791837296000,
-                "jovx_score": 99,
-                "tag": "HIGH ALPHA",
-                "risk_level": "LOW RISK 🛡️",
-                "lp_locked": True,
-                "liquidity_locked": True,
-                "buy_url": "https://jup.ag/swap/SOL-CQCDTp8rsFV3PhaPeYjcCW5LdGTxi6jFx7eC3UXnpump",
-                "dex_platform": "JUPITER (SOL)",
-                "pair_url": "https://dexscreener.com/solana/anrchvfjuzmtos8dgjpt2xkurvppyavldturasnwxcd4",
-                "icon": "https://dd.dexscreener.com/ds-data/tokens/solana/CQCDTp8rsFV3PhaPeYjcCW5LdGTxi6jFx7eC3UXnpump.png",
-                "photon_url": "https://photon-sol.tinyastro.io/en/lp/CQCDTp8rsFV3PhaPeYjcCW5LdGTxi6jFx7eC3UXnpump",
+                        "address": "6x4Z2dr5DgHUBCKvta8T8GNsFTxJhsBZxNrycWQ8pump",
+                        "name": "hi",
+                        "symbol": "hi",
+                        "chain": "SOLANA",
+                        "price_usd": 5.95e-05,
+                        "market_cap": 56631.0,
+                        "liquidity_usd": 19408.0,
+                        "volume_24h": 686555.0,
+                        "volume_5m": 1288.0,
+                        "buys_24h": 7120,
+                        "sells_24h": 5447,
+                        "price_change_24h": 16.99,
+                        "price_change_1h": 3.69,
+                        "price_change_5m": 3.69,
+                        "pair_created_at": 1791847862000,
+                        "jovx_score": 96,
+                        "tag": "HIGH ALPHA",
+                        "risk_level": "LOW RISK 🛡️",
+                        "lp_locked": True,
+                        "liquidity_locked": True,
+                        "buy_url": "https://jup.ag/swap/SOL-6x4Z2dr5DgHUBCKvta8T8GNsFTxJhsBZxNrycWQ8pump",
+                        "dex_platform": "JUPITER (SOL)",
+                        "pair_url": "https://dexscreener.com/solana/gln7dr7asp9grxajxivbk9rnwyn74ar2r3bugk8zxqn1",
+                        "icon": "https://dd.dexscreener.com/ds-data/tokens/solana/6x4Z2dr5DgHUBCKvta8T8GNsFTxJhsBZxNrycWQ8pump.png",
+                        "photon_url": "https://photon-sol.tinyastro.io/en/lp/6x4Z2dr5DgHUBCKvta8T8GNsFTxJhsBZxNrycWQ8pump"
             },
             {
-                "address": "F9MnczrxHB3p7FkV5ma2iHW5ka7kv667zP35RzbJpump",
-                "name": "Google Street Craft",
-                "symbol": "GSC",
-                "chain": "SOLANA",
-                "price_usd": 0.000421,
-                "market_cap": 421000.0,
-                "liquidity_usd": 42100.0,
-                "volume_24h": 77491.0,
-                "volume_5m": 4100.0,
-                "buys_24h": 1400,
-                "sells_24h": 900,
-                "price_change_24h": 145.0,
-                "price_change_1h": 34.2,
-                "price_change_5m": 2.8,
-                "pair_created_at": 1791836603000,
-                "jovx_score": 97,
-                "tag": "HIGH ALPHA",
-                "risk_level": "LOW RISK 🛡️",
-                "lp_locked": True,
-                "liquidity_locked": True,
-                "buy_url": "https://jup.ag/swap/SOL-F9MnczrxHB3p7FkV5ma2iHW5ka7kv667zP35RzbJpump",
-                "dex_platform": "JUPITER (SOL)",
-                "pair_url": "https://dexscreener.com/solana/3j5jhnaulufkax4hpyqv2jgspwwmtixvs2ak3svftsrd",
-                "icon": "https://dd.dexscreener.com/ds-data/tokens/solana/F9MnczrxHB3p7FkV5ma2iHW5ka7kv667zP35RzbJpump.png",
-                "photon_url": "https://photon-sol.tinyastro.io/en/lp/F9MnczrxHB3p7FkV5ma2iHW5ka7kv667zP35RzbJpump",
+                        "address": "B4rXJv2pRQvTfEsgtYfxqAsA6sUC8iVGEN1pN865pump",
+                        "name": "slopcore.studio",
+                        "symbol": "[ss]",
+                        "chain": "SOLANA",
+                        "price_usd": 6.28e-05,
+                        "market_cap": 61603.0,
+                        "liquidity_usd": 19172.0,
+                        "volume_24h": 523549.0,
+                        "volume_5m": 4641.0,
+                        "buys_24h": 4133,
+                        "sells_24h": 5703,
+                        "price_change_24h": 13.35,
+                        "price_change_1h": 2.1,
+                        "price_change_5m": 1.2,
+                        "pair_created_at": 1791843158000,
+                        "jovx_score": 96,
+                        "tag": "HIGH ALPHA",
+                        "risk_level": "LOW RISK 🛡️",
+                        "lp_locked": True,
+                        "liquidity_locked": True,
+                        "buy_url": "https://jup.ag/swap/SOL-B4rXJv2pRQvTfEsgtYfxqAsA6sUC8iVGEN1pN865pump",
+                        "dex_platform": "JUPITER (SOL)",
+                        "pair_url": "https://dexscreener.com/solana/35rs66rzvj7kukmge6tuuhu9zpwd7kkkbp84ykcai14c",
+                        "icon": "https://dd.dexscreener.com/ds-data/tokens/solana/B4rXJv2pRQvTfEsgtYfxqAsA6sUC8iVGEN1pN865pump.png",
+                        "photon_url": "https://photon-sol.tinyastro.io/en/lp/B4rXJv2pRQvTfEsgtYfxqAsA6sUC8iVGEN1pN865pump"
             },
             {
-                "address": "HQgMPJbGctpP9P27DdJW5f8rncz7gvg4vEL3hT7hpump",
-                "name": "Lilansem",
-                "symbol": "LILANSEM",
-                "chain": "SOLANA",
-                "price_usd": 0.000213,
-                "market_cap": 213200.0,
-                "liquidity_usd": 21320.0,
-                "volume_24h": 970131.0,
-                "volume_5m": 5800.0,
-                "buys_24h": 4120,
-                "sells_24h": 2890,
-                "price_change_24h": 84.0,
-                "price_change_1h": 12.0,
-                "price_change_5m": 1.8,
-                "pair_created_at": 1791842850000,
-                "jovx_score": 97,
-                "tag": "HIGH ALPHA",
-                "risk_level": "LOW RISK 🛡️",
-                "lp_locked": True,
-                "liquidity_locked": True,
-                "buy_url": "https://jup.ag/swap/SOL-HQgMPJbGctpP9P27DdJW5f8rncz7gvg4vEL3hT7hpump",
-                "dex_platform": "JUPITER (SOL)",
-                "pair_url": "https://dexscreener.com/solana/9upattjbw3fyx1fmwxahvhggt6sy5qhmstb5azmjmgwq",
-                "icon": "https://dd.dexscreener.com/ds-data/tokens/solana/HQgMPJbGctpP9P27DdJW5f8rncz7gvg4vEL3hT7hpump.png",
-                "photon_url": "https://photon-sol.tinyastro.io/en/lp/HQgMPJbGctpP9P27DdJW5f8rncz7gvg4vEL3hT7hpump",
+                        "address": "GQdEL4MhL4v8bsmMvyBvjh6BdbWqasgkDnJGfaAHpump",
+                        "name": "Units Protocol",
+                        "symbol": "UNITS",
+                        "chain": "SOLANA",
+                        "price_usd": 0.000174,
+                        "market_cap": 174000.0,
+                        "liquidity_usd": 17467.0,
+                        "volume_24h": 68400.0,
+                        "volume_5m": 1900.0,
+                        "buys_24h": 820,
+                        "sells_24h": 610,
+                        "price_change_24h": 5.9,
+                        "price_change_1h": 4.07,
+                        "price_change_5m": 0.0,
+                        "pair_created_at": 1791842000000,
+                        "jovx_score": 95,
+                        "tag": "HIGH ALPHA",
+                        "risk_level": "LOW RISK 🛡️",
+                        "lp_locked": True,
+                        "liquidity_locked": True,
+                        "buy_url": "https://jup.ag/swap/SOL-GQdEL4MhL4v8bsmMvyBvjh6BdbWqasgkDnJGfaAHpump",
+                        "dex_platform": "JUPITER (SOL)",
+                        "pair_url": "https://dexscreener.com/solana/gqdel4mhl4v8bsmmyvbvjh6bdbwqasgkdnjgfaahpump",
+                        "icon": "https://dd.dexscreener.com/ds-data/tokens/solana/GQdEL4MhL4v8bsmMvyBvjh6BdbWqasgkDnJGfaAHpump.png",
+                        "photon_url": "https://photon-sol.tinyastro.io/en/lp/GQdEL4MhL4v8bsmMvyBvjh6BdbWqasgkDnJGfaAHpump"
             },
             {
-                "address": "4k3MgyawuztfCtPiy3US8hXR6xP6T9sLRo7eM6eSzXuE",
-                "name": "Chonk Protocol",
-                "symbol": "CHONK",
-                "chain": "SOLANA",
-                "price_usd": 0.000151,
-                "market_cap": 151960.0,
-                "liquidity_usd": 20196.0,
-                "volume_24h": 37479.0,
-                "volume_5m": 1200.0,
-                "buys_24h": 890,
-                "sells_24h": 610,
-                "price_change_24h": 15.3,
-                "price_change_1h": 4.25,
-                "price_change_5m": 2.21,
-                "pair_created_at": 1791835600000,
-                "jovx_score": 96,
-                "tag": "HIGH ALPHA",
-                "risk_level": "LOW RISK 🛡️",
-                "lp_locked": True,
-                "liquidity_locked": True,
-                "buy_url": "https://jup.ag/swap/SOL-4k3MgyawuztfCtPiy3US8hXR6xP6T9sLRo7eM6eSzXuE",
-                "dex_platform": "JUPITER (SOL)",
-                "pair_url": "https://dexscreener.com/solana/4k3mgyawuztfctpiy3us8hxr6xp6t9slro7em6eszxue",
-                "icon": "https://dd.dexscreener.com/ds-data/tokens/solana/4k3MgyawuztfCtPiy3US8hXR6xP6T9sLRo7eM6eSzXuE.png",
-                "photon_url": "https://photon-sol.tinyastro.io/en/lp/4k3MgyawuztfCtPiy3US8hXR6xP6T9sLRo7eM6eSzXuE",
+                        "address": "591AAZPR6LSNan3hGGWeH9uvWBTT4iDoTyPL8oj3gbKJ",
+                        "name": "Normie Sol",
+                        "symbol": "Normie",
+                        "chain": "SOLANA",
+                        "price_usd": 0.001247,
+                        "market_cap": 1247242.0,
+                        "liquidity_usd": 1247242.0,
+                        "volume_24h": 8877.0,
+                        "volume_5m": 210.0,
+                        "buys_24h": 620,
+                        "sells_24h": 410,
+                        "price_change_24h": 829.0,
+                        "price_change_1h": 0.0,
+                        "price_change_5m": 0.0,
+                        "pair_created_at": 1791837200000,
+                        "jovx_score": 96,
+                        "tag": "HIGH ALPHA",
+                        "risk_level": "ACCUMULATING 💎",
+                        "lp_locked": True,
+                        "liquidity_locked": True,
+                        "buy_url": "https://jup.ag/swap/SOL-591AAZPR6LSNan3hGGWeH9uvWBTT4iDoTyPL8oj3gbKJ",
+                        "dex_platform": "JUPITER (SOL)",
+                        "pair_url": "https://dexscreener.com/solana/591aazpr6lsnan3hggweh9uvwbtt4idotypl8oj3gbkj",
+                        "icon": "https://dd.dexscreener.com/ds-data/tokens/solana/591AAZPR6LSNan3hGGWeH9uvWBTT4iDoTyPL8oj3gbKJ.png",
+                        "photon_url": "https://photon-sol.tinyastro.io/en/lp/591AAZPR6LSNan3hGGWeH9uvWBTT4iDoTyPL8oj3gbKJ"
             },
             {
-                "address": "7kfgvqivsfvcnwe2zwugdub7ctxsszbc7pjdnde8pczu",
-                "name": "Just Q Protocol",
-                "symbol": "JUSTQ",
-                "chain": "SOLANA",
-                "price_usd": 0.000216,
-                "market_cap": 216810.0,
-                "liquidity_usd": 21681.0,
-                "volume_24h": 161193.0,
-                "volume_5m": 3100.0,
-                "buys_24h": 1450,
-                "sells_24h": 1120,
-                "price_change_24h": 22.0,
-                "price_change_1h": 5.5,
-                "price_change_5m": 1.2,
-                "pair_created_at": 1791823610000,
-                "jovx_score": 96,
-                "tag": "HIGH ALPHA",
-                "risk_level": "LOW RISK 🛡️",
-                "lp_locked": True,
-                "liquidity_locked": True,
-                "buy_url": "https://jup.ag/swap/SOL-7kfgvqivsfvcnwe2zwugdub7ctxsszbc7pjdnde8pczu",
-                "dex_platform": "JUPITER (SOL)",
-                "pair_url": "https://dexscreener.com/solana/7kfgvqivsfvcnwe2zwugdub7ctxsszbc7pjdnde8pczu",
-                "icon": "https://dd.dexscreener.com/ds-data/tokens/solana/7kfgvqivsfvcnwe2zwugdub7ctxsszbc7pjdnde8pczu.png",
-                "photon_url": "https://photon-sol.tinyastro.io/en/lp/7kfgvqivsfvcnwe2zwugdub7ctxsszbc7pjdnde8pczu",
+                        "address": "CQCDTp8rsFV3PhaPeYjcCW5LdGTxi6jFx7eC3UXnpump",
+                        "name": "Crawlerpad",
+                        "symbol": "CRAWLER",
+                        "chain": "SOLANA",
+                        "price_usd": 0.01768,
+                        "market_cap": 17571334.0,
+                        "liquidity_usd": 387391.0,
+                        "volume_24h": 5884039.0,
+                        "volume_5m": 11642.0,
+                        "buys_24h": 70817,
+                        "sells_24h": 45097,
+                        "price_change_24h": 6657.0,
+                        "price_change_1h": 3.58,
+                        "price_change_5m": 3.58,
+                        "pair_created_at": 1791837296000,
+                        "jovx_score": 98,
+                        "tag": "HIGH ALPHA",
+                        "risk_level": "LOW RISK 🛡️",
+                        "lp_locked": True,
+                        "liquidity_locked": True,
+                        "buy_url": "https://jup.ag/swap/SOL-CQCDTp8rsFV3PhaPeYjcCW5LdGTxi6jFx7eC3UXnpump",
+                        "dex_platform": "JUPITER (SOL)",
+                        "pair_url": "https://dexscreener.com/solana/anrchvfjuzmtos8dgjpt2xkurvppyavldturasnwxcd4",
+                        "icon": "https://dd.dexscreener.com/ds-data/tokens/solana/CQCDTp8rsFV3PhaPeYjcCW5LdGTxi6jFx7eC3UXnpump.png",
+                        "photon_url": "https://photon-sol.tinyastro.io/en/lp/CQCDTp8rsFV3PhaPeYjcCW5LdGTxi6jFx7eC3UXnpump"
             },
             {
-                "address": "7yg2UT3Ksh7wwmAPAasaKU6SBbakRtzf2eYqjZZzpump",
-                "name": "Bumo-chan",
-                "symbol": "BUMO",
-                "chain": "SOLANA",
-                "price_usd": 6.978e-05,
-                "market_cap": 67993.0,
-                "liquidity_usd": 23257.0,
-                "volume_24h": 131516.0,
-                "volume_5m": 4446.0,
-                "buys_24h": 1625,
-                "sells_24h": 1119,
-                "price_change_24h": 68.13,
-                "price_change_1h": 5.72,
-                "price_change_5m": 1.5,
-                "pair_created_at": 1791825474000,
-                "jovx_score": 97,
-                "tag": "HIGH ALPHA",
-                "risk_level": "ACCUMULATING 💎",
-                "lp_locked": True,
-                "liquidity_locked": True,
-                "buy_url": "https://jup.ag/swap/SOL-7yg2UT3Ksh7wwmAPAasaKU6SBbakRtzf2eYqjZZzpump",
-                "dex_platform": "JUPITER (SOL)",
-                "pair_url": "https://dexscreener.com/solana/2jekq8vicyouwwtgpfflq61zu3nnxkjdjswfqebk1c9a",
-                "icon": "https://dd.dexscreener.com/ds-data/tokens/solana/7yg2UT3Ksh7wwmAPAasaKU6SBbakRtzf2eYqjZZzpump.png",
-                "photon_url": "https://photon-sol.tinyastro.io/en/lp/7yg2UT3Ksh7wwmAPAasaKU6SBbakRtzf2eYqjZZzpump",
+                        "address": "6NmGZKHv9U9CiSoaMUyJTufpoBsrnnBkhop2ojubkjep",
+                        "name": "The Normie",
+                        "symbol": "Normie",
+                        "chain": "SOLANA",
+                        "price_usd": 0.000461,
+                        "market_cap": 461163.0,
+                        "liquidity_usd": 56974.0,
+                        "volume_24h": 280313.0,
+                        "volume_5m": 882.0,
+                        "buys_24h": 1363,
+                        "sells_24h": 1290,
+                        "price_change_24h": 39.2,
+                        "price_change_1h": 0.5,
+                        "price_change_5m": 1.45,
+                        "pair_created_at": 1791837158000,
+                        "jovx_score": 96,
+                        "tag": "HIGH ALPHA",
+                        "risk_level": "LOW RISK 🛡️",
+                        "lp_locked": True,
+                        "liquidity_locked": True,
+                        "buy_url": "https://jup.ag/swap/SOL-6NmGZKHv9U9CiSoaMUyJTufpoBsrnnBkhop2ojubkjep",
+                        "dex_platform": "JUPITER (SOL)",
+                        "pair_url": "https://dexscreener.com/solana/6c1y6vz1hqb65yfpqxt6okgiin72xzrd6rnj8gwpxwlo",
+                        "icon": "https://dd.dexscreener.com/ds-data/tokens/solana/6NmGZKHv9U9CiSoaMUyJTufpoBsrnnBkhop2ojubkjep.png",
+                        "photon_url": "https://photon-sol.tinyastro.io/en/lp/6NmGZKHv9U9CiSoaMUyJTufpoBsrnnBkhop2ojubkjep"
             },
             {
-                "address": "4VScHuqZ13uma3S34iNkiSAQvZDEeGebjbM5bPcapump",
-                "name": "VisionSwap",
-                "symbol": "VSWAP",
-                "chain": "SOLANA",
-                "price_usd": 0.0003844,
-                "market_cap": 371265.0,
-                "liquidity_usd": 33772.0,
-                "volume_24h": 160960.0,
-                "volume_5m": 3200.0,
-                "buys_24h": 1900,
-                "sells_24h": 1200,
-                "price_change_24h": 260.0,
-                "price_change_1h": 14.42,
-                "price_change_5m": 3.11,
-                "pair_created_at": 1791818197000,
-                "jovx_score": 96,
-                "tag": "HIGH ALPHA",
-                "risk_level": "LOW RISK 🛡️",
-                "lp_locked": True,
-                "liquidity_locked": True,
-                "buy_url": "https://jup.ag/swap/SOL-4VScHuqZ13uma3S34iNkiSAQvZDEeGebjbM5bPcapump",
-                "dex_platform": "JUPITER (SOL)",
-                "pair_url": "https://dexscreener.com/solana/3jdls49hdpqk4wvr9c6pfozhrvfkhn2purvujnjaaswa",
-                "icon": "https://dd.dexscreener.com/ds-data/tokens/solana/4VScHuqZ13uma3S34iNkiSAQvZDEeGebjbM5bPcapump.png",
-                "photon_url": "https://photon-sol.tinyastro.io/en/lp/4VScHuqZ13uma3S34iNkiSAQvZDEeGebjbM5bPcapump",
+                        "address": "8sWe4GzK1YqG3vyzKHf8ZyB1WB5asofw2o6TqgFePtPo",
+                        "name": "Loadout",
+                        "symbol": "LOAD",
+                        "chain": "SOLANA",
+                        "price_usd": 0.008973,
+                        "market_cap": 8729316.0,
+                        "liquidity_usd": 157459.0,
+                        "volume_24h": 5810818.0,
+                        "volume_5m": 20176.0,
+                        "buys_24h": 16818,
+                        "sells_24h": 14599,
+                        "price_change_24h": 4317.0,
+                        "price_change_1h": 1.5,
+                        "price_change_5m": 0.0,
+                        "pair_created_at": 1791831675000,
+                        "jovx_score": 98,
+                        "tag": "HIGH ALPHA",
+                        "risk_level": "LOW RISK 🛡️",
+                        "lp_locked": True,
+                        "liquidity_locked": True,
+                        "buy_url": "https://jup.ag/swap/SOL-8sWe4GzK1YqG3vyzKHf8ZyB1WB5asofw2o6TqgFePtPo",
+                        "dex_platform": "JUPITER (SOL)",
+                        "pair_url": "https://dexscreener.com/solana/dcyra6dumbkmszk77cwv1wfzfjtbdyqjljohwvbxk3u1",
+                        "icon": "https://dd.dexscreener.com/ds-data/tokens/solana/8sWe4GzK1YqG3vyzKHf8ZyB1WB5asofw2o6TqgFePtPo.png",
+                        "photon_url": "https://photon-sol.tinyastro.io/en/lp/8sWe4GzK1YqG3vyzKHf8ZyB1WB5asofw2o6TqgFePtPo"
             },
             {
-                "address": "7tecn1nGFHaswTUFhivdwcj23XyxE9cnDoNjh3N1pump",
-                "name": "Rewards Sol",
-                "symbol": "REWARDS",
-                "chain": "SOLANA",
-                "price_usd": 0.000122,
-                "market_cap": 122000.0,
-                "liquidity_usd": 22100.0,
-                "volume_24h": 46111.0,
-                "volume_5m": 1800.0,
-                "buys_24h": 890,
-                "sells_24h": 610,
-                "price_change_24h": 18.4,
-                "price_change_1h": 3.2,
-                "price_change_5m": 0.8,
-                "pair_created_at": 1791841000000,
-                "jovx_score": 95,
-                "tag": "HIGH ALPHA",
-                "risk_level": "LOW RISK 🛡️",
-                "lp_locked": True,
-                "liquidity_locked": True,
-                "buy_url": "https://jup.ag/swap/SOL-7tecn1nGFHaswTUFhivdwcj23XyxE9cnDoNjh3N1pump",
-                "dex_platform": "JUPITER (SOL)",
-                "pair_url": "https://dexscreener.com/solana/3dbblaqu14uacfagccajiophkcvkyu1cns9wtjxxkyqv",
-                "icon": "https://dd.dexscreener.com/ds-data/tokens/solana/7tecn1nGFHaswTUFhivdwcj23XyxE9cnDoNjh3N1pump.png",
-                "photon_url": "https://photon-sol.tinyastro.io/en/lp/7tecn1nGFHaswTUFhivdwcj23XyxE9cnDoNjh3N1pump",
+                        "address": "CijiVS2cmoguYauqnk6rLGFgoypjVV5WjoVXSu8Hpump",
+                        "name": "The Normie",
+                        "symbol": "Normie",
+                        "chain": "SOLANA",
+                        "price_usd": 0.01948,
+                        "market_cap": 19486488.0,
+                        "liquidity_usd": 383484.0,
+                        "volume_24h": 299375.0,
+                        "volume_5m": 1013.0,
+                        "buys_24h": 16298,
+                        "sells_24h": 687,
+                        "price_change_24h": 43445.0,
+                        "price_change_1h": 2.77,
+                        "price_change_5m": 0.14,
+                        "pair_created_at": 1791827701000,
+                        "jovx_score": 98,
+                        "tag": "HIGH ALPHA",
+                        "risk_level": "LOW RISK 🛡️",
+                        "lp_locked": True,
+                        "liquidity_locked": True,
+                        "buy_url": "https://jup.ag/swap/SOL-CijiVS2cmoguYauqnk6rLGFgoypjVV5WjoVXSu8Hpump",
+                        "dex_platform": "JUPITER (SOL)",
+                        "pair_url": "https://dexscreener.com/solana/7ug7pdyasgktnqvh27blhp1epojgrhgulja1dh3ujy78",
+                        "icon": "https://dd.dexscreener.com/ds-data/tokens/solana/CijiVS2cmoguYauqnk6rLGFgoypjVV5WjoVXSu8Hpump.png",
+                        "photon_url": "https://photon-sol.tinyastro.io/en/lp/CijiVS2cmoguYauqnk6rLGFgoypjVV5WjoVXSu8Hpump"
             },
             {
-                "address": "8zmFs8YsZAd2FQXWJjqLSoHGVEsiKuheeKj4hhWXMops",
-                "name": "PadPad Sol",
-                "symbol": "PADPAD",
-                "chain": "SOLANA",
-                "price_usd": 0.000142,
-                "market_cap": 142000.0,
-                "liquidity_usd": 24200.0,
-                "volume_24h": 58039.0,
-                "volume_5m": 2100.0,
-                "buys_24h": 1100,
-                "sells_24h": 780,
-                "price_change_24h": 24.1,
-                "price_change_1h": 4.1,
-                "price_change_5m": 1.1,
-                "pair_created_at": 1791844500000,
-                "jovx_score": 95,
-                "tag": "HIGH ALPHA",
-                "risk_level": "LOW RISK 🛡️",
-                "lp_locked": True,
-                "liquidity_locked": True,
-                "buy_url": "https://jup.ag/swap/SOL-8zmFs8YsZAd2FQXWJjqLSoHGVEsiKuheeKj4hhWXMops",
-                "dex_platform": "JUPITER (SOL)",
-                "pair_url": "https://dexscreener.com/solana/6s1r18grfrwtyodgpzj5yfw4f9aouzvb69dzytglqqxk",
-                "icon": "https://dd.dexscreener.com/ds-data/tokens/solana/8zmFs8YsZAd2FQXWJjqLSoHGVEsiKuheeKj4hhWXMops.png",
-                "photon_url": "https://photon-sol.tinyastro.io/en/lp/8zmFs8YsZAd2FQXWJjqLSoHGVEsiKuheeKj4hhWXMops",
+                        "address": "7yg2UT3Ksh7wwmAPAasaKU6SBbakRtzf2eYqjZZzpump",
+                        "name": "Bumo-chan",
+                        "symbol": "Bumo",
+                        "chain": "SOLANA",
+                        "price_usd": 7.73e-05,
+                        "market_cap": 75356.0,
+                        "liquidity_usd": 22836.0,
+                        "volume_24h": 194429.0,
+                        "volume_5m": 756.0,
+                        "buys_24h": 5042,
+                        "sells_24h": 1788,
+                        "price_change_24h": 57.7,
+                        "price_change_1h": 1.77,
+                        "price_change_5m": 2.66,
+                        "pair_created_at": 1791825474000,
+                        "jovx_score": 97,
+                        "tag": "HIGH ALPHA",
+                        "risk_level": "ACCUMULATING 💎",
+                        "lp_locked": True,
+                        "liquidity_locked": True,
+                        "buy_url": "https://jup.ag/swap/SOL-7yg2UT3Ksh7wwmAPAasaKU6SBbakRtzf2eYqjZZzpump",
+                        "dex_platform": "JUPITER (SOL)",
+                        "pair_url": "https://dexscreener.com/solana/2jekq8vicyouwwtgpfflq61zu3nnxkjdjswfqebk1c9a",
+                        "icon": "https://dd.dexscreener.com/ds-data/tokens/solana/7yg2UT3Ksh7wwmAPAasaKU6SBbakRtzf2eYqjZZzpump.png",
+                        "photon_url": "https://photon-sol.tinyastro.io/en/lp/7yg2UT3Ksh7wwmAPAasaKU6SBbakRtzf2eYqjZZzpump"
             },
             {
-                "address": "9VKfarEDscEjg6N9NDPm3eqUgG3b61ReAArymRtpump",
-                "name": "Cat 144p",
-                "symbol": "CAT",
-                "chain": "SOLANA",
-                "price_usd": 0.000185,
-                "market_cap": 185000.0,
-                "liquidity_usd": 25100.0,
-                "volume_24h": 71836.0,
-                "volume_5m": 2400.0,
-                "buys_24h": 1320,
-                "sells_24h": 910,
-                "price_change_24h": 36.2,
-                "price_change_1h": 6.8,
-                "price_change_5m": 1.5,
-                "pair_created_at": 1791844200000,
-                "jovx_score": 95,
-                "tag": "HIGH ALPHA",
-                "risk_level": "LOW RISK 🛡️",
-                "lp_locked": True,
-                "liquidity_locked": True,
-                "buy_url": "https://jup.ag/swap/SOL-9VKfarEDscEjg6N9NDPm3eqUgG3b61ReAArymRtpump",
-                "dex_platform": "JUPITER (SOL)",
-                "pair_url": "https://dexscreener.com/solana/h1ne6vzq8csfu9kgqrje8g21gkh4siyqguz31tenaank",
-                "icon": "https://dd.dexscreener.com/ds-data/tokens/solana/9VKfarEDscEjg6N9NDPm3eqUgG3b61ReAArymRtpump.png",
-                "photon_url": "https://photon-sol.tinyastro.io/en/lp/9VKfarEDscEjg6N9NDPm3eqUgG3b61ReAArymRtpump",
+                        "address": "8KKHDdWRX3NY9gTgnxCPp2b9nMCofwzxdYzZrXwrpump",
+                        "name": "The fat wizard cat",
+                        "symbol": "CHONK",
+                        "chain": "SOLANA",
+                        "price_usd": 0.000155,
+                        "market_cap": 155000.0,
+                        "liquidity_usd": 22109.0,
+                        "volume_24h": 68400.0,
+                        "volume_5m": 2100.0,
+                        "buys_24h": 890,
+                        "sells_24h": 610,
+                        "price_change_24h": 62.88,
+                        "price_change_1h": 6.5,
+                        "price_change_5m": 2.2,
+                        "pair_created_at": 1791835600000,
+                        "jovx_score": 96,
+                        "tag": "HIGH ALPHA",
+                        "risk_level": "LOW RISK 🛡️",
+                        "lp_locked": True,
+                        "liquidity_locked": True,
+                        "buy_url": "https://jup.ag/swap/SOL-8KKHDdWRX3NY9gTgnxCPp2b9nMCofwzxdYzZrXwrpump",
+                        "dex_platform": "JUPITER (SOL)",
+                        "pair_url": "https://dexscreener.com/solana/4k3mgyawuztfctpiy3us8hxr6xp6t9slro7em6eszxue",
+                        "icon": "https://dd.dexscreener.com/ds-data/tokens/solana/8KKHDdWRX3NY9gTgnxCPp2b9nMCofwzxdYzZrXwrpump.png",
+                        "photon_url": "https://photon-sol.tinyastro.io/en/lp/8KKHDdWRX3NY9gTgnxCPp2b9nMCofwzxdYzZrXwrpump"
             },
             {
-                "address": "EdjgP52yUrKiyHnkvJQhhzB6XyNpMqbTfAZdw56Ppump",
-                "name": "Facebuck",
-                "symbol": "FBUCK",
-                "chain": "SOLANA",
-                "price_usd": 0.000155,
-                "market_cap": 155000.0,
-                "liquidity_usd": 22400.0,
-                "volume_24h": 50893.0,
-                "volume_5m": 1900.0,
-                "buys_24h": 980,
-                "sells_24h": 670,
-                "price_change_24h": 21.0,
-                "price_change_1h": 3.9,
-                "price_change_5m": 0.9,
-                "pair_created_at": 1791843000000,
-                "jovx_score": 94,
-                "tag": "HIGH ALPHA",
-                "risk_level": "LOW RISK 🛡️",
-                "lp_locked": True,
-                "liquidity_locked": True,
-                "buy_url": "https://jup.ag/swap/SOL-EdjgP52yUrKiyHnkvJQhhzB6XyNpMqbTfAZdw56Ppump",
-                "dex_platform": "JUPITER (SOL)",
-                "pair_url": "https://dexscreener.com/solana/gdbnmrjwtmwvqt3rwbqbdckxgdjbnbjkkbtaqkejfvcv",
-                "icon": "https://dd.dexscreener.com/ds-data/tokens/solana/EdjgP52yUrKiyHnkvJQhhzB6XyNpMqbTfAZdw56Ppump.png",
-                "photon_url": "https://photon-sol.tinyastro.io/en/lp/EdjgP52yUrKiyHnkvJQhhzB6XyNpMqbTfAZdw56Ppump",
+                        "address": "Gs7kJBNMDNYLtLESH1jjtC9rQkvTQQE3MLtFhaFvpump",
+                        "name": "Saxquito Sol",
+                        "symbol": "SAX",
+                        "chain": "SOLANA",
+                        "price_usd": 0.000142,
+                        "market_cap": 142000.0,
+                        "liquidity_usd": 18108.0,
+                        "volume_24h": 35691.0,
+                        "volume_5m": 1200.0,
+                        "buys_24h": 720,
+                        "sells_24h": 510,
+                        "price_change_24h": 14.37,
+                        "price_change_1h": 14.37,
+                        "price_change_5m": 1.5,
+                        "pair_created_at": 1791865900000,
+                        "jovx_score": 96,
+                        "tag": "HIGH ALPHA",
+                        "risk_level": "LOW RISK 🛡️",
+                        "lp_locked": True,
+                        "liquidity_locked": True,
+                        "buy_url": "https://jup.ag/swap/SOL-Gs7kJBNMDNYLtLESH1jjtC9rQkvTQQE3MLtFhaFvpump",
+                        "dex_platform": "JUPITER (SOL)",
+                        "pair_url": "https://dexscreener.com/solana/gs7kjbnmdnyltlesh1jjtc9rqkvtqqe3mltfhafvpump",
+                        "icon": "https://dd.dexscreener.com/ds-data/tokens/solana/Gs7kJBNMDNYLtLESH1jjtC9rQkvTQQE3MLtFhaFvpump.png",
+                        "photon_url": "https://photon-sol.tinyastro.io/en/lp/Gs7kJBNMDNYLtLESH1jjtC9rQkvTQQE3MLtFhaFvpump"
             },
             {
-                "address": "GL21ea5TvQDV3AdycEkxYnC9wiZB8wScSefND2gvpump",
-                "name": "Supah Interigence",
-                "symbol": "SUPAH",
-                "chain": "SOLANA",
-                "price_usd": 0.000135,
-                "market_cap": 135000.0,
-                "liquidity_usd": 23500.0,
-                "volume_24h": 47402.0,
-                "volume_5m": 1400.0,
-                "buys_24h": 820,
-                "sells_24h": 590,
-                "price_change_24h": 19.5,
-                "price_change_1h": 2.8,
-                "price_change_5m": 0.7,
-                "pair_created_at": 1791836500000,
-                "jovx_score": 94,
-                "tag": "HIGH ALPHA",
-                "risk_level": "LOW RISK 🛡️",
-                "lp_locked": True,
-                "liquidity_locked": True,
-                "buy_url": "https://jup.ag/swap/SOL-GL21ea5TvQDV3AdycEkxYnC9wiZB8wScSefND2gvpump",
-                "dex_platform": "JUPITER (SOL)",
-                "pair_url": "https://dexscreener.com/solana/hpaswk2spehlydwswxlhnhbeyuanukm6lcptsak2djcj",
-                "icon": "https://dd.dexscreener.com/ds-data/tokens/solana/GL21ea5TvQDV3AdycEkxYnC9wiZB8wScSefND2gvpump.png",
-                "photon_url": "https://photon-sol.tinyastro.io/en/lp/GL21ea5TvQDV3AdycEkxYnC9wiZB8wScSefND2gvpump",
-            },
-            {
-                "address": "Cw7Eh4HVCf1P8dn2gFpeoLV8fGBdB2BBR2PmcDuNpump",
-                "name": "John Stockman",
-                "symbol": "EMO",
-                "chain": "SOLANA",
-                "price_usd": 0.000145,
-                "market_cap": 145000.0,
-                "liquidity_usd": 24100.0,
-                "volume_24h": 54037.0,
-                "volume_5m": 1600.0,
-                "buys_24h": 910,
-                "sells_24h": 630,
-                "price_change_24h": 23.4,
-                "price_change_1h": 4.1,
-                "price_change_5m": 1.1,
-                "pair_created_at": 1791830000000,
-                "jovx_score": 94,
-                "tag": "HIGH ALPHA",
-                "risk_level": "LOW RISK 🛡️",
-                "lp_locked": True,
-                "liquidity_locked": True,
-                "buy_url": "https://jup.ag/swap/SOL-Cw7Eh4HVCf1P8dn2gFpeoLV8fGBdB2BBR2PmcDuNpump",
-                "dex_platform": "JUPITER (SOL)",
-                "pair_url": "https://dexscreener.com/solana/7rqqfj3yod1ayfskkdizsdujea6cfpucvtyppn9ddcnv",
-                "icon": "https://dd.dexscreener.com/ds-data/tokens/solana/Cw7Eh4HVCf1P8dn2gFpeoLV8fGBdB2BBR2PmcDuNpump.png",
-                "photon_url": "https://photon-sol.tinyastro.io/en/lp/Cw7Eh4HVCf1P8dn2gFpeoLV8fGBdB2BBR2PmcDuNpump",
-            },
-        ]
+                        "address": "BW4oQngRVLWSwfA76Xhm28boPE3rbqomTGMV34Bnpump",
+                        "name": "CNLeaks Protocol",
+                        "symbol": "CNLeaks",
+                        "chain": "SOLANA",
+                        "price_usd": 0.000155,
+                        "market_cap": 155000.0,
+                        "liquidity_usd": 16400.0,
+                        "volume_24h": 45000.0,
+                        "volume_5m": 1500.0,
+                        "buys_24h": 680,
+                        "sells_24h": 490,
+                        "price_change_24h": 22.5,
+                        "price_change_1h": 5.4,
+                        "price_change_5m": 1.2,
+                        "pair_created_at": 1791861000000,
+                        "jovx_score": 95,
+                        "tag": "HIGH ALPHA",
+                        "risk_level": "LOW RISK 🛡️",
+                        "lp_locked": True,
+                        "liquidity_locked": True,
+                        "buy_url": "https://jup.ag/swap/SOL-BW4oQngRVLWSwfA76Xhm28boPE3rbqomTGMV34Bnpump",
+                        "dex_platform": "JUPITER (SOL)",
+                        "pair_url": "https://dexscreener.com/solana/bw4oqngrvlwswfa76xhm28bope3rbqomtgmv34bnpump",
+                        "icon": "https://dd.dexscreener.com/ds-data/tokens/solana/BW4oQngRVLWSwfA76Xhm28boPE3rbqomTGMV34Bnpump.png",
+                        "photon_url": "https://photon-sol.tinyastro.io/en/lp/BW4oQngRVLWSwfA76Xhm28boPE3rbqomTGMV34Bnpump"
+            }
+]
         with self.lock:
             for s in seeds:
                 s["lp_locked"] = True
@@ -715,25 +707,11 @@ class JovxScanner:
     def fetch_live_tokens(self):
         """Retorna instantaneamente os 20 tokens recalculando as idades reais em tempo de execução"""
         with self.lock:
+            # FILTRO DE EXPULSÃO INSTANTÂNEA: Remove imediatamente qualquer token que derreteu ou foi banido
+            self.cached_list = [t for t in self.cached_list if t.get("address") not in self.blacklisted_dumped_addrs and t.get("liquidity_usd", 0) >= 12000 and t.get("price_change_24h", 0) >= 0.0]
+
             if len(self.cached_list) < 20:
                 self._recalculate_cached_list()
-
-            # Garantia inflexível de exatamente 20 moedas ativas na tela
-            if len(self.cached_list) < 20 and hasattr(self, 'original_seeds'):
-                existing_addrs = {t.get("address") for t in self.cached_list}
-                for os in self.original_seeds:
-                    os_addr = os.get("address")
-                    if os_addr and os_addr not in existing_addrs and os_addr not in self.blacklisted_dumped_addrs:
-                        if os.get("age_seconds", 0) <= MAX_TOKEN_AGE_SECONDS:
-                            tok = dict(os)
-                            if tok.get("price_change_24h", 0) <= 0:
-                                tok["price_change_24h"] = 12.0
-                            if tok.get("price_change_1h", 0) <= 0:
-                                tok["price_change_1h"] = 1.2
-                            self.cached_list.append(tok)
-                            existing_addrs.add(os_addr)
-                            if len(self.cached_list) >= 20:
-                                break
 
             for idx, token in enumerate(self.cached_list[:20]):
                 token["master_rank"] = idx + 1
@@ -873,11 +851,13 @@ class JovxScanner:
         top11_to_20 = remaining[:(20 - len(top10))]
         clean_tokens = top10 + top11_to_20
 
-        # FILTRO DE SEGURANÇA: Exclui qualquer token banido/derretido
-        clean_tokens = [t for t in clean_tokens if t.get("address") not in self.blacklisted_dumped_addrs]
-        self.fallback_reserve = [r for r in self.fallback_reserve if r.get("address") not in self.blacklisted_dumped_addrs]
+        # FILTRO DE SEGURANÇA: Exclui qualquer token banido/derretido ou vermelho
+        clean_tokens = [t for t in clean_tokens if t.get("address") not in self.blacklisted_dumped_addrs and t.get("liquidity_usd", 0) >= 15000 and t.get("price_change_24h", 0) >= 0.0]
+        self.fallback_reserve = [r for r in self.fallback_reserve if r.get("address") not in self.blacklisted_dumped_addrs and r.get("liquidity_usd", 0) >= 15000 and r.get("price_change_24h", 0) >= 0.0]
+        if hasattr(self, 'original_seeds'):
+            self.original_seeds = [s for s in self.original_seeds if s.get("address") not in self.blacklisted_dumped_addrs and s.get("liquidity_usd", 0) >= 15000 and s.get("price_change_24h", 0) >= 0.0]
 
-        # CAMADA 1: Preenchimento com candidatos saudáveis da reserva (idade <= 12h)
+        # CAMADA 1: Preenchimento com candidatos saudáveis da reserva (idade <= 12h, liq >= 15k, 24h >= 0%)
         if len(clean_tokens) < 20:
             existing_addrs = {t.get("address") for t in clean_tokens}
             candidates_to_fill = list(getattr(self, 'fallback_reserve', []))
@@ -889,25 +869,20 @@ class JovxScanner:
             for fb in candidates_to_fill:
                 fb_addr = fb.get("address")
                 if fb_addr and fb_addr not in existing_addrs and fb_addr not in self.blacklisted_dumped_addrs:
-                    if fb.get("liquidity_usd", 0) >= 15000 and fb.get("price_change_24h", 0) >= 0.0 and fb.get("age_seconds", 0) <= MAX_TOKEN_AGE_SECONDS:
+                    if fb.get("liquidity_usd", 0) >= 15000 and fb.get("price_change_24h", 0) >= 0.0 and fb.get("price_change_1h", 0) >= -8.0 and fb.get("age_seconds", 0) <= MAX_TOKEN_AGE_SECONDS:
                         clean_tokens.append(dict(fb))
                         existing_addrs.add(fb_addr)
                         if len(clean_tokens) >= 20:
                             break
 
-        # CAMADA 2: GARANTIA INFLEXÍVEL DE EXATAMENTE 20 MOEDAS (SEMPRE <= 12 HORAS)
+        # CAMADA 2: GARANTIA INFLEXÍVEL DE EXATAMENTE 20 MOEDAS (SEMPRE <= 12 HORAS E VERDES)
         if len(clean_tokens) < 20 and hasattr(self, 'original_seeds'):
             existing_addrs = {t.get("address") for t in clean_tokens}
             for os in self.original_seeds:
                 os_addr = os.get("address")
                 if os_addr and os_addr not in existing_addrs and os_addr not in self.blacklisted_dumped_addrs:
-                    if os.get("age_seconds", 0) <= MAX_TOKEN_AGE_SECONDS and os.get("liquidity_usd", 0) >= 10000:
-                        token_copy = dict(os)
-                        if token_copy.get("price_change_24h", 0) <= 0.0:
-                            token_copy["price_change_24h"] = 14.8
-                        if token_copy.get("price_change_1h", 0) <= 0.0:
-                            token_copy["price_change_1h"] = 1.4
-                        clean_tokens.append(token_copy)
+                    if os.get("age_seconds", 0) <= MAX_TOKEN_AGE_SECONDS and os.get("liquidity_usd", 0) >= 15000 and os.get("price_change_24h", 0) >= 0.0:
+                        clean_tokens.append(dict(os))
                         existing_addrs.add(os_addr)
                         if len(clean_tokens) >= 20:
                             break
@@ -993,12 +968,10 @@ class JovxScanner:
 
                 # 2. AUTO-BAN 100% AUTOMÁTICO PARA PARES INEXISTENTES / 404 NO DEXSCREENER:
                 # Se a consulta foi realizada com sucesso mas a DexScreener não encontrou nenhum par
-                # para o endereço, a moeda é banida permanentemente de forma 100% automática!
-                seed_addresses = {s.get("address") for s in getattr(self, "original_seeds", [])}
+                # para o endereço, a moeda é banida permanentemente de forma 100% automática (ZERO IMUNIDADE)!
                 if addr in successfully_queried_addrs and addr not in active_best_pairs:
-                    if addr not in seed_addresses:
-                        logger.warning(f"[AUTO-BAN 404] Moeda sem par no DexScreener: {addr} -> BANINDO AUTOMATICAMENTE!")
-                        tokens_to_kill_permanently.add(addr)
+                    logger.warning(f"[AUTO-BAN 404] Moeda sem par no DexScreener: {addr} -> BANINDO AUTOMATICAMENTE!")
+                    tokens_to_kill_permanently.add(addr)
                     continue
 
                 if addr in active_best_pairs:
@@ -1006,6 +979,7 @@ class JovxScanner:
                     liq = float(pair.get("liquidity", {}).get("usd", 0) or 0)
                     pc24 = float(pair.get("priceChange", {}).get("h24", 0) or 0)
                     pc1h = float(pair.get("priceChange", {}).get("h1", 0) or 0)
+                    pc5m = float(pair.get("priceChange", {}).get("m5", 0) or 0)
                     vol24 = float(pair.get("volume", {}).get("h24", 0) or 0)
                     txns = pair.get("txns", {}).get("h24", {})
                     buys = int(txns.get("buys", 0) or 0)
@@ -1014,38 +988,36 @@ class JovxScanner:
                     age_sec = (time.time() - (age_ms / 1000)) if age_ms else 0
                     sym = pair.get("baseToken", {}).get("symbol", addr[:8])
 
-                    # 1. CRITÉRIOS DE RUGPULL / SCAM REAL (FATAL BAN PERMANENTE):
-                    # - Liquidez drenada abaixo de $10.000
-                    # - Desabamento fatal: 1h < -50% ou 24h < -80%
+                    # 1. CRITÉRIOS DE RUGPULL / SCAM REAL / DERRETIMENTO (FATAL BAN PERMANENTE - ZERO IMUNIDADE):
+                    # - Liquidez drenada abaixo de $15.000
+                    # - Desabamento fatal: 1h < -25% ou 24h < -25% ou 5m < -15%
                     # - Honeypot / Fraude: 0 compras e só vendas
-                    # - Idade superior a 4 dias (ultrapassou o prazo de validade)
+                    # - Idade superior a 12 horas (ultrapassou o prazo de validade)
                     is_true_rug = (
-                        (liq < 10000) or
-                        (pc1h < -50.0) or
-                        (pc24 < -80.0) or
-                        (buys == 0 and sells > 5)
+                        (liq < 15000) or
+                        (pc1h < -25.0) or
+                        (pc24 < -25.0) or
+                        (pc5m < -15.0) or
+                        (buys == 0 and sells > 5) or
+                        (age_sec > MAX_TOKEN_AGE_SECONDS and age_sec > 0)
                     )
 
-                    seed_addresses = {s.get("address") for s in getattr(self, "original_seeds", [])}
                     if is_true_rug:
-                        if addr not in seed_addresses:
-                            logger.warning(f"[FATAL RUG KILL] Moeda fraudulenta ou drenada: {sym} (Liq: ${liq:.0f}, 24h: {pc24}%, 1h: {pc1h}%) -> BANINDO PERMANENTEMENTE!")
-                            tokens_to_kill_permanently.add(addr)
-                        else:
-                            tokens_to_pause_temporarily.add(addr)
+                        logger.warning(f"[FATAL RUG KILL] Moeda derretida/drenada: {sym} ({addr}) (Liq: ${liq:.0f}, 24h: {pc24}%, 1h: {pc1h}%, 5m: {pc5m}%) -> BANINDO PERMANENTEMENTE!")
+                        tokens_to_kill_permanently.add(addr)
                         continue
 
-                    # 2. CRITÉRIOS DE CORREÇÃO TEMPORÁRIA DE MERCADO (PAUSA TEMPORÁRIA, SEM BAN PERMANENTE):
-                    # - Variação 24h negativa (< 0.0%)
-                    # - Recuo de curto prazo (1h < -15.0%)
+                    # 2. CRITÉRIOS DE CORREÇÃO TEMPORÁRIA DE MERCADO (PAUSA TEMPORÁRIA, RETIRADA IMEDIATA DA TELA):
+                    # - Variação 24h negativa (< 0.0%) -> SAI NA HORA DO JOVX A CADA 15s!
+                    # - Recuo de curto prazo (1h < -8.0% ou 5m < -6.0%) -> SAI NA HORA DO JOVX!
                     # - Volume 24h baixo momentâneo (< $15.000)
-                    # - Liquidez momentânea entre $10k e $20k
+                    # - Liquidez momentânea abaixo de $20k
                     is_temporary_pullback = (
                         (pc24 < 0.0) or
-                        (pc1h < -15.0) or
+                        (pc1h < -8.0) or
+                        (pc5m < -6.0) or
                         (vol24 < 15000) or
-                        (liq < 20000) or
-                        (age_sec > MAX_TOKEN_AGE_SECONDS and age_sec > 0)
+                        (liq < 20000)
                     )
 
                     if is_temporary_pullback:
@@ -1055,15 +1027,17 @@ class JovxScanner:
                         if audited:
                             self.pool[addr] = audited
 
-            # 1. Purga permanente APENAS para rugs e drenagens reais
+            # 1. Purga permanente para rugs, drenagens, 404s e tokens derretidos (ZERO IMUNIDADE!)
             for bad_addr in tokens_to_kill_permanently:
                 self.blacklisted_dumped_addrs.add(bad_addr)
                 if bad_addr in self.pool:
                     del self.pool[bad_addr]
                 self.fallback_reserve = [r for r in self.fallback_reserve if r.get("address") != bad_addr]
                 self.cached_list = [t for t in self.cached_list if t.get("address") != bad_addr]
+                if hasattr(self, 'original_seeds'):
+                    self.original_seeds = [s for s in self.original_seeds if s.get("address") != bad_addr]
 
-            # 2. Pausa temporária: remove apenas do pool ativo desta rodada, NÃO destrói a reserva permanente!
+            # 2. Pausa temporária: remove da tela e do pool ativo na hora (cada 15s conferido e retirado!)
             for pause_addr in tokens_to_pause_temporarily:
                 if pause_addr in self.pool:
                     del self.pool[pause_addr]
