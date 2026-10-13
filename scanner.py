@@ -866,11 +866,12 @@ class JovxScanner:
                 continue
 
             # Anti-Dump Geral (Tolerância Zero para perda de liquidez ou 24h negativo)
-            if t.get("price_change_5m", 0) < -8.0:
+            if t.get("price_change_5m", 0) < -10.0:
                 continue
-            if t.get("price_change_1h", 0) < -12.0:
+            if t.get("price_change_1h", 0) < -15.0:
                 continue
-            if t.get("liquidity_usd", 0) < 12000:
+            min_liq = 10000 if age <= FRESH_WINDOW_MAX_SECONDS else 12000
+            if t.get("liquidity_usd", 0) < min_liq:
                 continue
             if not t.get("lp_locked", True) or not t.get("liquidity_locked", True):
                 continue
@@ -1189,7 +1190,7 @@ class JovxScanner:
                     logger.error(f"[HELIUS FETCH ERROR]: {e}")
 
         # 3.0. GeckoTerminal New Pools (Descoberta instantânea de moedas frescas de 12m a 45m na fonte)
-        for page in range(1, 4):
+        for page in range(1, 6):
             try:
                 r_gecko = requests.get(f"https://api.geckoterminal.com/api/v2/networks/solana/new_pools?page={page}", headers=self.headers, timeout=3.5)
                 if r_gecko.status_code == 200:
@@ -1257,8 +1258,9 @@ class JovxScanner:
                     for p in r_disc.json().get("pairs", []):
                         base_a = p.get("baseToken", {}).get("address")
                         if not base_a: continue
-                        vol = float(p.get("volume", {}).get("h24", 0) or 0)
-                        if base_a not in discover_best_pairs or vol > float(discover_best_pairs[base_a].get("volume", {}).get("h24", 0) or 0):
+                        liq = float(p.get("liquidity", {}).get("usd", 0) or 0)
+                        prev_liq = float(discover_best_pairs[base_a].get("liquidity", {}).get("usd", 0) or 0) if base_a in discover_best_pairs else -1
+                        if base_a not in discover_best_pairs or liq > prev_liq:
                             discover_best_pairs[base_a] = p
             except Exception:
                 pass
@@ -1376,12 +1378,12 @@ class JovxScanner:
             # KILL SWITCHES ANTI-DERRETIMENTO & ANTI-GHOST (Calibrado para novos lançamentos)
             if price_change_24h < 0.0:
                 return None
-            if price_change_1h < -8.0:
+            if price_change_1h < -12.0:
                 return None
-            if price_change_5m < -6.0:
+            if price_change_5m < -10.0:
                 return None
-            min_liq = 12000 if age_sec <= 3600 else 15000
-            min_vol = 8000 if age_sec <= 3600 else 15000
+            min_liq = 10000 if age_sec <= FRESH_WINDOW_MAX_SECONDS else (12000 if age_sec <= 3600 else 15000)
+            min_vol = 5000 if age_sec <= FRESH_WINDOW_MAX_SECONDS else (8000 if age_sec <= 3600 else 15000)
             if liquidity_usd < min_liq:
                 return None
             if volume_24h < min_vol:
