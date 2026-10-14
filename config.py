@@ -26,6 +26,12 @@ MAX_TOP10_HOLDERS_PCT = 25.0        # Alerta se Top 10 tiver mais de 25%
 MIN_MARKET_CAP_USD = 30000          # Descarta micro-lixo abaixo de $30k
 TARGET_CHAINS = ["solana", "base", "ethereum", "robinhood"]
 
+# Filtros Anti-Manipulação e Anti-Wash Trading (Gemas Orgânicas de Longa Duração)
+MIN_AVG_TRADE_TICKET_USD = 14.0       # Descarta bots de micro-swaps (0.02 - 0.04 SOL / $3-$6)
+MAX_VOL_LIQUIDITY_RATIO = 35.0        # Descarta anomalias de churn artificial em pools rasos
+MIN_LIQ_MC_RATIO = 0.025              # Mínimo de 2.5% de liquidez real para microcaps
+MAX_SELL_BUY_RATIO = 1.35             # Descarta moedas com pressão vendedora de dev dump
+
 # Helius Infrastructure (Solana Real-Time Sub-Second Feed)
 HELIUS_API_KEY = os.environ.get("HELIUS_API_KEY", "793ee1a9-6bef-48b2-bfa9-f0270ad46857")
 HELIUS_RPC_URL = f"https://mainnet.helius-rpc.com/?api-key={HELIUS_API_KEY}" if HELIUS_API_KEY else ""

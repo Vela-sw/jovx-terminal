@@ -4,10 +4,18 @@ import threading
 import logging
 import json
 try:
-    from config import HELIUS_API_KEY, HELIUS_RPC_URL
+    from config import (
+        HELIUS_API_KEY, HELIUS_RPC_URL,
+        MIN_AVG_TRADE_TICKET_USD, MAX_VOL_LIQUIDITY_RATIO,
+        MIN_LIQ_MC_RATIO, MAX_SELL_BUY_RATIO
+    )
 except ImportError:
     HELIUS_API_KEY = ""
     HELIUS_RPC_URL = ""
+    MIN_AVG_TRADE_TICKET_USD = 14.0
+    MAX_VOL_LIQUIDITY_RATIO = 35.0
+    MIN_LIQ_MC_RATIO = 0.025
+    MAX_SELL_BUY_RATIO = 1.35
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("JOVX_SCANNER")
@@ -33,6 +41,12 @@ TOTAL_DISPLAY_TOKENS = 20
 MIN_TOKEN_AGE_SECONDS = 480          # 8 minutos (proteção contra snipers de berçário)
 FRESH_WINDOW_MAX_SECONDS = 2700       # 45 minutos (janela ultra-fresca de lançamentos)
 MAX_TOKEN_AGE_SECONDS = 86400        # Teto máximo estrito de 24 horas (86.400 segundos)
+
+# Constantes de calibração anti-manipulação (Gemas Orgânicas com Potencial de Dias)
+MIN_AVG_TRADE_TICKET_USD = globals().get("MIN_AVG_TRADE_TICKET_USD", 14.0)
+MAX_VOL_LIQUIDITY_RATIO = globals().get("MAX_VOL_LIQUIDITY_RATIO", 35.0)
+MIN_LIQ_MC_RATIO = globals().get("MIN_LIQ_MC_RATIO", 0.025)
+MAX_SELL_BUY_RATIO = globals().get("MAX_SELL_BUY_RATIO", 1.35)
 
 class JovxScanner:
     """
@@ -1032,16 +1046,81 @@ class JovxScanner:
             
         return replenished
 
+    def _is_clean_organic_token(self, t):
+        """
+        Auditoria Forense Anti-Manipulação (Proteção de Longo Prazo / Moedas que duram dias):
+        - Limite estrito de idade (8 minutos até 24 horas)
+        - Liquidez real mínima ($10.000)
+        - Detector de Wash-Trading: Ticket médio >= $14.0 em tokens com volume expressivo
+        - Anti-Churn: Volume 24h <= 35x liquidez em pools menores que $25.000
+        - Anti-Ghost MC: Mínimo de 2.5% de liquidez frente ao market cap (< $3M)
+        - Anti-Dev Dump: Relação de vendas para compras <= 1.35x
+        - Tolerância Zero para derretimento (24h, 1h e 5m)
+        """
+        if not t or not isinstance(t, dict):
+            return False
+            
+        addr = t.get("address")
+        if not addr or addr in self.blacklisted_dumped_addrs:
+            return False
+            
+        age_sec = t.get("age_seconds", 3600)
+        if age_sec < MIN_TOKEN_AGE_SECONDS or age_sec > MAX_TOKEN_AGE_SECONDS:
+            return False
+            
+        liq = float(t.get("liquidity_usd", 0) or 0)
+        if liq < 10000:
+            return False
+            
+        pc24 = float(t.get("price_change_24h", 0) or 0)
+        min_pc24 = -5.0 if liq >= 50000 else 0.0
+        if pc24 < min_pc24:
+            return False
+            
+        pc1h = float(t.get("price_change_1h", 0) or 0)
+        pc5m = float(t.get("price_change_5m", 0) or 0)
+        if pc1h < -25.0 or pc5m < -15.0:
+            return False
+            
+        vol = float(t.get("volume_24h", 0) or 0)
+        if vol < 4000:
+            return False
+            
+        buys = int(t.get("buys_24h", 0) or 0)
+        sells = int(t.get("sells_24h", 0) or 0)
+        if buys < 5 or sells < 2:
+            return False
+            
+        # Anti-Staggered Exit (Despejo do criador)
+        if sells > buys * MAX_SELL_BUY_RATIO:
+            return False
+            
+        total_tx = buys + sells
+        # Anti-Wash Trading (Detector de Micro-Swaps de Bot de 0.02-0.04 SOL)
+        if vol >= 15000 and total_tx >= 80:
+            avg_ticket = vol / max(1, total_tx)
+            if avg_ticket < MIN_AVG_TRADE_TICKET_USD:
+                return False
+                
+        # Anomalia Volume x Liquidez (Churn artificial em piscina rasa)
+        if liq < 25000 and (vol / max(1, liq)) > MAX_VOL_LIQUIDITY_RATIO:
+            return False
+            
+        # Anti-Ghost Market Cap (Falta de lastro real de liquidez)
+        mc = float(t.get("market_cap", 0) or 0)
+        if 100000 <= mc <= 3000000 and liq < 100000:
+            if (liq / max(1, mc)) < MIN_LIQ_MC_RATIO:
+                return False
+                
+        return True
+
     def fetch_live_tokens(self):
         """Retorna instantaneamente SEMPRE as 20 moedas cravadas recalculando idades reais"""
         with self.lock:
-            # Elimina imediatamente qualquer token que derreteu, foi banido ou tem mais de 24 horas
+            # Elimina imediatamente qualquer token que derreteu, foi banido ou é artificial
             self.cached_list = [
                 t for t in self.cached_list 
-                if t.get("address") not in self.blacklisted_dumped_addrs 
-                and t.get("liquidity_usd", 0) >= 8000 
-                and t.get("age_seconds", 0) <= MAX_TOKEN_AGE_SECONDS
-                and t.get("price_change_24h", 0) >= (-5.0 if t.get("liquidity_usd", 0) >= 50000 else 0.0)
+                if self._is_clean_organic_token(t)
             ]
 
             if len(self.cached_list) < 20:
@@ -1055,15 +1134,9 @@ class JovxScanner:
                 for fb in candidates:
                     fb_addr = fb.get("address")
                     fb_sym = fb.get("symbol", "").upper()
-                    fb_age = fb.get("age_seconds", 0)
-                    fb_liq = fb.get("liquidity_usd", 0)
-                    min_pc24 = -5.0 if fb_liq >= 50000 else 0.0
                     if (fb_addr and fb_addr not in existing_addrs 
                         and fb_sym not in existing_syms
-                        and fb_addr not in self.blacklisted_dumped_addrs
-                        and fb_liq >= 8000
-                        and fb.get("price_change_24h", 0) >= min_pc24
-                        and fb_age <= MAX_TOKEN_AGE_SECONDS):
+                        and self._is_clean_organic_token(fb)):
                         tok = dict(fb)
                         self.cached_list.append(tok)
                         existing_addrs.add(fb_addr)
@@ -1107,39 +1180,8 @@ class JovxScanner:
         """
         valid_pool = []
         for t in self.pool.values():
-            age = t.get("age_seconds", 3600)
-            
-            # Filtro de idade estrito: de 8 minutos até no máximo 24 horas (86.400 segundos)
-            if age < MIN_TOKEN_AGE_SECONDS or age > MAX_TOKEN_AGE_SECONDS:
+            if not self._is_clean_organic_token(t):
                 continue
-
-            # Anti-Dump Geral (Tolerância Zero para perda de liquidez ou 24h negativo)
-            if t.get("price_change_5m", 0) < -15.0:
-                continue
-            if t.get("price_change_1h", 0) < -25.0:
-                continue
-            if t.get("liquidity_usd", 0) < 10000:
-                continue
-            min_pc24 = -5.0 if t.get("liquidity_usd", 0) >= 50000 else 0.0
-            if t.get("price_change_24h", 0) < min_pc24:
-                continue
-
-            # FILTRO ANTI-CABAL & ANTI-WASH TRADING
-            mc_tok = t.get("market_cap", 0)
-            vol_tok = t.get("volume_24h", 0)
-            if mc_tok >= 1000000 and (vol_tok / max(1, mc_tok)) < 0.05:
-                continue
-            if mc_tok >= 500000 and vol_tok < 15000:
-                continue
-
-            # Atividade Real
-            if t.get("volume_24h", 0) < 4000:
-                continue
-            if t.get("sells_24h", 0) < 2 or t.get("buys_24h", 0) < 5:
-                continue
-            if t.get("sells_24h", 0) > (t.get("buys_24h", 0) * 1.5) and t.get("buys_24h", 0) > 0:
-                continue
-
             valid_pool.append(t)
 
         # =========================================================================
@@ -1155,28 +1197,31 @@ class JovxScanner:
             m5 = t.get("price_change_5m", 0)
             score = t.get("jovx_score", 0)
             age = t.get("age_seconds", 3600)
+            total_tx = buys + sells
+            avg_ticket = (vol / max(1, total_tx)) if total_tx > 0 else 0
             
-            # 1. PONTO PRINCIPAL: SEGURANÇA POR LIQUIDEZ ROBUSTA (Até 40 pontos)
-            # Maior liquidez = Menos risco de dump e maior facilidade para entrar e sair no trade de até 1 dia
-            liq_safety = min(40.0, (liq / 50000.0) * 20.0)
+            # 1. PONTO PRINCIPAL: SEGURANÇA POR LIQUIDEZ ROBUSTA (Até 35 pontos)
+            liq_safety = min(35.0, (liq / 50000.0) * 18.0)
             
-            # 2. CONVICÇÃO DO MERCADO: PRESSÃO COMPRADORA (Até 30 pontos)
-            # Mais compras que vendas = Acumulação de baleias
-            buyer_safety = 30.0 if buy_ratio >= 1.3 else (20.0 if buy_ratio >= 1.1 else (10.0 if buy_ratio >= 1.0 else 0.0))
+            # 2. CONVICÇÃO DO MERCADO: PRESSÃO COMPRADORA ORGÂNICA (Até 25 pontos)
+            buyer_safety = 25.0 if buy_ratio >= 1.3 else (18.0 if buy_ratio >= 1.1 else (10.0 if buy_ratio >= 1.0 else 0.0))
             
-            # 3. SAÚDE DA TENDÊNCIA: 1h e 5m sustentáveis (Até 15 pontos)
+            # 3. TICKET MÉDIO ORGÂNICO (Até 15 pontos) - Recompensa compras reais de traders reais
+            ticket_safety = 15.0 if avg_ticket >= 60.0 else (10.0 if avg_ticket >= 35.0 else (5.0 if avg_ticket >= 20.0 else 0.0))
+            
+            # 4. SAÚDE DA TENDÊNCIA: 1h e 5m sustentáveis (Até 15 pontos)
             trend_safety = min(10.0, max(0.0, h1) * 1.0) + min(5.0, max(0.0, m5) * 1.5)
             
-            # 4. VOLUME REAL (Até 10 pontos)
+            # 5. VOLUME REAL (Até 10 pontos)
             vol_safety = min(10.0, vol / 50000.0)
             
-            # 5. PONTUAÇÃO DO SCORE JOVX (Até 15 pontos)
-            score_factor = (score / 100.0) * 15.0
+            # 6. PONTUAÇÃO DO SCORE JOVX (Até 10 pontos)
+            score_factor = (score / 100.0) * 10.0
             
-            # 6. BÔNUS DE SOBREVIVÊNCIA (Ponto Doce de 45m a 24h / 1 dia)
+            # 7. BÔNUS DE SOBREVIVÊNCIA E LONGEVIDADE (Ponto Doce de 45m a 24h / 1 dia)
             age_bonus = 10.0 if (2700 <= age <= 86400) else (5.0 if age < 2700 else 2.0)
             
-            return liq_safety + buyer_safety + trend_safety + vol_safety + score_factor + age_bonus
+            return liq_safety + buyer_safety + ticket_safety + trend_safety + vol_safety + score_factor + age_bonus
 
         # Ordena: A MAIS SEGURA E DE MAIOR PROBABILIDADE EM 1º LUGAR!
         valid_pool.sort(key=lambda t: -token_safety_score(t))
@@ -1197,9 +1242,7 @@ class JovxScanner:
         # Filtro de segurança: elimina banidos ou vermelhos (limiar de 10k)
         clean_tokens = [
             t for t in clean_tokens 
-            if t.get("address") not in self.blacklisted_dumped_addrs 
-            and t.get("liquidity_usd", 0) >= 10000 
-            and t.get("price_change_24h", 0) >= (-5.0 if t.get("liquidity_usd", 0) >= 50000 else 0.0)
+            if self._is_clean_organic_token(t)
         ]
 
         # =========================================================================
@@ -1213,15 +1256,9 @@ class JovxScanner:
             for fb in candidates:
                 fb_addr = fb.get("address")
                 fb_sym = fb.get("symbol", "").upper()
-                fb_age = fb.get("age_seconds", 0)
-                fb_liq = fb.get("liquidity_usd", 0)
-                fb_min_pc24 = -5.0 if fb_liq >= 50000 else 0.0
                 if (fb_addr and fb_addr not in existing_addrs 
                     and fb_sym not in existing_syms
-                    and fb_addr not in self.blacklisted_dumped_addrs
-                    and fb_liq >= 8000 
-                    and fb.get("price_change_24h", 0) >= fb_min_pc24
-                    and fb_age <= MAX_TOKEN_AGE_SECONDS):
+                    and self._is_clean_organic_token(fb)):
                     clean_tokens.append(dict(fb))
                     existing_addrs.add(fb_addr)
                     existing_syms.add(fb_sym)
@@ -1379,6 +1416,8 @@ class JovxScanner:
                         audited = self._audit_and_score_pair(pair)
                         if audited:
                             self.pool[addr] = audited
+                        else:
+                            tokens_to_pause_temporarily.add(addr)
 
             # 1. Purga permanente para rugs, drenagens, 404s e tokens derretidos (ZERO IMUNIDADE!)
             for bad_addr in tokens_to_kill_permanently:
@@ -1653,7 +1692,29 @@ class JovxScanner:
                 return None
             if market_cap < 30000:
                 return None
-            if sells > 0 and buys > 0 and (sells > buys * 1.5):
+            if sells > 0 and buys > 0 and (sells > buys * MAX_SELL_BUY_RATIO):
+                return None
+
+            # FILTRO 1 ANTI-WASH TRADING (Detector de Micro-Swaps de Bots):
+            # Se o volume for considerável (>= $15k) e o ticket médio de transação for < $14,
+            # trata-se de bot de 0.02 - 0.04 SOL gerando volume artificial circular!
+            total_txns = buys + sells
+            if volume_24h >= 15000 and total_txns >= 80:
+                avg_trade_size = volume_24h / max(1, total_txns)
+                if avg_trade_size < MIN_AVG_TRADE_TICKET_USD:
+                    logger.info(f"[ANTI-WASH TRADING] Token {symbol} rejeitado: volume ${volume_24h:,.0f} com {total_txns} txs gerou ticket médio suspeito de apenas ${avg_trade_size:.2f}")
+                    return None
+
+            # FILTRO 2 ANOMALIA VOLUME X LIQUIDEZ (Volume Fake Desproporcional):
+            # Tokens com liquidez baixa (< $25k) mas volume astronômico (> 35x a liquidez)
+            # indicam churn forçado de robô sem suporte real de mercado
+            if liquidity_usd < 25000 and (volume_24h / max(1, liquidity_usd)) > MAX_VOL_LIQUIDITY_RATIO:
+                logger.info(f"[ANTI-CHURN] Token {symbol} rejeitado: anomalia Vol/Liq de {volume_24h / max(1, liquidity_usd):.1f}x em liquidez de ${liquidity_usd:,.0f}")
+                return None
+
+            # FILTRO 3 ANTI-GHOST MARKET CAP:
+            # Rejeita market caps inflados sem lastro proporcional de liquidez no pool
+            if 100000 <= market_cap <= 3000000 and liquidity_usd < 100000 and (liquidity_usd / max(1, market_cap)) < MIN_LIQ_MC_RATIO:
                 return None
 
             # FILTRO ANTI-CABAL & ANTI-WASH TRADING (Elimina tokens inflados com volume fantasma)
@@ -1667,7 +1728,6 @@ class JovxScanner:
                 return None
             if not self._check_rugcheck_safe(address):
                 return None
-
 
             # Proteção contra fake pool / honeypot (liquidez irrisória frente ao market cap)
             if market_cap > 500000 and (liquidity_usd / market_cap) < 0.005:
@@ -1696,6 +1756,14 @@ class JovxScanner:
                 score += 10
             elif price_change_1h > 0:
                 score += 5
+
+            # Bônus de Ticket Médio Orgânico (Transações genuínas de investidores reais)
+            total_tx_score = buys + sells
+            avg_ticket_score = (volume_24h / max(1, total_tx_score)) if total_tx_score > 0 else 0
+            if avg_ticket_score >= 50.0:
+                score += 8
+            elif avg_ticket_score >= 30.0:
+                score += 4
 
             if volume_5m >= 3000:
                 score += 8
