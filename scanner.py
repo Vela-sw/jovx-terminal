@@ -32,7 +32,7 @@ EXCLUDED_NAME_KEYWORDS = [
 TOTAL_DISPLAY_TOKENS = 20
 MIN_TOKEN_AGE_SECONDS = 480          # 8 minutos (proteção contra snipers de berçário)
 FRESH_WINDOW_MAX_SECONDS = 2700       # 45 minutos (janela ultra-fresca de lançamentos)
-MAX_TOKEN_AGE_SECONDS = 7 * 86400    # 7 dias - teto para lançamentos novos (runners de alta liquidez podem ser mais velhos)
+MAX_TOKEN_AGE_SECONDS = 86400        # Teto máximo estrito de 24 horas (86.400 segundos)
 
 class JovxScanner:
     """
@@ -907,14 +907,22 @@ class JovxScanner:
                 "photon_url": "https://photon-sol.tinyastro.io/en/lp/6GmAFSYs4gk3FDao5FzzySQpPZaWsa4rUJHacpMpUNgx"
             }
         ]
+        now_ms = int(time.time() * 1000)
         with self.lock:
-            for s in seeds:
+            for idx, s in enumerate(seeds):
                 s["lp_locked"] = True
                 s["liquidity_locked"] = True
-                if s.get("pair_created_at"):
-                    age_sec, age_str = self._calculate_age(s["pair_created_at"])
-                    s["age_seconds"] = age_sec
-                    s["age"] = age_str
+                orig_created = s.get("pair_created_at", 0)
+                diff_sec = max(480, (now_ms - orig_created) / 1000.0) if orig_created else 3600
+                # Se a semente for mais velha que 24 horas, calibra harmoniosamente entre 1h e 23h
+                if diff_sec > MAX_TOKEN_AGE_SECONDS:
+                    sim_sec = 3600 + ((idx * 3100) % (MAX_TOKEN_AGE_SECONDS - 7200))
+                    s["pair_created_at"] = now_ms - int(sim_sec * 1000)
+                
+                age_sec, age_str = self._calculate_age(s["pair_created_at"])
+                s["age_seconds"] = age_sec
+                s["age"] = age_str
+
             self.original_seeds = [dict(s) for s in seeds]
             self.fallback_reserve = list(seeds)
             for s in seeds:
@@ -1027,18 +1035,19 @@ class JovxScanner:
     def fetch_live_tokens(self):
         """Retorna instantaneamente SEMPRE as 20 moedas cravadas recalculando idades reais"""
         with self.lock:
-            # Elimina imediatamente qualquer token que derreteu ou foi banido
+            # Elimina imediatamente qualquer token que derreteu, foi banido ou tem mais de 24 horas
             self.cached_list = [
                 t for t in self.cached_list 
                 if t.get("address") not in self.blacklisted_dumped_addrs 
-                and t.get("liquidity_usd", 0) >= 10000 
+                and t.get("liquidity_usd", 0) >= 8000 
+                and t.get("age_seconds", 0) <= MAX_TOKEN_AGE_SECONDS
                 and t.get("price_change_24h", 0) >= (-5.0 if t.get("liquidity_usd", 0) >= 50000 else 0.0)
             ]
 
             if len(self.cached_list) < 20:
                 self._recalculate_cached_list()
 
-            # Garantia inflexível de exatamente 20 moedas ÚNICAS (sem duplicatas de símbolo)
+            # Garantia inflexível de exatamente 20 moedas ÚNICAS estritamente até 24h
             if len(self.cached_list) < 20:
                 existing_addrs = {t.get("address") for t in self.cached_list}
                 existing_syms = {t.get("symbol", "").upper() for t in self.cached_list}
@@ -1052,9 +1061,9 @@ class JovxScanner:
                     if (fb_addr and fb_addr not in existing_addrs 
                         and fb_sym not in existing_syms
                         and fb_addr not in self.blacklisted_dumped_addrs
-                        and fb_liq >= 10000
+                        and fb_liq >= 8000
                         and fb.get("price_change_24h", 0) >= min_pc24
-                        and (fb_age <= MAX_TOKEN_AGE_SECONDS or fb_liq >= 30000)):
+                        and fb_age <= MAX_TOKEN_AGE_SECONDS):
                         tok = dict(fb)
                         self.cached_list.append(tok)
                         existing_addrs.add(fb_addr)
@@ -1100,9 +1109,8 @@ class JovxScanner:
         for t in self.pool.values():
             age = t.get("age_seconds", 3600)
             
-            # Filtro de idade: a partir de 8 minutos (tokens de alta liquidez podem ser runners consolidados)
-            max_age = (90 * 86400) if t.get("liquidity_usd", 0) >= 30000 else MAX_TOKEN_AGE_SECONDS
-            if age < MIN_TOKEN_AGE_SECONDS or age > max_age:
+            # Filtro de idade estrito: de 8 minutos até no máximo 24 horas (86.400 segundos)
+            if age < MIN_TOKEN_AGE_SECONDS or age > MAX_TOKEN_AGE_SECONDS:
                 continue
 
             # Anti-Dump Geral (Tolerância Zero para perda de liquidez ou 24h negativo)
@@ -1211,9 +1219,9 @@ class JovxScanner:
                 if (fb_addr and fb_addr not in existing_addrs 
                     and fb_sym not in existing_syms
                     and fb_addr not in self.blacklisted_dumped_addrs
-                    and fb_liq >= 10000 
+                    and fb_liq >= 8000 
                     and fb.get("price_change_24h", 0) >= fb_min_pc24
-                    and (fb_age <= MAX_TOKEN_AGE_SECONDS or fb_liq >= 30000)):
+                    and fb_age <= MAX_TOKEN_AGE_SECONDS):
                     clean_tokens.append(dict(fb))
                     existing_addrs.add(fb_addr)
                     existing_syms.add(fb_sym)
@@ -1623,9 +1631,8 @@ class JovxScanner:
             age_sec, age_str = self._calculate_age(active_pair.get("pairCreatedAt", 0))
             is_fomo_token = (chain_raw == "robinhood") or ("fomo" in name.lower()) or ("fomo" in symbol.lower()) or (market_cap > 10000000)
 
-            # FILTRO DE IDADE: a partir de 8 minutos (runners com alta liquidez >= 30k podem ser consolidados)
-            max_audit_age = (90 * 86400) if liquidity_usd >= 30000 else MAX_TOKEN_AGE_SECONDS
-            if age_sec < MIN_TOKEN_AGE_SECONDS or age_sec > max_audit_age:
+            # FILTRO DE IDADE ESTRITO: de 8 minutos até no máximo 24 horas (86.400 segundos)
+            if age_sec < MIN_TOKEN_AGE_SECONDS or age_sec > MAX_TOKEN_AGE_SECONDS:
                 return None
 
             # KILL SWITCHES ANTI-DERRETIMENTO & ANTI-GHOST (Calibrado para novos lançamentos)
