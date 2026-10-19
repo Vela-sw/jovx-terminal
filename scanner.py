@@ -38,7 +38,7 @@ EXCLUDED_NAME_KEYWORDS = [
 # - Total SEMPRE cravado em 20 moedas únicas (sem repetição de símbolos)!
 # =========================================================================
 TOTAL_DISPLAY_TOKENS = 20
-MIN_TOKEN_AGE_SECONDS = 480          # 8 minutos (proteção contra snipers de berçário)
+MIN_TOKEN_AGE_SECONDS = 120          # 2 minutos (captura precoce na ignição)
 FRESH_WINDOW_MAX_SECONDS = 2700       # 45 minutos (janela ultra-fresca de lançamentos)
 MAX_TOKEN_AGE_SECONDS = 86400        # Teto máximo estrito de 24 horas (86.400 segundos)
 
@@ -1218,8 +1218,15 @@ class JovxScanner:
             # 6. PONTUAÇÃO DO SCORE JOVX (Até 10 pontos)
             score_factor = (score / 100.0) * 10.0
             
-            # 7. BÔNUS DE SOBREVIVÊNCIA E LONGEVIDADE (Ponto Doce de 45m a 24h / 1 dia)
-            age_bonus = 10.0 if (2700 <= age <= 86400) else (5.0 if age < 2700 else 2.0)
+            # 7. BÔNUS DE IGNITION / ARANCADA FRESCA (Prioridade para moedas jovens rompendo!)
+            if age <= 1800 and m5 >= 1.0 and buy_ratio >= 1.1:
+                age_bonus = 22.0  # Arrancada precoce! Foguete subindo pro topo do ranking
+            elif age <= 3600 and m5 >= 0.0:
+                age_bonus = 14.0
+            elif 3600 < age <= 86400:
+                age_bonus = 8.0
+            else:
+                age_bonus = 2.0
             
             return liq_safety + buyer_safety + ticket_safety + trend_safety + vol_safety + score_factor + age_bonus
 
@@ -1682,15 +1689,15 @@ class JovxScanner:
                 return None
             if price_change_5m < -15.0:
                 return None
-            min_liq = 10000
-            min_vol = 4000
+            min_liq = 8000
+            min_vol = 3000
             if liquidity_usd < min_liq:
                 return None
             if volume_24h < min_vol:
                 return None
             if sells < 2 or buys < 5:
                 return None
-            if market_cap < 30000:
+            if market_cap < 25000:
                 return None
             if sells > 0 and buys > 0 and (sells > buys * MAX_SELL_BUY_RATIO):
                 return None
