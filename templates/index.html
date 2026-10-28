@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <meta name="theme-color" content="#050608">
+  <meta name="theme-color" content="#1a1e28">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Desafio do Cofre | Torneio de Habilidade Mental</title>
@@ -15,48 +15,48 @@
     }
     
     body {
-      background-color: #050608;
-      color: #f4f4f5;
+      background: radial-gradient(circle at 50% 10%, #2a3142 0%, #1a1e28 55%, #12151d 100%);
+      color: #ffffff;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       min-height: 100vh;
       min-height: 100dvh;
     }
 
-    /* Textura da carcaça do cofre blindado */
+    /* Carcaça do cofre mais clara em aço titânio */
     .vault-outer-frame {
-      background: radial-gradient(circle at 50% 20%, #222630 0%, #12141a 60%, #090a0d 100%);
-      border: 3px solid #333845;
+      background: linear-gradient(165deg, #2e3547 0%, #202533 60%, #171b24 100%);
+      border: 2px solid #525e7a;
       box-shadow: 
-        inset 0 2px 4px rgba(255, 255, 255, 0.15),
-        inset 0 -4px 8px rgba(0, 0, 0, 0.8),
-        0 15px 40px rgba(0, 0, 0, 0.9);
+        inset 0 1px 2px rgba(255, 255, 255, 0.25),
+        inset 0 -3px 6px rgba(0, 0, 0, 0.6),
+        0 12px 35px rgba(0, 0, 0, 0.55);
     }
 
     /* Rebaixo da porta blindada */
     .vault-inner-door {
-      background: linear-gradient(165deg, #1b1e25 0%, #101217 50%, #0b0c10 100%);
+      background: linear-gradient(175deg, #252b3a 0%, #1b1f2a 70%, #151821 100%);
       box-shadow: 
-        inset 0 4px 12px rgba(0, 0, 0, 0.9),
-        inset 0 1px 2px rgba(255, 255, 255, 0.1),
-        0 2px 4px rgba(0, 0, 0, 0.6);
-      border: 1px solid #282c37;
+        inset 0 3px 8px rgba(0, 0, 0, 0.6),
+        inset 0 1px 2px rgba(255, 255, 255, 0.15),
+        0 1px 3px rgba(0, 0, 0, 0.4);
+      border: 1px solid #414b62;
     }
 
-    /* Rebites de aço industrial nos cantos */
+    /* Rebites de aço industrial */
     .bolt-rivet {
-      width: 10px;
-      height: 10px;
+      width: 9px;
+      height: 9px;
       border-radius: 50%;
-      background: radial-gradient(circle at 35% 35%, #8b92a2 0%, #3e4452 60%, #1b1e25 100%);
+      background: radial-gradient(circle at 35% 35%, #cbd5e1 0%, #64748b 60%, #334155 100%);
       box-shadow: 
-        inset 0 1px 1px rgba(255, 255, 255, 0.6),
-        0 2px 4px rgba(0, 0, 0, 0.8);
+        inset 0 1px 1px rgba(255, 255, 255, 0.8),
+        0 2px 4px rgba(0, 0, 0, 0.6);
       position: absolute;
     }
 
     /* Brilho Dourado Metálico */
     .gold-gradient-text {
-      background: linear-gradient(135deg, #fff7c2 0%, #facc15 35%, #ca8a04 70%, #854d0e 100%);
+      background: linear-gradient(135deg, #fffbeb 0%, #fde047 30%, #eab308 70%, #ca8a04 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
@@ -65,184 +65,184 @@
       background: linear-gradient(180deg, #fef08a 0%, #eab308 30%, #ca8a04 80%, #a16207 100%);
       box-shadow: 
         inset 0 1px 2px rgba(255, 255, 255, 0.6),
-        0 4px 12px rgba(202, 138, 4, 0.35),
-        0 2px 4px rgba(0, 0, 0, 0.6);
+        0 3px 8px rgba(202, 138, 4, 0.4),
+        0 1px 3px rgba(0, 0, 0, 0.5);
       border: 1px solid #fef08a;
     }
     .gold-metallic-btn:active {
-      transform: translateY(2px) scale(0.98);
-      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+      transform: translateY(1px) scale(0.98);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
     }
 
-    /* Teclas de Cofre Otimizadas para Toque no Celular */
+    /* Teclas de Cofre Mais Compactas e com Alto Contraste */
     .vault-key {
-      background: linear-gradient(180deg, #2a2e39 0%, #181b22 60%, #0f1015 100%);
-      border: 1px solid #3d4352;
+      background: linear-gradient(180deg, #3d465c 0%, #2a3040 60%, #1e222e 100%);
+      border: 1px solid #576484;
       box-shadow: 
-        inset 0 1px 1px rgba(255, 255, 255, 0.2),
-        0 3px 6px rgba(0, 0, 0, 0.6);
-      transition: all 0.08s ease;
+        inset 0 1px 1px rgba(255, 255, 255, 0.3),
+        0 2px 4px rgba(0, 0, 0, 0.5);
+      transition: all 0.06s ease;
       user-select: none;
     }
     .vault-key:active {
-      transform: translateY(2px) scale(0.96);
+      transform: translateY(1.5px) scale(0.95);
       box-shadow: 
-        inset 0 2px 4px rgba(0, 0, 0, 0.9),
-        0 1px 2px rgba(0, 0, 0, 0.4);
-      background: #14161c;
-      border-color: #facc15;
+        inset 0 2px 4px rgba(0, 0, 0, 0.8),
+        0 1px 2px rgba(0, 0, 0, 0.3);
+      background: #181b24;
+      border-color: #fde047;
     }
 
     /* Visor Digital dos 5 Números */
     .digit-box {
-      background: linear-gradient(180deg, #090b0e 0%, #030405 100%);
-      border: 1.5px solid rgba(234, 179, 8, 0.4);
+      background: linear-gradient(180deg, #10131a 0%, #080a0e 100%);
+      border: 1.5px solid rgba(250, 204, 21, 0.6);
       box-shadow: 
-        inset 0 2px 6px rgba(0, 0, 0, 0.9),
-        0 0 10px rgba(234, 179, 8, 0.15);
-      text-shadow: 0 0 12px rgba(250, 204, 21, 0.7);
+        inset 0 2px 5px rgba(0, 0, 0, 0.9),
+        0 0 10px rgba(250, 204, 21, 0.2);
+      text-shadow: 0 0 10px rgba(250, 204, 21, 0.8);
     }
 
-    /* Anel de rolamento da tranca */
+    /* Anel da tranca */
     .dial-bearing-ring {
-      background: radial-gradient(circle, #252932 40%, #111317 75%, #08090b 100%);
+      background: radial-gradient(circle, #333a4c 40%, #1e232f 75%, #13161f 100%);
       box-shadow: 
-        inset 0 4px 10px rgba(0, 0, 0, 0.9),
-        0 0 20px rgba(0, 0, 0, 0.8),
-        0 0 25px rgba(234, 179, 8, 0.15);
-      border: 2.5px solid #3c4250;
+        inset 0 3px 8px rgba(0, 0, 0, 0.8),
+        0 0 15px rgba(0, 0, 0, 0.7),
+        0 0 20px rgba(234, 179, 8, 0.2);
+      border: 2px solid #525e7a;
     }
   </style>
 </head>
-<body class="flex flex-col items-center justify-start p-2 sm:p-4 select-none antialiased">
+<body class="flex flex-col items-center justify-center p-1.5 sm:p-3 select-none antialiased">
 
-  <!-- CONTAINER MOBILE PRINCIPAL (Perfeito para Celulares de 360px a 430px) -->
-  <div class="w-full max-w-[400px] vault-outer-frame rounded-[28px] p-2.5 sm:p-3.5 relative flex flex-col gap-2 my-auto shadow-2xl">
+  <!-- CONTAINER MOBILE PRINCIPAL (Comprimento Reduzido - Cabe 100% na Tela do Celular) -->
+  <div class="w-full max-w-[390px] vault-outer-frame rounded-[24px] p-2 sm:p-3 relative flex flex-col gap-1.5 my-auto shadow-2xl">
     
     <!-- 4 REBITES NOS CANTOS DA CARCAÇA -->
-    <div class="bolt-rivet top-2.5 left-2.5"></div>
-    <div class="bolt-rivet top-2.5 right-2.5"></div>
-    <div class="bolt-rivet bottom-2.5 left-2.5"></div>
-    <div class="bolt-rivet bottom-2.5 right-2.5"></div>
+    <div class="bolt-rivet top-2 left-2"></div>
+    <div class="bolt-rivet top-2 right-2"></div>
+    <div class="bolt-rivet bottom-2 left-2"></div>
+    <div class="bolt-rivet bottom-2 right-2"></div>
 
     <!-- CABEÇALHO DO COFRE: IDENTIDADE DO TORNEIO -->
     <div class="flex items-center justify-between px-2 pt-0.5">
       <div class="flex items-center gap-1.5">
-        <span class="text-lg filter drop-shadow-[0_0_8px_rgba(250,204,21,0.6)]">⭐</span>
+        <span class="text-base filter drop-shadow-[0_0_8px_rgba(250,204,21,0.7)]">⭐</span>
         <div>
           <h1 class="text-[11px] font-black tracking-widest text-white uppercase leading-none">
             DESAFIO DO COFRE
           </h1>
-          <p class="text-[8px] text-zinc-400 font-medium mt-0.5">Torneio de Habilidade • Desafio do Enigma</p>
+          <p class="text-[8px] text-zinc-300 font-semibold mt-0.5">Torneio de Habilidade • Desafio do Enigma</p>
         </div>
       </div>
       <div class="flex items-center gap-2">
-        <button onclick="openRulesModal()" class="text-[9px] text-zinc-400 hover:text-amber-300 underline font-medium">
+        <button onclick="openRulesModal()" class="text-[9.5px] text-amber-300 hover:text-amber-200 underline font-bold">
           Regras
         </button>
-        <button onclick="toggleAdminModal()" class="text-zinc-600 hover:text-amber-400 p-0.5 text-xs">
+        <button onclick="toggleAdminModal()" class="text-zinc-400 hover:text-amber-300 p-0.5 text-xs">
           ⚙️
         </button>
       </div>
     </div>
 
-    <!-- BARRA DO COMPETIDOR / SESSÃO ATIVA -->
-    <div id="playerSessionBar" class="flex items-center justify-between bg-zinc-950/80 border border-zinc-800/80 rounded-xl px-2.5 py-1 text-[9px]">
-      <div class="flex items-center gap-1.5 text-zinc-400">
+    <!-- BARRA DO COMPETIDOR / SESSÃO ATIVA (MAIS CLARA) -->
+    <div id="playerSessionBar" class="flex items-center justify-between bg-[#1d2230] border border-[#3f4961] rounded-xl px-2.5 py-1 text-[9px]">
+      <div class="flex items-center gap-1.5 text-zinc-200">
         <span class="text-xs">👤</span>
-        <span id="playerSessionName" class="font-medium text-zinc-300 truncate max-w-[170px]">Visitante</span>
+        <span id="playerSessionName" class="font-bold text-white truncate max-w-[170px]">Visitante</span>
       </div>
       <div id="playerSessionActions">
-        <button onclick="handleAuthAction()" id="playerAuthBtn" class="text-amber-400 hover:text-amber-300 font-bold underline">
+        <button onclick="handleAuthAction()" id="playerAuthBtn" class="text-amber-300 hover:text-amber-200 font-black underline">
           Entrar / Cadastrar
         </button>
       </div>
     </div>
 
-    <!-- PORTA INTERNA DO COFRE (ÁREA DE ENGENHARIA METÁLICA) -->
-    <div class="vault-inner-door rounded-2xl p-2.5 flex flex-col items-center relative">
+    <!-- PORTA INTERNA DO COFRE (ÁREA DE ENGENHARIA METÁLICA CLARA) -->
+    <div class="vault-inner-door rounded-2xl p-2 flex flex-col items-center relative">
       
       <!-- MINI VISOR OLED DO VALOR ACUMULADO (CENTRALIZADO) -->
-      <div class="w-full flex flex-col items-center justify-center bg-black/85 border border-zinc-800 rounded-xl py-1.5 px-2.5 mb-1.5 shadow-inner text-center">
+      <div class="w-full flex flex-col items-center justify-center bg-[#13161f] border border-[#3c4458] rounded-xl py-1 px-2.5 mb-1 shadow-inner text-center">
         <div class="flex items-center gap-1.5">
-          <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
-          <span class="text-[8px] text-zinc-400 uppercase tracking-widest font-semibold">Cofre Acumulado</span>
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+          <span class="text-[8px] text-zinc-300 uppercase tracking-widest font-bold">Cofre Acumulado</span>
         </div>
-        <div class="text-base sm:text-lg font-black text-amber-400 font-mono tracking-tight leading-tight my-0.5" id="jackpotDisplay">
+        <div class="text-base sm:text-lg font-black text-amber-300 font-mono tracking-tight leading-tight my-0.5" id="jackpotDisplay">
           R$ 3.424,50
         </div>
-        <span class="text-[7.5px] text-emerald-400 font-bold uppercase tracking-wider">
+        <span class="text-[7.5px] text-emerald-400 font-black uppercase tracking-wider">
           Para quem desvendar o enigma
         </span>
       </div>
 
-      <!-- SEÇÃO DA TRANCA DOURADA (IMAGEM 3D DE ALTA DEFINIÇÃO + MARCADOR) -->
+      <!-- SEÇÃO DA TRANCA DOURADA (TAMANHO COMPACTO PARA ENCAIXAR NA TELA) -->
       <div class="relative flex flex-col items-center justify-center my-0.5">
         
         <!-- INDICADOR TRIANGULAR DE PRECISÃO NO TOPO -->
-        <div class="z-20 -mb-1.5 flex flex-col items-center">
+        <div class="z-20 -mb-1 flex flex-col items-center">
           <div class="w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-t-[7px] border-t-amber-400 filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]"></div>
         </div>
 
-        <!-- ANEL DE ROLAMENTO E DISCO DOURADO 3D (Tamanho Otimizado para Mobile) -->
+        <!-- ANEL DE ROLAMENTO E DISCO DOURADO 3D -->
         <div class="dial-bearing-ring rounded-full p-1.5 relative cursor-pointer active:scale-98 transition" onclick="clickVaultWheel()">
-          <div class="w-32 h-32 sm:w-36 sm:h-36 rounded-full overflow-hidden flex items-center justify-center relative">
+          <div class="w-26 h-26 sm:w-28 sm:h-28 rounded-full overflow-hidden flex items-center justify-center relative">
             <img id="vaultWheel" src="/static/dial_luxo.png" alt="Disco Dourado do Cofre"
               class="w-full h-full object-cover transition-transform duration-700 ease-out select-none pointer-events-none drop-shadow-2xl" />
           </div>
         </div>
 
-        <span class="text-[8px] text-amber-400/80 font-mono tracking-widest uppercase font-bold mt-1">
+        <span class="text-[8px] text-amber-300 font-mono tracking-widest uppercase font-black mt-0.5">
           COMBINAÇÃO MECÂNICA • 5 DÍGITOS
         </span>
       </div>
 
-      <!-- DISPLAY OLED DO SEGREDO (5 DÍGITOS) -->
-      <div class="flex items-center justify-center gap-1.5 my-1.5 w-full">
-        <div id="digit-0" class="digit-box w-11 h-13 sm:w-12 sm:h-14 rounded-xl flex items-center justify-center text-2xl sm:text-3xl font-black font-mono text-amber-300">
+      <!-- DISPLAY DOS 5 DÍGITOS GIGANTES -->
+      <div class="flex items-center justify-center gap-1.5 my-1 w-full">
+        <div id="digit-0" class="digit-box w-10 h-11 sm:w-11 sm:h-12 rounded-lg flex items-center justify-center text-xl sm:text-2xl font-black font-mono text-amber-300">
           -
         </div>
-        <div id="digit-1" class="digit-box w-11 h-13 sm:w-12 sm:h-14 rounded-xl flex items-center justify-center text-2xl sm:text-3xl font-black font-mono text-amber-300">
+        <div id="digit-1" class="digit-box w-10 h-11 sm:w-11 sm:h-12 rounded-lg flex items-center justify-center text-xl sm:text-2xl font-black font-mono text-amber-300">
           -
         </div>
-        <div id="digit-2" class="digit-box w-11 h-13 sm:w-12 sm:h-14 rounded-xl flex items-center justify-center text-2xl sm:text-3xl font-black font-mono text-amber-300">
+        <div id="digit-2" class="digit-box w-10 h-11 sm:w-11 sm:h-12 rounded-lg flex items-center justify-center text-xl sm:text-2xl font-black font-mono text-amber-300">
           -
         </div>
-        <div id="digit-3" class="digit-box w-11 h-13 sm:w-12 sm:h-14 rounded-xl flex items-center justify-center text-2xl sm:text-3xl font-black font-mono text-amber-300">
+        <div id="digit-3" class="digit-box w-10 h-11 sm:w-11 sm:h-12 rounded-lg flex items-center justify-center text-xl sm:text-2xl font-black font-mono text-amber-300">
           -
         </div>
-        <div id="digit-4" class="digit-box w-11 h-13 sm:w-12 sm:h-14 rounded-xl flex items-center justify-center text-2xl sm:text-3xl font-black font-mono text-amber-300">
+        <div id="digit-4" class="digit-box w-10 h-11 sm:w-11 sm:h-12 rounded-lg flex items-center justify-center text-xl sm:text-2xl font-black font-mono text-amber-300">
           -
         </div>
       </div>
 
-      <!-- MENSAGEM DE STATUS DO COFRE (LIMPO, SEM 'PASSOU PERTO') -->
-      <div id="statusMessage" class="w-full text-center text-[9.5px] font-semibold py-1 px-2 rounded-lg bg-black/70 border border-zinc-800 text-zinc-300 min-h-[24px] flex items-center justify-center">
+      <!-- MENSAGEM DE STATUS DO COFRE (CORES FORTES E CLARAS) -->
+      <div id="statusMessage" class="w-full text-center text-[9.5px] font-bold py-0.5 px-2 rounded-lg bg-[#151922] border border-[#3c4458] text-amber-200 min-h-[22px] flex items-center justify-center">
         Digite a senha no teclado ou toque abaixo
       </div>
 
-      <!-- TECLADO NUMÉRICO TÁTIL DE COFRE (ERGONÔMICO PARA DEDOS) -->
-      <div class="w-full max-w-[270px] mt-1.5 space-y-1.5">
-        <div class="grid grid-cols-3 gap-1.5">
-          <button onclick="pressDigit(1)" class="vault-key h-11 rounded-xl text-lg font-mono font-black text-amber-300">1</button>
-          <button onclick="pressDigit(2)" class="vault-key h-11 rounded-xl text-lg font-mono font-black text-amber-300">2</button>
-          <button onclick="pressDigit(3)" class="vault-key h-11 rounded-xl text-lg font-mono font-black text-amber-300">3</button>
+      <!-- TECLADO NUMÉRICO COMPACTO (REDUZIDO CONFORME PEDIDO) -->
+      <div class="w-full max-w-[250px] mt-1 space-y-1">
+        <div class="grid grid-cols-3 gap-1">
+          <button onclick="pressDigit(1)" class="vault-key h-8.5 rounded-lg text-base font-mono font-black text-amber-300">1</button>
+          <button onclick="pressDigit(2)" class="vault-key h-8.5 rounded-lg text-base font-mono font-black text-amber-300">2</button>
+          <button onclick="pressDigit(3)" class="vault-key h-8.5 rounded-lg text-base font-mono font-black text-amber-300">3</button>
 
-          <button onclick="pressDigit(4)" class="vault-key h-11 rounded-xl text-lg font-mono font-black text-amber-300">4</button>
-          <button onclick="pressDigit(5)" class="vault-key h-11 rounded-xl text-lg font-mono font-black text-amber-300">5</button>
-          <button onclick="pressDigit(6)" class="vault-key h-11 rounded-xl text-lg font-mono font-black text-amber-300">6</button>
+          <button onclick="pressDigit(4)" class="vault-key h-8.5 rounded-lg text-base font-mono font-black text-amber-300">4</button>
+          <button onclick="pressDigit(5)" class="vault-key h-8.5 rounded-lg text-base font-mono font-black text-amber-300">5</button>
+          <button onclick="pressDigit(6)" class="vault-key h-8.5 rounded-lg text-base font-mono font-black text-amber-300">6</button>
 
-          <button onclick="pressDigit(7)" class="vault-key h-11 rounded-xl text-lg font-mono font-black text-amber-300">7</button>
-          <button onclick="pressDigit(8)" class="vault-key h-11 rounded-xl text-lg font-mono font-black text-amber-300">8</button>
-          <button onclick="pressDigit(9)" class="vault-key h-11 rounded-xl text-lg font-mono font-black text-amber-300">9</button>
+          <button onclick="pressDigit(7)" class="vault-key h-8.5 rounded-lg text-base font-mono font-black text-amber-300">7</button>
+          <button onclick="pressDigit(8)" class="vault-key h-8.5 rounded-lg text-base font-mono font-black text-amber-300">8</button>
+          <button onclick="pressDigit(9)" class="vault-key h-8.5 rounded-lg text-base font-mono font-black text-amber-300">9</button>
 
-          <button onclick="clearDigits()" class="vault-key h-11 rounded-xl text-[9px] font-bold text-red-400 uppercase tracking-tight">Limpar</button>
-          <button onclick="pressDigit(0)" class="vault-key h-11 rounded-xl text-lg font-mono font-black text-amber-300">0</button>
-          <button onclick="backspaceDigit()" class="vault-key h-11 rounded-xl text-sm font-bold text-zinc-400">⌫</button>
+          <button onclick="clearDigits()" class="vault-key h-8.5 rounded-lg text-[9px] font-black text-red-400 uppercase tracking-tight">Limpar</button>
+          <button onclick="pressDigit(0)" class="vault-key h-8.5 rounded-lg text-base font-mono font-black text-amber-300">0</button>
+          <button onclick="backspaceDigit()" class="vault-key h-8.5 rounded-lg text-sm font-black text-zinc-200">⌫</button>
         </div>
 
         <!-- BOTÃO DE AÇÃO MECÂNICA: DESTRAVAR COFRE -->
-        <button onclick="submitGuess()" class="gold-metallic-btn w-full py-2.5 rounded-xl font-black text-[11px] uppercase tracking-wider text-zinc-950 flex items-center justify-center gap-1.5 shadow-lg">
+        <button onclick="submitGuess()" class="gold-metallic-btn w-full py-2 rounded-xl font-black text-[10.5px] uppercase tracking-wider text-zinc-950 flex items-center justify-center gap-1.5 shadow-md">
           <span>DESTRAVAR TRANCA DO COFRE</span>
           <span class="text-xs">🔓</span>
         </button>
@@ -250,53 +250,53 @@
 
     </div>
 
-    <!-- PAINEL DAS 4 PISTAS PROGRESSIVAS (LIBERAÇÃO POR TENTATIVA) -->
-    <div class="bg-black/60 border border-zinc-800/90 rounded-2xl p-2 space-y-1">
-      <div class="flex items-center justify-between mb-0.5 px-0.5">
-        <h3 class="text-[9px] font-bold uppercase tracking-wider text-zinc-300 flex items-center gap-1">
-          <span>🧩</span> Pistas Estratégicas do Segredo
+    <!-- PAINEL DAS 4 PISTAS PROGRESSIVAS (AMPLIADO, NÍTIDO E COM CORES FORTES) -->
+    <div class="bg-gradient-to-b from-[#1e2330] to-[#161a24] border-2 border-[#3d465d] rounded-2xl p-2 space-y-1 shadow-md">
+      <div class="flex items-center justify-between px-1 mb-0.5">
+        <h3 class="text-[10px] font-black uppercase tracking-wider text-amber-300 flex items-center gap-1">
+          <span>🧩</span> PISTAS ESTRATÉGICAS DO ENIGMA
         </h3>
-        <span id="clueBadge" class="text-[8px] bg-amber-500/15 text-amber-300 font-bold px-1.5 py-0.2 rounded-full border border-amber-500/30">
+        <span id="clueBadge" class="text-[9px] bg-amber-500/25 text-amber-200 font-black px-2 py-0.2 rounded-full border border-amber-400/50">
           0 de 4 liberadas
         </span>
       </div>
 
-      <!-- PISTA 1 -->
-      <div id="clueRow1" class="flex items-center gap-1.5 p-1 rounded-lg bg-zinc-950/80 border border-zinc-800/70 opacity-40 text-[10px] transition-all duration-300">
-        <span class="text-[10px] clue-ico">🔒</span>
-        <span class="font-bold text-zinc-400 clue-title text-[9.5px]">1ª Pista:</span>
-        <span class="text-zinc-500 text-[9px] clue-desc">Tente 1 palpite para liberar a 1ª pista</span>
+      <!-- PISTA 1 (CORES FORTES E LETRAS NÍTIDAS) -->
+      <div id="clueRow1" class="flex items-center gap-1.5 p-1 rounded-xl bg-[#252b3b] border border-[#48536f] text-xs transition-all duration-300">
+        <span class="text-xs clue-ico">🔒</span>
+        <span class="font-black text-amber-400 clue-title text-[10.5px]">1ª PISTA:</span>
+        <span class="text-white font-bold text-[10px] clue-desc">Liberada na 1ª tentativa</span>
       </div>
 
-      <!-- PISTA 2 -->
-      <div id="clueRow2" class="flex items-center gap-1.5 p-1 rounded-lg bg-zinc-950/80 border border-zinc-800/70 opacity-40 text-[10px] transition-all duration-300">
-        <span class="text-[10px] clue-ico">🔒</span>
-        <span class="font-bold text-zinc-400 clue-title text-[9.5px]">2ª Pista:</span>
-        <span class="text-zinc-500 text-[9px] clue-desc">Tente 2 palpites para liberar a 2ª pista</span>
+      <!-- PISTA 2 (CORES FORTES E LETRAS NÍTIDAS) -->
+      <div id="clueRow2" class="flex items-center gap-1.5 p-1 rounded-xl bg-[#252b3b] border border-[#48536f] text-xs transition-all duration-300">
+        <span class="text-xs clue-ico">🔒</span>
+        <span class="font-black text-amber-400 clue-title text-[10.5px]">2ª PISTA:</span>
+        <span class="text-white font-bold text-[10px] clue-desc">Liberada na 2ª tentativa</span>
       </div>
 
-      <!-- PISTA 3 -->
-      <div id="clueRow3" class="flex items-center gap-1.5 p-1 rounded-lg bg-zinc-950/80 border border-zinc-800/70 opacity-40 text-[10px] transition-all duration-300">
-        <span class="text-[10px] clue-ico">🔒</span>
-        <span class="font-bold text-zinc-400 clue-title text-[9.5px]">3ª Pista:</span>
-        <span class="text-zinc-500 text-[9px] clue-desc">Tente 3 palpites para liberar a 3ª pista</span>
+      <!-- PISTA 3 (CORES FORTES E LETRAS NÍTIDAS) -->
+      <div id="clueRow3" class="flex items-center gap-1.5 p-1 rounded-xl bg-[#252b3b] border border-[#48536f] text-xs transition-all duration-300">
+        <span class="text-xs clue-ico">🔒</span>
+        <span class="font-black text-amber-400 clue-title text-[10.5px]">3ª PISTA:</span>
+        <span class="text-white font-bold text-[10px] clue-desc">Liberada na 3ª tentativa</span>
       </div>
 
-      <!-- PISTA 4 -->
-      <div id="clueRow4" class="flex items-center gap-1.5 p-1 rounded-lg bg-zinc-950/80 border border-zinc-800/70 opacity-40 text-[10px] transition-all duration-300">
-        <span class="text-[10px] clue-ico">🔒</span>
-        <span class="font-bold text-zinc-400 clue-title text-[9.5px]">4ª Pista:</span>
-        <span class="text-zinc-500 text-[9px] clue-desc">Tente 4 palpites para liberar a 4ª pista</span>
+      <!-- PISTA 4 (CORES FORTES E LETRAS NÍTIDAS) -->
+      <div id="clueRow4" class="flex items-center gap-1.5 p-1 rounded-xl bg-[#252b3b] border border-[#48536f] text-xs transition-all duration-300">
+        <span class="text-xs clue-ico">🔒</span>
+        <span class="font-black text-amber-400 clue-title text-[10.5px]">4ª PISTA:</span>
+        <span class="text-white font-bold text-[10px] clue-desc">Liberada na 4ª tentativa</span>
       </div>
     </div>
 
     <!-- SALDO DE CHAVES + ADICIONAR CHANCES PIX -->
-    <div class="flex items-center justify-between bg-zinc-950/90 border border-zinc-800 rounded-2xl px-2.5 py-1.5">
+    <div class="flex items-center justify-between bg-[#1d2230] border border-[#3f4961] rounded-2xl px-2.5 py-1.5">
       <div class="flex items-center gap-2">
         <span class="text-base">🔑</span>
         <div>
-          <span class="text-[8px] text-zinc-400 block font-medium">Chaves Restantes:</span>
-          <span class="text-[11px] font-black text-amber-400 font-mono" id="chancesDisplay">0 CHAVES</span>
+          <span class="text-[8px] text-zinc-300 block font-bold">Chaves Restantes:</span>
+          <span class="text-[11px] font-black text-amber-300 font-mono" id="chancesDisplay">0 CHAVES</span>
         </div>
       </div>
 
@@ -304,15 +304,6 @@
         <span>+5 Chaves</span>
         <span class="bg-black/25 text-zinc-950 px-1 py-0.2 rounded text-[8.5px] font-mono">R$ 4,99</span>
       </button>
-    </div>
-
-    <!-- RODAPÉ LEGAL DISCRETO -->
-    <div class="text-center pt-0.5 pb-1">
-      <p class="text-[7.5px] text-zinc-500 leading-tight">
-        Concurso de Habilidade Mental fundamentado no Art. 3º, II da Lei Federal nº 5.768/71 e Lei nº 14.790/23.
-        <br>Empresa Promotora CNPJ 63.425.775/0007-15 • IRRF 30% retido na fonte.
-        <a href="javascript:void(0)" onclick="openRulesModal()" class="text-amber-400/80 underline ml-1">Ver Termos</a>
-      </p>
     </div>
 
   </div>
@@ -392,7 +383,7 @@
     </div>
   </div>
 
-  <!-- MODAL DE LOGIN (RETORNO DE JOGADOR CADASTRADO) -->
+  <!-- MODAL DE LOGIN -->
   <div id="loginModal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-3">
     <div class="bg-zinc-900 border border-zinc-700 rounded-3xl max-w-xs w-full p-4 space-y-3 shadow-2xl">
       <div class="flex items-center justify-between border-b border-zinc-800 pb-2">
@@ -643,10 +634,10 @@
     let attemptsCount = 0;
 
     const CLUES = [
-      { num: 1, title: "1ª Pista", text: "O 1º número do segredo é ÍMPAR (1, 3, 5, 7 ou 9)" },
-      { num: 2, title: "2ª Pista", text: "O 2º número do segredo é PAR (0, 2, 4, 6 ou 8)" },
-      { num: 3, title: "3ª Pista", text: "O número 2 NÃO FAZ PARTE da combinação" },
-      { num: 4, title: "4ª Pista", text: "O número 9 NÃO FAZ PARTE da combinação" }
+      { num: 1, title: "1ª PISTA", text: "O 1º número do segredo é ÍMPAR (1, 3, 5, 7 ou 9)" },
+      { num: 2, title: "2ª PISTA", text: "O 2º número do segredo é PAR (0, 2, 4, 6 ou 8)" },
+      { num: 3, title: "3ª PISTA", text: "O número 2 NÃO FAZ PARTE da combinação" },
+      { num: 4, title: "4ª PISTA", text: "O número 9 NÃO FAZ PARTE da combinação" }
     ];
 
     window.addEventListener('DOMContentLoaded', () => {
@@ -694,12 +685,12 @@
       const actionEl = document.getElementById('playerAuthBtn');
       if (currentUser) {
         nameEl.innerText = `${currentUser.name.split(' ')[0]} (CPF ${currentUser.cpf.slice(0, 3)}...)`;
-        nameEl.classList.add('text-amber-300', 'font-bold');
+        nameEl.classList.add('text-amber-300', 'font-black');
         actionEl.innerText = "Trocar / Sair";
         actionEl.onclick = handleLogout;
       } else {
         nameEl.innerText = "Visitante";
-        nameEl.classList.remove('text-amber-300', 'font-bold');
+        nameEl.classList.remove('text-amber-300', 'font-black');
         actionEl.innerText = "Entrar / Cadastrar";
         actionEl.onclick = handleAuthAction;
       }
@@ -863,7 +854,7 @@
       playUnlockSound();
       const status = document.getElementById('statusMessage');
       status.innerText = "PAGAMENTO PIX CONFIRMADO! +5 CHAVES LIBERADAS.";
-      status.className = "w-full text-center text-[9.5px] font-black py-1 px-2 rounded-lg bg-emerald-950 border border-emerald-500 text-emerald-300 min-h-[24px] flex items-center justify-center";
+      status.className = "w-full text-center text-[9.5px] font-black py-1 px-2 rounded-lg bg-emerald-950 border border-emerald-500 text-emerald-300 min-h-[22px] flex items-center justify-center";
     }
 
     // ÁUDIO MECÂNICO & VIBRAÇÃO HÁPTICA NO CELULAR
@@ -933,10 +924,10 @@
         if (el) {
           if (currentDigits[i] !== undefined) {
             el.innerText = currentDigits[i];
-            el.classList.add('border-amber-400');
+            el.classList.add('border-amber-300', 'text-yellow-200');
           } else {
             el.innerText = "-";
-            el.classList.remove('border-amber-400');
+            el.classList.remove('border-amber-300', 'text-yellow-200');
           }
         }
       }
@@ -976,6 +967,7 @@
       else if (e.key === 'Escape') clearDigits();
     });
 
+    // PISTAS ESTRATÉGICAS (REVELAÇÃO COM CORES VIVAS E FORTES)
     function revealClues(attempt) {
       const unlockedCount = Math.min(attempt, 4);
       document.getElementById('clueBadge').innerText = `${unlockedCount} de 4 liberadas`;
@@ -985,13 +977,13 @@
         if (!row) continue;
         if (i <= unlockedCount) {
           const clue = CLUES[i - 1];
-          row.classList.remove('opacity-40');
-          row.classList.add('opacity-100', 'border-amber-500/50', 'bg-amber-500/10');
+          row.classList.remove('bg-[#252b3b]', 'border-[#48536f]');
+          row.classList.add('bg-amber-400/20', 'border-amber-400', 'shadow-md');
           row.querySelector('.clue-ico').innerText = '💡';
-          row.querySelector('.clue-title').classList.remove('text-zinc-400');
-          row.querySelector('.clue-title').classList.add('text-amber-400');
-          row.querySelector('.clue-desc').classList.remove('text-zinc-500');
-          row.querySelector('.clue-desc').classList.add('text-zinc-200');
+          row.querySelector('.clue-title').classList.remove('text-amber-400');
+          row.querySelector('.clue-title').classList.add('text-amber-300');
+          row.querySelector('.clue-desc').classList.remove('text-white');
+          row.querySelector('.clue-desc').classList.add('text-yellow-100', 'font-black');
           row.querySelector('.clue-desc').innerText = clue.text;
         }
       }
@@ -1007,7 +999,7 @@
       if (currentDigits.length < 5) {
         const status = document.getElementById('statusMessage');
         status.innerText = "Complete os 5 dígitos antes de girar!";
-        status.className = "w-full text-center text-[9.5px] font-bold py-1 px-2 rounded-lg bg-amber-950/80 border border-amber-600 text-amber-300 min-h-[24px] flex items-center justify-center";
+        status.className = "w-full text-center text-[9.5px] font-black py-0.5 px-2 rounded-lg bg-amber-950 border border-amber-500 text-amber-200 min-h-[22px] flex items-center justify-center";
         return;
       }
 
@@ -1026,7 +1018,6 @@
         chancesLeft = data.chancesLeft !== undefined ? data.chancesLeft : chancesLeft - 1;
         attemptsCount = data.attemptsCount !== undefined ? data.attemptsCount : attemptsCount + 1;
       } catch (err) {
-        // Fallback local se backend não responder
         chancesLeft--;
         attemptsCount++;
         won = (guessStr === "72039");
@@ -1039,7 +1030,7 @@
         playUnlockSound();
         const status = document.getElementById('statusMessage');
         status.innerText = "TRANCA DESTRAVADA! VOCÊ É O VENCEDOR!";
-        status.className = "w-full text-center text-[9.5px] font-black py-1 px-2 rounded-lg bg-emerald-950 border border-emerald-500 text-emerald-300 min-h-[24px] flex items-center justify-center";
+        status.className = "w-full text-center text-[9.5px] font-black py-1 px-2 rounded-lg bg-emerald-950 border border-emerald-400 text-emerald-200 min-h-[22px] flex items-center justify-center";
         
         document.getElementById('victoryPrize').innerText = document.getElementById('jackpotDisplay').innerText;
         document.getElementById('victoryWinnerName').innerText = currentUser.name;
@@ -1054,13 +1045,13 @@
 
         const status = document.getElementById('statusMessage');
         status.innerText = `Combinação incorreta! Tranca travada. (Pista #${Math.min(attemptsCount, 4)} liberada)`;
-        status.className = "w-full text-center text-[9.5px] font-semibold py-1 px-2 rounded-lg bg-red-950/70 border border-red-700/60 text-red-300 min-h-[24px] flex items-center justify-center";
+        status.className = "w-full text-center text-[9.5px] font-bold py-0.5 px-2 rounded-lg bg-red-950 border border-red-600 text-red-200 min-h-[22px] flex items-center justify-center";
 
         setTimeout(() => {
           clearDigits();
           if (chancesLeft === 0) {
             status.innerText = "Suas chaves acabaram! Adicione +5 chaves para continuar.";
-            status.className = "w-full text-center text-[9.5px] font-bold py-1 px-2 rounded-lg bg-amber-950/80 border border-amber-500 text-amber-300 min-h-[24px] flex items-center justify-center";
+            status.className = "w-full text-center text-[9.5px] font-bold py-0.5 px-2 rounded-lg bg-amber-950 border border-amber-500 text-amber-200 min-h-[22px] flex items-center justify-center";
           }
         }, 900);
       }
