@@ -1,363 +1,1096 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JOVX — The High-Probability Token Intelligence Engine</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- Google Fonts: JetBrains Mono & Inter -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/static/css/terminal.css">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        obsidian: '#09070F',
-                        surface: '#120F1D',
-                        surfaceBorder: '#231D38',
-                        jovxPurple: '#A855F7',
-                        jovxNeon: '#C084FC',
-                        jovxDarkPurple: '#6B21A8',
-                        alphaGreen: '#10B981',
-                        warningAmber: '#F59E0B',
-                        dangerRose: '#F43F5E'
-                    },
-                    fontFamily: {
-                        mono: ['"JetBrains Mono"', 'monospace'],
-                        sans: ['"Inter"', 'sans-serif'],
-                    }
-                }
-            }
-        }
-    </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#050608">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Desafio do Cofre | Torneio de Habilidade Mental</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    * {
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+    
+    body {
+      background-color: #050608;
+      color: #f4f4f5;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      min-height: 100vh;
+      min-height: 100dvh;
+    }
+
+    /* Textura da carcaça do cofre blindado */
+    .vault-outer-frame {
+      background: radial-gradient(circle at 50% 20%, #222630 0%, #12141a 60%, #090a0d 100%);
+      border: 3px solid #333845;
+      box-shadow: 
+        inset 0 2px 4px rgba(255, 255, 255, 0.15),
+        inset 0 -4px 8px rgba(0, 0, 0, 0.8),
+        0 15px 40px rgba(0, 0, 0, 0.9);
+    }
+
+    /* Rebaixo da porta blindada */
+    .vault-inner-door {
+      background: linear-gradient(165deg, #1b1e25 0%, #101217 50%, #0b0c10 100%);
+      box-shadow: 
+        inset 0 4px 12px rgba(0, 0, 0, 0.9),
+        inset 0 1px 2px rgba(255, 255, 255, 0.1),
+        0 2px 4px rgba(0, 0, 0, 0.6);
+      border: 1px solid #282c37;
+    }
+
+    /* Rebites de aço industrial nos cantos */
+    .bolt-rivet {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #8b92a2 0%, #3e4452 60%, #1b1e25 100%);
+      box-shadow: 
+        inset 0 1px 1px rgba(255, 255, 255, 0.6),
+        0 2px 4px rgba(0, 0, 0, 0.8);
+      position: absolute;
+    }
+
+    /* Brilho Dourado Metálico */
+    .gold-gradient-text {
+      background: linear-gradient(135deg, #fff7c2 0%, #facc15 35%, #ca8a04 70%, #854d0e 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .gold-metallic-btn {
+      background: linear-gradient(180deg, #fef08a 0%, #eab308 30%, #ca8a04 80%, #a16207 100%);
+      box-shadow: 
+        inset 0 1px 2px rgba(255, 255, 255, 0.6),
+        0 4px 12px rgba(202, 138, 4, 0.35),
+        0 2px 4px rgba(0, 0, 0, 0.6);
+      border: 1px solid #fef08a;
+    }
+    .gold-metallic-btn:active {
+      transform: translateY(2px) scale(0.98);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+    }
+
+    /* Teclas de Cofre Otimizadas para Toque no Celular */
+    .vault-key {
+      background: linear-gradient(180deg, #2a2e39 0%, #181b22 60%, #0f1015 100%);
+      border: 1px solid #3d4352;
+      box-shadow: 
+        inset 0 1px 1px rgba(255, 255, 255, 0.2),
+        0 3px 6px rgba(0, 0, 0, 0.6);
+      transition: all 0.08s ease;
+      user-select: none;
+    }
+    .vault-key:active {
+      transform: translateY(2px) scale(0.96);
+      box-shadow: 
+        inset 0 2px 4px rgba(0, 0, 0, 0.9),
+        0 1px 2px rgba(0, 0, 0, 0.4);
+      background: #14161c;
+      border-color: #facc15;
+    }
+
+    /* Visor Digital dos 5 Números */
+    .digit-box {
+      background: linear-gradient(180deg, #090b0e 0%, #030405 100%);
+      border: 1.5px solid rgba(234, 179, 8, 0.4);
+      box-shadow: 
+        inset 0 2px 6px rgba(0, 0, 0, 0.9),
+        0 0 10px rgba(234, 179, 8, 0.15);
+      text-shadow: 0 0 12px rgba(250, 204, 21, 0.7);
+    }
+
+    /* Anel de rolamento da tranca */
+    .dial-bearing-ring {
+      background: radial-gradient(circle, #252932 40%, #111317 75%, #08090b 100%);
+      box-shadow: 
+        inset 0 4px 10px rgba(0, 0, 0, 0.9),
+        0 0 20px rgba(0, 0, 0, 0.8),
+        0 0 25px rgba(234, 179, 8, 0.15);
+      border: 2.5px solid #3c4250;
+    }
+  </style>
 </head>
-<body class="bg-obsidian text-slate-200 font-sans min-h-screen selection:bg-jovxPurple selection:text-white antialiased overflow-x-hidden">
+<body class="flex flex-col items-center justify-start p-2 sm:p-4 select-none antialiased">
 
-    <!-- TOP TICKER BAR -->
-    <header class="border-b border-surfaceBorder bg-surface/80 backdrop-blur-md px-6 py-2.5 flex items-center justify-between text-xs font-mono">
-        <div class="flex items-center space-x-6">
-            <div class="flex items-center space-x-2">
-                <span class="relative flex h-2.5 w-2.5">
-                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-jovxPurple opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-jovxPurple"></span>
-                </span>
-                <span class="text-jovxNeon font-semibold tracking-wider">JOVX CORE ENGINE v2.4</span>
-            </div>
-            <div class="hidden md:flex items-center space-x-5 text-slate-400">
-                <span>SCANNED 24H: <strong class="text-white">24,890</strong></span>
-                <span class="text-surfaceBorder">|</span>
-                <span>RUG ELIMINATION RATE: <strong class="text-dangerRose">99.82%</strong></span>
-                <span class="text-surfaceBorder">|</span>
-                <span>CHAIN: <strong class="text-cyan-400">SOLANA (PUMP.FUN & RAYDIUM)</strong></span>
-                <span class="text-surfaceBorder">|</span>
-                <!-- LIVE COUNTDOWN DISPLAY -->
-                <span class="flex items-center space-x-1.5 text-jovxNeon font-bold">
-                    <i data-lucide="refresh-cw" class="w-3.5 h-3.5 animate-spin text-jovxNeon"></i>
-                    <span>NEXT SCAN IN: <span id="countdownTimer">15</span>s</span>
-                </span>
-            </div>
+  <!-- CONTAINER MOBILE PRINCIPAL (Perfeito para Celulares de 360px a 430px) -->
+  <div class="w-full max-w-[400px] vault-outer-frame rounded-[28px] p-2.5 sm:p-3.5 relative flex flex-col gap-2 my-auto shadow-2xl">
+    
+    <!-- 4 REBITES NOS CANTOS DA CARCAÇA -->
+    <div class="bolt-rivet top-2.5 left-2.5"></div>
+    <div class="bolt-rivet top-2.5 right-2.5"></div>
+    <div class="bolt-rivet bottom-2.5 left-2.5"></div>
+    <div class="bolt-rivet bottom-2.5 right-2.5"></div>
+
+    <!-- CABEÇALHO DO COFRE: IDENTIDADE DO TORNEIO -->
+    <div class="flex items-center justify-between px-2 pt-0.5">
+      <div class="flex items-center gap-1.5">
+        <span class="text-lg filter drop-shadow-[0_0_8px_rgba(250,204,21,0.6)]">⭐</span>
+        <div>
+          <h1 class="text-[11px] font-black tracking-widest text-white uppercase leading-none">
+            DESAFIO DO COFRE
+          </h1>
+          <p class="text-[8px] text-zinc-400 font-medium mt-0.5">Torneio de Habilidade • Desafio do Enigma</p>
         </div>
-
-        <div class="flex items-center space-x-4">
-            <div id="userTierBadge" onclick="toggleProTest()" title="Click to toggle Free / PRO Mode preview" class="cursor-pointer hidden sm:flex items-center space-x-1.5 px-2.5 py-1 rounded border border-surfaceBorder bg-surface hover:border-jovxPurple text-[11px] font-mono text-slate-400 transition select-none">
-                <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
-                <span id="userTierText">FREE TIER (5 PRO GEMS LOCKED)</span>
-            </div>
-            <button id="soundToggleBtn" onclick="toggleAudio()" class="px-2.5 py-1 rounded border border-surfaceBorder hover:border-jovxPurple/50 text-slate-400 hover:text-white transition flex items-center space-x-1.5">
-                <i data-lucide="volume-2" id="soundIcon" class="w-3.5 h-3.5 text-jovxNeon"></i>
-                <span id="soundLabel">SOUND: ON</span>
-            </button>
-            <button onclick="openLoginModal()" id="loginBtn" class="px-3 py-1 rounded-lg bg-surface border border-jovxPurple/70 hover:border-jovxNeon text-jovxNeon hover:text-white font-bold transition flex items-center space-x-1.5 shadow-md shadow-purple-900/30" title="Already subscribed? Access with your email on any device">
-                <i data-lucide="key" class="w-3.5 h-3.5 text-jovxNeon"></i>
-                <span>ALREADY PRO?</span>
-            </button>
-            <button onclick="openProModal()" id="headerUpgradeBtn" class="px-3 py-1 rounded bg-gradient-to-r from-jovxDarkPurple to-jovxPurple hover:from-purple-600 hover:to-jovxNeon text-white font-semibold transition shadow-lg shadow-purple-900/40 flex items-center space-x-1.5">
-                <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
-                <span>UPGRADE TO PRO ($19.90 / MONTH)</span>
-            </button>
-        </div>
-    </header>
-
-    <!-- MAIN COCKPIT -->
-    <main class="max-w-[1720px] mx-auto px-6 py-6 space-y-6">
-
-        <!-- HERO HEADER: THE PURPLE COW PHILOSOPHY -->
-        <section class="bg-gradient-to-b from-surface to-obsidian border border-surfaceBorder rounded-xl p-6 relative overflow-hidden shadow-2xl">
-            <!-- Glow background -->
-            <div class="absolute -top-24 -left-24 w-96 h-96 bg-jovxPurple/15 rounded-full blur-3xl pointer-events-none"></div>
-            <div class="absolute -bottom-24 -right-24 w-96 h-96 bg-alphaGreen/10 rounded-full blur-3xl pointer-events-none"></div>
-
-            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
-                <div class="space-y-2">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-10 h-10 rounded-lg bg-jovxPurple/20 border border-jovxPurple/50 flex items-center justify-center shadow-lg shadow-purple-500/20">
-                            <span class="font-mono text-xl font-black text-jovxNeon">J</span>
-                        </div>
-                        <h1 class="text-3xl font-extrabold tracking-tight text-white flex items-center space-x-3">
-                            <span>JOVX TERMINAL</span>
-                            <span class="text-xs font-mono uppercase px-2.5 py-0.5 rounded-full bg-jovxPurple/20 border border-jovxPurple text-jovxNeon tracking-widest">Multi-Chain Alpha Engine</span>
-                        </h1>
-                    </div>
-                    <p class="text-slate-400 text-sm max-w-3xl leading-relaxed">
-                        Eliminating 99.8% of blockchain noise and rugpulls. Isolating in real time the <strong class="text-white">Top 20 Mathematical High-Probability Memecoins</strong> across Solana, Base, and Ethereum with instant 1-click DEX execution.
-                    </p>
-                </div>
-
-                <!-- LIVE METRIC CARDS -->
-                <div class="grid grid-cols-3 gap-4 font-mono text-xs min-w-[380px]">
-                    <div class="bg-obsidian/80 border border-surfaceBorder p-3 rounded-lg">
-                        <div class="text-slate-500 uppercase">Live Alpha Signals</div>
-                        <div id="statActiveGems" class="text-xl font-bold text-jovxNeon mt-1">20 TOKENS</div>
-                        <div class="text-[10px] text-alphaGreen mt-0.5 font-sans">Multi-Chain Verified</div>
-                    </div>
-                    <div class="bg-obsidian/80 border border-surfaceBorder p-3 rounded-lg">
-                        <div class="text-slate-500 uppercase">Avg Score Filter</div>
-                        <div class="text-xl font-bold text-alphaGreen mt-1">&ge; 82 / 100</div>
-                        <div class="text-[10px] text-slate-400 mt-0.5 font-sans">High Conviction</div>
-                    </div>
-                    <div class="bg-obsidian/80 border border-surfaceBorder p-3 rounded-lg">
-                        <div class="text-slate-500 uppercase">Network Feed</div>
-                        <div class="text-xl font-bold text-white mt-1">REAL-TIME</div>
-                        <div class="text-[10px] text-jovxNeon mt-0.5 font-sans">Helius RPC Powered</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- FILTERS & ACTIONS BAR -->
-        <section class="space-y-3 bg-surface border border-surfaceBorder p-4 rounded-xl">
-            <!-- Row 1: Strategy Filters & Chains -->
-            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-                
-                <!-- Strategy Pills -->
-                <div class="flex items-center space-x-2 text-xs font-mono flex-wrap gap-y-2">
-                    <span class="text-slate-500 mr-2 flex items-center space-x-1">
-                        <i data-lucide="filter" class="w-3.5 h-3.5"></i>
-                        <span>STRATEGY:</span>
-                    </span>
-                    <button onclick="setFilter('ALL')" id="filter-ALL" class="filter-pill active px-3.5 py-1.5 rounded-lg border border-jovxPurple bg-jovxPurple/20 text-jovxNeon font-semibold transition">
-                        ALL VERIFIED (20)
-                    </button>
-                    <button onclick="setFilter('ALPHA')" id="filter-ALPHA" class="filter-pill px-3.5 py-1.5 rounded-lg border border-surfaceBorder hover:border-slate-600 text-slate-300 transition">
-                        🔥 HIGH ALPHA (&ge; 85)
-                    </button>
-                    <button onclick="setFilter('EARLY')" id="filter-EARLY" class="filter-pill px-3.5 py-1.5 rounded-lg border border-surfaceBorder hover:border-slate-600 text-slate-300 transition">
-                        💎 SUB-$500K GEMS
-                    </button>
-                    <button onclick="setFilter('WHALE')" id="filter-WHALE" class="filter-pill px-3.5 py-1.5 rounded-lg border border-surfaceBorder hover:border-slate-600 text-slate-300 transition">
-                        🐋 BUYER SURGE
-                    <button onclick="setFilter('FOMO')" id="filter-FOMO" class="filter-pill px-3.5 py-1.5 rounded-lg border border-surfaceBorder hover:border-slate-600 text-slate-300 transition">
-                        ⚡ FOMO GEMS
-                    </button>
-                </div>
-
-                <!-- Chain Pills (Multi-Chain Engine) -->
-                <div class="flex items-center space-x-2 text-xs font-mono">
-                    <span class="text-slate-500 mr-1">CHAIN:</span>
-                    <button onclick="setChainFilter('ALL')" id="chain-ALL" class="chain-pill active px-2.5 py-1 rounded border border-jovxPurple bg-jovxPurple/20 text-jovxNeon font-semibold transition">
-                        ALL (20)
-                    </button>
-                    <button onclick="setChainFilter('SOLANA')" id="chain-SOLANA" class="chain-pill px-2.5 py-1 rounded border border-surfaceBorder hover:border-slate-600 text-slate-300 transition">
-                        🟣 SOLANA
-                    </button>
-                </div>
-
-            </div>
-
-            <!-- Row 2: Search & Refresh -->
-            <div class="flex items-center justify-between pt-2 border-t border-surfaceBorder/60 text-xs font-mono">
-                <div class="relative w-full max-w-md">
-                    <input type="text" id="searchInput" oninput="handleSearch()" placeholder="Search token name, symbol or contract..." class="w-full bg-obsidian border border-surfaceBorder rounded-lg px-3.5 py-2 pl-9 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-jovxPurple transition">
-                    <i data-lucide="search" class="w-3.5 h-3.5 text-slate-500 absolute left-3 top-2.5"></i>
-                </div>
-                <div class="flex items-center space-x-3 text-slate-400">
-                    <span>Press <kbd class="px-1.5 py-0.5 rounded bg-surfaceBorder text-slate-300 text-[10px]">CTRL + C</kbd> to copy CA</span>
-                    <button onclick="fetchTokens(true)" class="px-3 py-1.5 rounded-lg bg-surface border border-surfaceBorder hover:border-jovxPurple text-slate-300 hover:text-white transition flex items-center space-x-1.5 group" title="Force Refresh">
-                        <i data-lucide="rotate-cw" class="w-3.5 h-3.5 text-jovxNeon group-hover:rotate-180 transition-transform duration-500"></i>
-                        <span>FORCE SCAN</span>
-                    </button>
-                </div>
-            </div>
-        </section>
-
-        <!-- TOKEN MATRIX TABLE (DESKTOP PRO TRADER VIEW) -->
-        <section class="bg-surface border border-surfaceBorder rounded-xl overflow-hidden shadow-2xl">
-            <div class="overflow-x-auto">
-                <table class="w-full text-left text-xs font-mono border-collapse">
-                    <thead>
-                        <tr class="border-b border-surfaceBorder bg-obsidian/60 text-slate-400 uppercase text-[11px] tracking-wider select-none">
-                            <th class="py-3.5 px-4 w-12 text-center">#</th>
-                            <th class="py-3.5 px-4">TOKEN / NETWORK</th>
-                            <th class="py-3.5 px-4 text-center">JOVX PROBABILITY SCORE</th>
-                            <th class="py-3.5 px-4 text-right">PRICE (USD)</th>
-                            <th class="py-3.5 px-4 text-right">MARKET CAP</th>
-                            <th class="py-3.5 px-4 text-right">LIQUIDITY</th>
-                            <th class="py-3.5 px-4 text-right">24H VOLUME</th>
-                            <th class="py-3.5 px-4 text-center">BUY / SELL PRESSURE</th>
-                            <th class="py-3.5 px-4 text-center">AGE</th>
-                            <th class="py-3.5 px-4 text-center">ALPHA SIGNAL 🎯</th>
-                            <th class="py-3.5 px-4 text-center">DIRECT BUY / TRADE</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tokenTableBody" class="divide-y divide-surfaceBorder/60">
-                        <tr>
-                            <td colspan="11" class="py-20 text-center text-slate-500 font-mono">
-                                <div class="flex flex-col items-center justify-center space-y-3">
-                                    <div class="w-8 h-8 border-2 border-jovxPurple border-t-transparent rounded-full animate-spin"></div>
-                                    <span>RUNNING DEEP SCAN ACROSS SOLANA (PUMP.FUN & RAYDIUM)...</span>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- TABLE FOOTER -->
-            <div class="border-t border-surfaceBorder px-6 py-3 flex items-center justify-between text-xs font-mono text-slate-400 bg-obsidian/40">
-                <div class="flex items-center space-x-2">
-                    <span class="inline-block w-2 h-2 rounded-full bg-alphaGreen"></span>
-                    <span>MULTI-CHAIN DECENTRALIZED DATA FEED (ZERO LAG)</span>
-                </div>
-                <div class="flex items-center space-x-4">
-                    <span>Showing <strong id="tokenCountLabel" class="text-white">20</strong> High-Probability Pairs</span>
-                    <button onclick="openProModal()" class="text-jovxNeon hover:underline flex items-center space-x-1">
-                        <span>Unlock Instant Webhook & Telegram Alerts</span>
-                        <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
-                    </button>
-                </div>
-            </div>
-        </section>
-
-    </main>
-
-    <!-- PRO UPGRADE MODAL (STRIPE CHECKOUT) -->
-    <div id="proModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-surface border border-jovxPurple/60 rounded-2xl max-w-lg w-full p-8 relative shadow-2xl shadow-purple-900/50">
-            <button onclick="closeProModal()" class="absolute top-5 right-5 text-slate-400 hover:text-white transition">
-                <i data-lucide="x" class="w-5 h-5"></i>
-            </button>
-
-            <div class="space-y-6">
-                <div class="flex items-center space-x-3">
-                    <div class="w-12 h-12 rounded-xl bg-jovxPurple/20 border border-jovxPurple flex items-center justify-center shadow-lg shadow-purple-500/30">
-                        <i data-lucide="zap" class="w-6 h-6 text-jovxNeon"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-2xl font-extrabold text-white">JOVX PRO PASS</h3>
-                        <p class="text-xs font-mono text-jovxNeon">High-Conviction Memecoin Intelligence</p>
-                    </div>
-                </div>
-
-                <div class="space-y-3 text-sm text-slate-300">
-                    <div class="flex items-start space-x-3">
-                        <i data-lucide="check-circle" class="w-5 h-5 text-alphaGreen shrink-0 mt-0.5"></i>
-                        <span><strong>Uncensored Top #1 - #5 Alpha Gems:</strong> Instant real-time unlock of the highest-scoring breakout tokens before the public wave.</span>
-                    </div>
-                    <div class="flex items-start space-x-3">
-                        <i data-lucide="check-circle" class="w-5 h-5 text-alphaGreen shrink-0 mt-0.5"></i>
-                        <span><strong>Zero-Delay Realtime Feed:</strong> Live Block-0 signals on Solana, Base, and Ethereum with sub-second WebSocket updates.</span>
-                    </div>
-                    <div class="flex items-start space-x-3">
-                        <i data-lucide="check-circle" class="w-5 h-5 text-alphaGreen shrink-0 mt-0.5"></i>
-                        <span><strong>99.8% Rug-Pull Shield:</strong> Real-time LP lock verification, honeypot elimination, and aggressive anti-dump kill switches.</span>
-                    </div>
-                    <div class="flex items-start space-x-3">
-                        <i data-lucide="check-circle" class="w-5 h-5 text-alphaGreen shrink-0 mt-0.5"></i>
-                        <span><strong>1-Click Instant DEX Execution:</strong> Direct swap routing to Jupiter, Uniswap, and Raydium.</span>
-                    </div>
-                </div>
-
-                <div class="border-t border-surfaceBorder pt-6 flex items-center justify-between">
-                    <div>
-                        <div class="text-3xl font-black text-white">$19.90 <span class="text-xs font-normal text-slate-400">/ Month</span></div>
-                        <div class="text-[11px] text-jovxNeon font-semibold">VIP Monthly Access Pass</div>
-                        <div class="text-[10px] text-alphaGreen mt-0.5">Recurring monthly access. Cancel anytime. 100% Secure via Stripe.</div>
-                    </div>
-                    <button onclick="startStripeCheckout()" id="stripeCheckoutBtn" class="px-6 py-3 rounded-xl bg-gradient-to-r from-jovxDarkPurple via-jovxPurple to-jovxNeon text-white font-bold hover:shadow-lg hover:shadow-purple-500/40 transition flex items-center space-x-2">
-                        <span>Unlock Monthly ($19.90/mo)</span>
-                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-    <!-- LOGIN / RESTORE ACCESS MODAL -->
-    <div id="loginModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-surface border border-jovxPurple/60 rounded-2xl max-w-md w-full p-6 relative shadow-2xl shadow-purple-900/50">
-            <button onclick="closeLoginModal()" class="absolute top-5 right-5 text-slate-400 hover:text-white transition">
-                <i data-lucide="x" class="w-5 h-5"></i>
-            </button>
-            <div class="space-y-4">
-                <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 rounded-xl bg-jovxPurple/20 border border-jovxPurple flex items-center justify-center">
-                        <i data-lucide="key" class="w-5 h-5 text-jovxNeon"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-xl font-bold text-white">PRO Access (Monthly)</h3>
-                        <p class="text-xs text-slate-400">Restore access on any phone, tablet, or desktop</p>
-                    </div>
-                </div>
-                <p class="text-xs text-slate-300">
-                    Enter the same <strong>email address</strong> you used at Stripe checkout to unlock the terminal.
-                </p>
-                <div class="space-y-2">
-                    <input type="email" id="loginEmailInput" placeholder="your-email@example.com" class="w-full bg-obsidian border border-surfaceBorder rounded-lg px-3.5 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-jovxPurple font-mono text-sm">
-                    <div id="loginFeedback" class="text-xs font-mono hidden"></div>
-                </div>
-                <div class="flex items-center justify-end space-x-2 pt-2">
-                    <button onclick="closeLoginModal()" class="px-4 py-2 rounded-lg bg-surface border border-surfaceBorder text-slate-400 hover:text-white text-xs font-semibold">Cancel</button>
-                    <button onclick="submitVerifyEmail()" id="verifyEmailBtn" class="px-5 py-2 rounded-lg bg-jovxPurple hover:bg-purple-600 text-white text-xs font-bold transition flex items-center space-x-1.5 shadow-lg shadow-purple-900/40">
-                        <i data-lucide="check" class="w-4 h-4"></i>
-                        <span>Verify & Unlock</span>
-                    </button>
-                </div>
-            </div>
-        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <button onclick="openRulesModal()" class="text-[9px] text-zinc-400 hover:text-amber-300 underline font-medium">
+          Regras
+        </button>
+        <button onclick="toggleAdminModal()" class="text-zinc-600 hover:text-amber-400 p-0.5 text-xs">
+          ⚙️
+        </button>
+      </div>
     </div>
 
-    <!-- POST-PAYMENT ACTIVATION MODAL -->
-    <div id="activateModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-surface border border-emerald-500/60 rounded-2xl max-w-md w-full p-6 relative shadow-2xl shadow-emerald-900/50">
-            <div class="space-y-4">
-                <div class="flex items-center space-x-3">
-                    <div class="w-12 h-12 rounded-xl bg-emerald-500/20 border border-emerald-500 flex items-center justify-center">
-                        <i data-lucide="check-circle" class="w-6 h-6 text-alphaGreen"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-xl font-black text-white">🎉 Payment Confirmed!</h3>
-                        <p class="text-xs text-alphaGreen font-mono font-semibold">JOVX PRO — Monthly Active Pass</p>
-                    </div>
-                </div>
-                <p class="text-xs text-slate-300">
-                    To lock in your <strong>monthly VIP access</strong> across all your devices, confirm your <strong>email</strong> below:
-                </p>
-                <div class="space-y-2">
-                    <input type="email" id="activateEmailInput" placeholder="your-stripe-email@example.com" class="w-full bg-obsidian border border-surfaceBorder rounded-lg px-3.5 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-alphaGreen font-mono text-sm">
-                    <div id="activateFeedback" class="text-xs font-mono hidden"></div>
-                </div>
-                <button onclick="submitRegisterEmail()" id="registerEmailBtn" class="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-alphaGreen text-obsidian font-black text-sm transition flex items-center justify-center space-x-2 shadow-lg shadow-emerald-900/40">
-                    <i data-lucide="sparkles" class="w-4 h-4"></i>
-                    <span>Activate My 90-Day Access Now</span>
-                </button>
-            </div>
+    <!-- BARRA DO COMPETIDOR / SESSÃO ATIVA -->
+    <div id="playerSessionBar" class="flex items-center justify-between bg-zinc-950/80 border border-zinc-800/80 rounded-xl px-2.5 py-1 text-[9px]">
+      <div class="flex items-center gap-1.5 text-zinc-400">
+        <span class="text-xs">👤</span>
+        <span id="playerSessionName" class="font-medium text-zinc-300 truncate max-w-[170px]">Visitante</span>
+      </div>
+      <div id="playerSessionActions">
+        <button onclick="handleAuthAction()" id="playerAuthBtn" class="text-amber-400 hover:text-amber-300 font-bold underline">
+          Entrar / Cadastrar
+        </button>
+      </div>
+    </div>
+
+    <!-- PORTA INTERNA DO COFRE (ÁREA DE ENGENHARIA METÁLICA) -->
+    <div class="vault-inner-door rounded-2xl p-2.5 flex flex-col items-center relative">
+      
+      <!-- MINI VISOR OLED DO VALOR ACUMULADO (CENTRALIZADO) -->
+      <div class="w-full flex flex-col items-center justify-center bg-black/85 border border-zinc-800 rounded-xl py-1.5 px-2.5 mb-1.5 shadow-inner text-center">
+        <div class="flex items-center gap-1.5">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
+          <span class="text-[8px] text-zinc-400 uppercase tracking-widest font-semibold">Cofre Acumulado</span>
         </div>
+        <div class="text-base sm:text-lg font-black text-amber-400 font-mono tracking-tight leading-tight my-0.5" id="jackpotDisplay">
+          R$ 3.424,50
+        </div>
+        <span class="text-[7.5px] text-emerald-400 font-bold uppercase tracking-wider">
+          Para quem desvendar o enigma
+        </span>
+      </div>
+
+      <!-- SEÇÃO DA TRANCA DOURADA (IMAGEM 3D DE ALTA DEFINIÇÃO + MARCADOR) -->
+      <div class="relative flex flex-col items-center justify-center my-0.5">
+        
+        <!-- INDICADOR TRIANGULAR DE PRECISÃO NO TOPO -->
+        <div class="z-20 -mb-1.5 flex flex-col items-center">
+          <div class="w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-t-[7px] border-t-amber-400 filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]"></div>
+        </div>
+
+        <!-- ANEL DE ROLAMENTO E DISCO DOURADO 3D (Tamanho Otimizado para Mobile) -->
+        <div class="dial-bearing-ring rounded-full p-1.5 relative cursor-pointer active:scale-98 transition" onclick="clickVaultWheel()">
+          <div class="w-32 h-32 sm:w-36 sm:h-36 rounded-full overflow-hidden flex items-center justify-center relative">
+            <img id="vaultWheel" src="/static/dial_luxo.png" alt="Disco Dourado do Cofre"
+              class="w-full h-full object-cover transition-transform duration-700 ease-out select-none pointer-events-none drop-shadow-2xl" />
+          </div>
+        </div>
+
+        <span class="text-[8px] text-amber-400/80 font-mono tracking-widest uppercase font-bold mt-1">
+          COMBINAÇÃO MECÂNICA • 5 DÍGITOS
+        </span>
+      </div>
+
+      <!-- DISPLAY OLED DO SEGREDO (5 DÍGITOS) -->
+      <div class="flex items-center justify-center gap-1.5 my-1.5 w-full">
+        <div id="digit-0" class="digit-box w-11 h-13 sm:w-12 sm:h-14 rounded-xl flex items-center justify-center text-2xl sm:text-3xl font-black font-mono text-amber-300">
+          -
+        </div>
+        <div id="digit-1" class="digit-box w-11 h-13 sm:w-12 sm:h-14 rounded-xl flex items-center justify-center text-2xl sm:text-3xl font-black font-mono text-amber-300">
+          -
+        </div>
+        <div id="digit-2" class="digit-box w-11 h-13 sm:w-12 sm:h-14 rounded-xl flex items-center justify-center text-2xl sm:text-3xl font-black font-mono text-amber-300">
+          -
+        </div>
+        <div id="digit-3" class="digit-box w-11 h-13 sm:w-12 sm:h-14 rounded-xl flex items-center justify-center text-2xl sm:text-3xl font-black font-mono text-amber-300">
+          -
+        </div>
+        <div id="digit-4" class="digit-box w-11 h-13 sm:w-12 sm:h-14 rounded-xl flex items-center justify-center text-2xl sm:text-3xl font-black font-mono text-amber-300">
+          -
+        </div>
+      </div>
+
+      <!-- MENSAGEM DE STATUS DO COFRE (LIMPO, SEM 'PASSOU PERTO') -->
+      <div id="statusMessage" class="w-full text-center text-[9.5px] font-semibold py-1 px-2 rounded-lg bg-black/70 border border-zinc-800 text-zinc-300 min-h-[24px] flex items-center justify-center">
+        Digite a senha no teclado ou toque abaixo
+      </div>
+
+      <!-- TECLADO NUMÉRICO TÁTIL DE COFRE (ERGONÔMICO PARA DEDOS) -->
+      <div class="w-full max-w-[270px] mt-1.5 space-y-1.5">
+        <div class="grid grid-cols-3 gap-1.5">
+          <button onclick="pressDigit(1)" class="vault-key h-11 rounded-xl text-lg font-mono font-black text-amber-300">1</button>
+          <button onclick="pressDigit(2)" class="vault-key h-11 rounded-xl text-lg font-mono font-black text-amber-300">2</button>
+          <button onclick="pressDigit(3)" class="vault-key h-11 rounded-xl text-lg font-mono font-black text-amber-300">3</button>
+
+          <button onclick="pressDigit(4)" class="vault-key h-11 rounded-xl text-lg font-mono font-black text-amber-300">4</button>
+          <button onclick="pressDigit(5)" class="vault-key h-11 rounded-xl text-lg font-mono font-black text-amber-300">5</button>
+          <button onclick="pressDigit(6)" class="vault-key h-11 rounded-xl text-lg font-mono font-black text-amber-300">6</button>
+
+          <button onclick="pressDigit(7)" class="vault-key h-11 rounded-xl text-lg font-mono font-black text-amber-300">7</button>
+          <button onclick="pressDigit(8)" class="vault-key h-11 rounded-xl text-lg font-mono font-black text-amber-300">8</button>
+          <button onclick="pressDigit(9)" class="vault-key h-11 rounded-xl text-lg font-mono font-black text-amber-300">9</button>
+
+          <button onclick="clearDigits()" class="vault-key h-11 rounded-xl text-[9px] font-bold text-red-400 uppercase tracking-tight">Limpar</button>
+          <button onclick="pressDigit(0)" class="vault-key h-11 rounded-xl text-lg font-mono font-black text-amber-300">0</button>
+          <button onclick="backspaceDigit()" class="vault-key h-11 rounded-xl text-sm font-bold text-zinc-400">⌫</button>
+        </div>
+
+        <!-- BOTÃO DE AÇÃO MECÂNICA: DESTRAVAR COFRE -->
+        <button onclick="submitGuess()" class="gold-metallic-btn w-full py-2.5 rounded-xl font-black text-[11px] uppercase tracking-wider text-zinc-950 flex items-center justify-center gap-1.5 shadow-lg">
+          <span>DESTRAVAR TRANCA DO COFRE</span>
+          <span class="text-xs">🔓</span>
+        </button>
+      </div>
+
     </div>
 
-    <!-- TOAST NOTIFICATION -->
-    <div id="toast" class="fixed bottom-6 right-6 px-4 py-2.5 rounded-lg bg-surface border border-jovxPurple text-white text-xs font-mono shadow-2xl flex items-center space-x-2 transform translate-y-20 opacity-0 transition-all duration-300 z-50">
-        <i data-lucide="check" class="w-4 h-4 text-alphaGreen"></i>
-        <span id="toastMsg">Contract Address Copied!</span>
+    <!-- PAINEL DAS 4 PISTAS PROGRESSIVAS (LIBERAÇÃO POR TENTATIVA) -->
+    <div class="bg-black/60 border border-zinc-800/90 rounded-2xl p-2 space-y-1">
+      <div class="flex items-center justify-between mb-0.5 px-0.5">
+        <h3 class="text-[9px] font-bold uppercase tracking-wider text-zinc-300 flex items-center gap-1">
+          <span>🧩</span> Pistas Estratégicas do Segredo
+        </h3>
+        <span id="clueBadge" class="text-[8px] bg-amber-500/15 text-amber-300 font-bold px-1.5 py-0.2 rounded-full border border-amber-500/30">
+          0 de 4 liberadas
+        </span>
+      </div>
+
+      <!-- PISTA 1 -->
+      <div id="clueRow1" class="flex items-center gap-1.5 p-1 rounded-lg bg-zinc-950/80 border border-zinc-800/70 opacity-40 text-[10px] transition-all duration-300">
+        <span class="text-[10px] clue-ico">🔒</span>
+        <span class="font-bold text-zinc-400 clue-title text-[9.5px]">1ª Pista:</span>
+        <span class="text-zinc-500 text-[9px] clue-desc">Tente 1 palpite para liberar a 1ª pista</span>
+      </div>
+
+      <!-- PISTA 2 -->
+      <div id="clueRow2" class="flex items-center gap-1.5 p-1 rounded-lg bg-zinc-950/80 border border-zinc-800/70 opacity-40 text-[10px] transition-all duration-300">
+        <span class="text-[10px] clue-ico">🔒</span>
+        <span class="font-bold text-zinc-400 clue-title text-[9.5px]">2ª Pista:</span>
+        <span class="text-zinc-500 text-[9px] clue-desc">Tente 2 palpites para liberar a 2ª pista</span>
+      </div>
+
+      <!-- PISTA 3 -->
+      <div id="clueRow3" class="flex items-center gap-1.5 p-1 rounded-lg bg-zinc-950/80 border border-zinc-800/70 opacity-40 text-[10px] transition-all duration-300">
+        <span class="text-[10px] clue-ico">🔒</span>
+        <span class="font-bold text-zinc-400 clue-title text-[9.5px]">3ª Pista:</span>
+        <span class="text-zinc-500 text-[9px] clue-desc">Tente 3 palpites para liberar a 3ª pista</span>
+      </div>
+
+      <!-- PISTA 4 -->
+      <div id="clueRow4" class="flex items-center gap-1.5 p-1 rounded-lg bg-zinc-950/80 border border-zinc-800/70 opacity-40 text-[10px] transition-all duration-300">
+        <span class="text-[10px] clue-ico">🔒</span>
+        <span class="font-bold text-zinc-400 clue-title text-[9.5px]">4ª Pista:</span>
+        <span class="text-zinc-500 text-[9px] clue-desc">Tente 4 palpites para liberar a 4ª pista</span>
+      </div>
     </div>
 
-    <!-- Scripts -->
-    <script src="/static/js/terminal.js"></script>
-    <script>
-        lucide.createIcons();
-    </script>
+    <!-- SALDO DE CHAVES + ADICIONAR CHANCES PIX -->
+    <div class="flex items-center justify-between bg-zinc-950/90 border border-zinc-800 rounded-2xl px-2.5 py-1.5">
+      <div class="flex items-center gap-2">
+        <span class="text-base">🔑</span>
+        <div>
+          <span class="text-[8px] text-zinc-400 block font-medium">Chaves Restantes:</span>
+          <span class="text-[11px] font-black text-amber-400 font-mono" id="chancesDisplay">0 CHAVES</span>
+        </div>
+      </div>
+
+      <button onclick="handleBuyKeysClick()" class="bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-black text-[11px] px-3 py-1.5 rounded-xl shadow active:scale-95 transition flex items-center gap-1.5">
+        <span>+5 Chaves</span>
+        <span class="bg-black/25 text-zinc-950 px-1 py-0.2 rounded text-[8.5px] font-mono">R$ 4,99</span>
+      </button>
+    </div>
+
+    <!-- RODAPÉ LEGAL DISCRETO -->
+    <div class="text-center pt-0.5 pb-1">
+      <p class="text-[7.5px] text-zinc-500 leading-tight">
+        Concurso de Habilidade Mental fundamentado no Art. 3º, II da Lei Federal nº 5.768/71 e Lei nº 14.790/23.
+        <br>Empresa Promotora CNPJ 63.425.775/0007-15 • IRRF 30% retido na fonte.
+        <a href="javascript:void(0)" onclick="openRulesModal()" class="text-amber-400/80 underline ml-1">Ver Termos</a>
+      </p>
+    </div>
+
+  </div>
+
+  <!-- MODAL 1: IDENTIFICAÇÃO DO COMPETIDOR & REGULAMENTO -->
+  <div id="registerModal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-3 overflow-y-auto">
+    <div class="bg-zinc-900 border border-zinc-700 rounded-3xl max-w-sm w-full p-4 space-y-3 shadow-2xl my-auto">
+      
+      <div class="flex items-center justify-between border-b border-zinc-800 pb-2">
+        <div>
+          <h3 class="text-xs font-bold text-white flex items-center gap-1.5">
+            <span>🛡️</span> Identificação do Competidor
+          </h3>
+          <p class="text-[8.5px] text-zinc-400">Necessário para resgate seguro do prêmio via PIX</p>
+        </div>
+        <button onclick="closeRegisterModal()" class="text-zinc-500 hover:text-white p-1">✕</button>
+      </div>
+
+      <form id="registerForm" onsubmit="handleRegisterSubmit(event)" class="space-y-2 text-xs">
+        <div>
+          <label class="text-[9.5px] text-zinc-300 font-semibold block mb-0.5">Nome Completo:</label>
+          <input type="text" id="regName" required placeholder="Seu nome completo" class="w-full bg-zinc-950 border border-zinc-700 rounded-xl px-2.5 py-1.5 text-white focus:outline-none focus:border-amber-400 text-xs">
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="text-[9.5px] text-zinc-300 font-semibold block mb-0.5">CPF:</label>
+            <input type="tel" id="regCpf" required placeholder="000.000.000-00" maxlength="14" oninput="maskCpf(this)" class="w-full bg-zinc-950 border border-zinc-700 rounded-xl px-2.5 py-1.5 text-white font-mono focus:outline-none focus:border-amber-400 text-xs">
+          </div>
+          <div>
+            <label class="text-[9.5px] text-zinc-300 font-semibold block mb-0.5">WhatsApp:</label>
+            <input type="tel" id="regPhone" required placeholder="(00) 00000-0000" maxlength="15" oninput="maskPhone(this)" class="w-full bg-zinc-950 border border-zinc-700 rounded-xl px-2.5 py-1.5 text-white font-mono focus:outline-none focus:border-amber-400 text-xs">
+          </div>
+        </div>
+
+        <div>
+          <label class="text-[9.5px] text-zinc-300 font-semibold block mb-0.5">Chave PIX (Para Receber o Prêmio):</label>
+          <div class="grid grid-cols-3 gap-1.5 mb-1">
+            <select id="regPixType" class="bg-zinc-950 border border-zinc-700 rounded-xl px-1.5 py-1.5 text-[9px] text-zinc-300 focus:outline-none focus:border-amber-400">
+              <option value="cpf">CPF</option>
+              <option value="telefone">Celular</option>
+              <option value="email">E-mail</option>
+              <option value="aleatoria">Aleatória</option>
+            </select>
+            <input type="text" id="regPixKey" required placeholder="Chave PIX do titular" class="col-span-2 bg-zinc-950 border border-zinc-700 rounded-xl px-2.5 py-1.5 text-white font-mono text-[10.5px] focus:outline-none focus:border-amber-400">
+          </div>
+        </div>
+
+        <div>
+          <label class="text-[9.5px] text-zinc-300 font-semibold block mb-0.5">Criar Senha de Acesso (PIN 4 a 6 dígitos):</label>
+          <input type="password" id="regPassword" required placeholder="Para entrar depois" maxlength="8" class="w-full bg-zinc-950 border border-zinc-700 rounded-xl px-2.5 py-1.5 text-white font-mono focus:outline-none focus:border-amber-400 text-xs">
+        </div>
+
+        <!-- ACEITE DOS TERMOS LEGAIS -->
+        <div class="bg-black/60 p-2 rounded-xl border border-zinc-800 space-y-1">
+          <label class="flex items-start gap-2 cursor-pointer">
+            <input type="checkbox" id="regTerms" required class="mt-0.5 accent-amber-500 rounded">
+            <span class="text-[8px] text-zinc-300 leading-tight">
+              Declaro ter +18 anos e concordo com o 
+              <a href="javascript:void(0)" onclick="openRulesModal()" class="text-amber-400 underline font-bold">Regulamento Oficial do Torneio</a>.
+              Estou ciente de que o prêmio acumula progressivamente e de que a premiação é líquida com retenção de IRRF (CNPJ 63.425.775/0007-15).
+            </span>
+          </label>
+        </div>
+
+        <button type="submit" class="w-full py-2.5 rounded-xl gold-metallic-btn text-zinc-950 font-black text-xs uppercase tracking-wider shadow hover:brightness-110 active:scale-95 transition mt-2">
+          CONFIRMAR E GERAR PIX (R$ 4,99)
+        </button>
+      </form>
+
+      <div class="text-center pt-1 border-t border-zinc-800/80">
+        <button onclick="switchToLoginModal()" class="text-[9.5px] text-zinc-400 hover:text-amber-300 underline">
+          Já tem cadastro? Entrar com CPF e Senha
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MODAL DE LOGIN (RETORNO DE JOGADOR CADASTRADO) -->
+  <div id="loginModal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-3">
+    <div class="bg-zinc-900 border border-zinc-700 rounded-3xl max-w-xs w-full p-4 space-y-3 shadow-2xl">
+      <div class="flex items-center justify-between border-b border-zinc-800 pb-2">
+        <h3 class="text-xs font-bold text-white flex items-center gap-1.5">
+          <span>🔐</span> Acessar Minha Conta
+        </h3>
+        <button onclick="closeLoginModal()" class="text-zinc-500 hover:text-white">✕</button>
+      </div>
+
+      <form onsubmit="handleLoginSubmit(event)" class="space-y-2.5 text-xs">
+        <div>
+          <label class="text-[9.5px] text-zinc-300 font-semibold block mb-0.5">CPF:</label>
+          <input type="tel" id="loginCpf" required placeholder="000.000.000-00" maxlength="14" oninput="maskCpf(this)" class="w-full bg-zinc-950 border border-zinc-700 rounded-xl px-2.5 py-1.5 text-white font-mono focus:outline-none focus:border-amber-400 text-xs">
+        </div>
+        <div>
+          <label class="text-[9.5px] text-zinc-300 font-semibold block mb-0.5">Senha / PIN:</label>
+          <input type="password" id="loginPassword" required placeholder="Sua senha cadastrada" class="w-full bg-zinc-950 border border-zinc-700 rounded-xl px-2.5 py-1.5 text-white font-mono focus:outline-none focus:border-amber-400 text-xs">
+        </div>
+
+        <button type="submit" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-zinc-950 font-bold uppercase tracking-wider text-xs shadow active:scale-95 transition">
+          ENTRAR E JOGAR
+        </button>
+      </form>
+
+      <div class="text-center pt-1 border-t border-zinc-800/80">
+        <button onclick="switchToRegisterModal()" class="text-[9.5px] text-zinc-400 hover:text-amber-300 underline">
+          Não tem cadastro? Crie sua conta grátis
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 2: PAGAMENTO PIX (COPIA E COLA + QR CODE) -->
+  <div id="pixModal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-3 overflow-y-auto">
+    <div class="bg-zinc-900 border border-zinc-700 rounded-3xl max-w-sm w-full p-4 space-y-3 shadow-2xl my-auto">
+      
+      <div class="flex items-center justify-between border-b border-zinc-800 pb-2">
+        <div class="flex items-center gap-2">
+          <span class="w-6 h-6 rounded-lg bg-emerald-500 flex items-center justify-center text-zinc-950 font-black text-xs">⚡</span>
+          <div>
+            <h3 class="text-xs font-bold text-white">Pacote +5 Chaves</h3>
+            <p class="text-[8.5px] text-zinc-400" id="pixModalUserDesc">Competidor Identificado</p>
+          </div>
+        </div>
+        <button onclick="closePixModal()" class="text-zinc-500 hover:text-white p-1">✕</button>
+      </div>
+
+      <!-- VALOR E BENEFÍCIO -->
+      <div class="bg-black/60 border border-zinc-800 rounded-2xl p-2.5 text-center">
+        <span class="text-2xl font-black text-emerald-400 font-mono">R$ 4,99</span>
+        <div class="text-[9.5px] text-zinc-300 font-semibold mt-0.5">
+          Libera <span class="text-amber-400 font-bold">5 Tentativas</span> de abrir o cofre
+        </div>
+        <p class="text-[7.5px] text-zinc-500 mt-0.5">R$ 1,50 (30%) entra direto no prêmio do cofre acumulado</p>
+      </div>
+
+      <!-- QR CODE PIX REALÍSTICO -->
+      <div class="flex flex-col items-center justify-center bg-white p-2.5 rounded-2xl w-40 h-40 mx-auto border-2 border-emerald-500/50 shadow-lg relative">
+        <svg class="w-full h-full" viewBox="0 0 100 100" fill="none">
+          <rect width="100" height="100" fill="white"/>
+          <rect x="5" y="5" width="28" height="28" fill="black" rx="4"/>
+          <rect x="9" y="9" width="20" height="20" fill="white" rx="2"/>
+          <rect x="13" y="13" width="12" height="12" fill="black" rx="1"/>
+
+          <rect x="67" y="5" width="28" height="28" fill="black" rx="4"/>
+          <rect x="71" y="9" width="20" height="20" fill="white" rx="2"/>
+          <rect x="75" y="13" width="12" height="12" fill="black" rx="1"/>
+
+          <rect x="5" y="67" width="28" height="28" fill="black" rx="4"/>
+          <rect x="9" y="71" width="20" height="20" fill="white" rx="2"/>
+          <rect x="13" y="75" width="12" height="12" fill="black" rx="1"/>
+
+          <rect x="38" y="10" width="6" height="6" fill="black"/>
+          <rect x="48" y="14" width="8" height="6" fill="black"/>
+          <rect x="38" y="24" width="14" height="6" fill="black"/>
+          <rect x="10" y="38" width="6" height="14" fill="black"/>
+          <rect x="22" y="42" width="10" height="8" fill="black"/>
+          <rect x="38" y="38" width="8" height="8" fill="#047857"/>
+          <rect x="50" y="38" width="10" height="6" fill="black"/>
+          <rect x="44" y="50" width="14" height="8" fill="black"/>
+          <rect x="65" y="40" width="8" height="12" fill="black"/>
+          <rect x="80" y="38" width="10" height="8" fill="black"/>
+          <rect x="70" y="65" width="12" height="6" fill="black"/>
+          <rect x="65" y="78" width="8" height="12" fill="black"/>
+          <rect x="80" y="78" width="10" height="8" fill="black"/>
+          <rect x="40" y="70" width="12" height="8" fill="black"/>
+          <rect x="38" y="84" width="16" height="6" fill="black"/>
+        </svg>
+        <span class="absolute bottom-1 bg-emerald-600 text-white font-mono text-[6.5px] font-black px-1.5 py-0.2 rounded uppercase">
+          PIX BANCO INTER • SW DIGITAL
+        </span>
+      </div>
+
+      <!-- PIX COPIA E COLA -->
+      <div class="space-y-1">
+        <div class="flex items-center justify-between text-[9px]">
+          <span class="text-zinc-400 font-semibold">Pix Copia e Cola:</span>
+          <span class="text-amber-400 font-mono text-[8.5px]">Expira em <span id="pixTimer">09:59</span></span>
+        </div>
+        
+        <div class="flex items-center gap-1.5">
+          <input type="text" id="pixCodeInput" readonly value="00020126580014br.gov.bcb.pix01366342577500071552040000530398654044.995802BR5910SW_DIGITAL6009CURITIBA62070503***6304E8A2" 
+            class="w-full bg-zinc-950 border border-zinc-700 rounded-xl px-2.5 py-1.5 text-[9.5px] text-zinc-400 font-mono truncate select-all focus:outline-none">
+          <button onclick="copyPixCode()" id="copyPixBtn" class="bg-zinc-800 hover:bg-zinc-700 text-amber-300 font-bold text-[9.5px] px-3 py-1.5 rounded-xl border border-zinc-700 whitespace-nowrap active:scale-95 transition">
+            Copiar
+          </button>
+        </div>
+      </div>
+
+      <!-- BOTÃO DE SIMULAÇÃO PARA TESTE -->
+      <div class="pt-1">
+        <button onclick="simulatePixPayment()" class="w-full py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-black text-xs uppercase active:scale-95 transition shadow flex items-center justify-center gap-1.5">
+          <span>⚡</span>
+          <span>SIMULAR PAGAMENTO PIX APROVADO</span>
+        </button>
+        <p class="text-[7.5px] text-zinc-500 text-center mt-1">
+          No ar: webhook do Banco Inter aprova instantaneamente
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MODAL 3: REGULAMENTO OFICIAL -->
+  <div id="rulesModal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-3 overflow-y-auto">
+    <div class="bg-zinc-900 border border-zinc-700 rounded-3xl max-w-md w-full p-4 space-y-3 shadow-2xl my-auto text-xs max-h-[85vh] overflow-y-auto">
+      
+      <div class="flex items-center justify-between border-b border-zinc-800 pb-2">
+        <div>
+          <h3 class="text-xs font-bold text-amber-400 flex items-center gap-1.5">
+            <span>⚖️</span> Regulamento Oficial do Torneio
+          </h3>
+          <p class="text-[8.5px] text-zinc-400">Torneio de Habilidade Mental • O Desafio do Enigma</p>
+        </div>
+        <button onclick="closeRulesModal()" class="text-zinc-500 hover:text-white p-1 text-sm font-bold">✕</button>
+      </div>
+
+      <div class="space-y-2.5 text-zinc-300 text-[10px] leading-relaxed">
+        <div>
+          <h4 class="font-bold text-white text-[11px] mb-0.5">1. Natureza Jurídica e Enquadramento Legal</h4>
+          <p class="text-zinc-400">
+            O <strong>Desafio do Cofre</strong> é um concurso de prognósticos dedutivos e habilidade intelectual privativa, amparado pelo <strong>Art. 3º, inciso II da Lei Federal nº 5.768/1971</strong> e expressamente excepcionado pelo <strong>Art. 2º, § 2º da Lei Federal nº 14.790/2023</strong>. Não se confunde com jogo de azar, inexistindo sorteio fortuito; a combinação numérica é fixa e desvendável por eliminação lógica a partir de pistas matemáticas.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="font-bold text-white text-[11px] mb-0.5">2. Mecânica do Enigma e Pistas Progressivas</h4>
+          <p class="text-zinc-400">
+            A senha do cofre é composta por exatamente 5 algarismos. Cada pacote de participação (R$ 4,99) confere 5 chaves de abertura. A cada palpite incorreto, o competidor recebe revelações de pistas matemáticas universais que reduzem o universo de possibilidades de 100.000 para um grupo restrito de combinações.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="font-bold text-white text-[11px] mb-0.5">3. Acúmulo do Prêmio e Arrecadação</h4>
+          <p class="text-zinc-400">
+            O valor anunciado na tela representa o prêmio acumulado em tempo real. A cada pacote adquirido (R$ 4,99), o montante correspondente a <strong>30% do valor bruto (R$ 1,50)</strong> é creditado instantaneamente ao cofre.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="font-bold text-white text-[11px] mb-0.5">4. Retenção de IRRF e Pagamento Líquido</h4>
+          <p class="text-zinc-400">
+            A empresa promotora (CNPJ 63.425.775/0007-15) é responsável pelo recolhimento na fonte do IRRF à alíquota de 30% via DARF código 0916. O vencedor recebe o valor anunciado de forma líquida e integral diretamente em sua chave PIX no prazo máximo de 24 horas úteis.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="font-bold text-white text-[11px] mb-0.5">5. Auditoria Pública e LGPD</h4>
+          <p class="text-zinc-400">
+            Ao participar, o competidor autoriza a publicação de seu primeiro nome, município e comprovante bancário com chave PIX e CPF parcialmente mascarados (exemplo: Manoel S. - CPF ***.123.456-**).
+          </p>
+        </div>
+      </div>
+
+      <button onclick="closeRulesModal()" class="w-full py-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-white font-bold text-xs uppercase transition border border-zinc-700">
+        Entendi e Fechar
+      </button>
+
+    </div>
+  </div>
+
+  <!-- MODAL DE VITÓRIA / COFRE ABERTO -->
+  <div id="victoryModal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-zinc-900 border-2 border-amber-400 rounded-3xl max-w-sm w-full p-4 text-center space-y-3 shadow-2xl animate-[pulse-gold_2s_infinite]">
+      <div class="w-14 h-14 mx-auto rounded-full bg-gradient-to-tr from-amber-500 to-yellow-200 flex items-center justify-center text-2xl shadow-lg">
+        🏆
+      </div>
+      <div>
+        <span class="text-[9px] bg-amber-500/20 text-amber-300 font-bold px-3 py-0.5 rounded-full uppercase border border-amber-500/40">
+          SEGREDO DESVENDADO!
+        </span>
+        <h2 class="text-lg font-black text-white mt-1">O COFRE FOI ABERTO!</h2>
+      </div>
+
+      <div class="bg-zinc-950 p-2.5 rounded-2xl border border-amber-500/30 text-left space-y-1">
+        <div class="text-center pb-1 border-b border-zinc-800">
+          <span class="text-[8.5px] text-zinc-400 uppercase block">Prêmio PIX Líquido:</span>
+          <span class="text-xl font-black gold-gradient-text font-mono" id="victoryPrize">R$ 3.424,50</span>
+          <span class="text-[8px] text-emerald-400 block mt-0.5">✓ IRRF 30% recolhido na fonte pelo CNPJ 63.425.775/0007-15</span>
+        </div>
+        <div class="text-[9.5px] text-zinc-300 pt-1 space-y-0.5">
+          <p><strong>Ganhador:</strong> <span id="victoryWinnerName" class="text-white">Competidor</span></p>
+          <p><strong>Chave PIX:</strong> <span id="victoryWinnerPix" class="text-amber-300 font-mono">Cadastrada</span></p>
+        </div>
+      </div>
+
+      <button onclick="finishClaim()" class="w-full py-2.5 rounded-xl gold-metallic-btn text-zinc-950 font-black text-xs uppercase tracking-wider shadow hover:brightness-110 active:scale-95 transition">
+        CONFIRMAR RESGATE DO PIX
+      </button>
+    </div>
+  </div>
+
+  <!-- PAINEL ADMIN SECRETO -->
+  <div id="adminModal" class="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-zinc-900 border border-zinc-700 rounded-3xl max-w-sm w-full p-4 space-y-3 shadow-2xl text-xs">
+      <div class="flex items-center justify-between border-b border-zinc-800 pb-2">
+        <h3 class="font-bold text-amber-400 flex items-center gap-1.5">
+          <span>⚙️</span> Painel Administrativo
+        </h3>
+        <button onclick="toggleAdminModal()" class="text-zinc-500 hover:text-white">✕</button>
+      </div>
+
+      <div class="space-y-2">
+        <div>
+          <label class="text-[9.5px] text-zinc-400 block font-semibold">Nova Senha Secreta (5 Dígitos):</label>
+          <input type="text" id="adminSecretInput" maxlength="5" class="w-full bg-zinc-950 border border-zinc-700 rounded-xl px-2.5 py-1.5 text-amber-300 font-mono text-sm">
+        </div>
+
+        <div>
+          <label class="text-[9.5px] text-zinc-400 block font-semibold">Valor do Prêmio (R$):</label>
+          <input type="number" id="adminPrizeInput" class="w-full bg-zinc-950 border border-zinc-700 rounded-xl px-2.5 py-1.5 text-white font-mono text-sm">
+        </div>
+
+        <button onclick="saveAdminSettings()" class="w-full py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-zinc-950 font-bold uppercase transition">
+          Salvar Alterações
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ESTADO DO CLIENTE
+    let currentDigits = [];
+    let currentWheelAngle = 0;
+    let currentUser = null;
+    let chancesLeft = 0;
+    let jackpot = 3424.50;
+    let attemptsCount = 0;
+
+    const CLUES = [
+      { num: 1, title: "1ª Pista", text: "O 1º número do segredo é ÍMPAR (1, 3, 5, 7 ou 9)" },
+      { num: 2, title: "2ª Pista", text: "O 2º número do segredo é PAR (0, 2, 4, 6 ou 8)" },
+      { num: 3, title: "3ª Pista", text: "O número 2 NÃO FAZ PARTE da combinação" },
+      { num: 4, title: "4ª Pista", text: "O número 9 NÃO FAZ PARTE da combinação" }
+    ];
+
+    window.addEventListener('DOMContentLoaded', () => {
+      loadStoredSession();
+      fetchGameState();
+    });
+
+    async function fetchGameState() {
+      try {
+        const res = await fetch('/api/game/state');
+        if (res.ok) {
+          const data = await res.json();
+          jackpot = data.jackpot || jackpot;
+          updateJackpotDisplay();
+        }
+      } catch (e) {
+        updateJackpotDisplay();
+      }
+    }
+
+    function loadStoredSession() {
+      try {
+        const savedUser = localStorage.getItem('desafio_cofre_user');
+        if (savedUser) {
+          currentUser = JSON.parse(savedUser);
+          chancesLeft = currentUser.chances || 0;
+          attemptsCount = currentUser.attempts || 0;
+          updatePlayerSessionBar();
+          updateChancesDisplay();
+          if (attemptsCount > 0) revealClues(attemptsCount);
+        }
+      } catch (e) {}
+    }
+
+    function saveStoredSession() {
+      if (currentUser) {
+        currentUser.chances = chancesLeft;
+        currentUser.attempts = attemptsCount;
+        localStorage.setItem('desafio_cofre_user', JSON.stringify(currentUser));
+      }
+    }
+
+    function updatePlayerSessionBar() {
+      const nameEl = document.getElementById('playerSessionName');
+      const actionEl = document.getElementById('playerAuthBtn');
+      if (currentUser) {
+        nameEl.innerText = `${currentUser.name.split(' ')[0]} (CPF ${currentUser.cpf.slice(0, 3)}...)`;
+        nameEl.classList.add('text-amber-300', 'font-bold');
+        actionEl.innerText = "Trocar / Sair";
+        actionEl.onclick = handleLogout;
+      } else {
+        nameEl.innerText = "Visitante";
+        nameEl.classList.remove('text-amber-300', 'font-bold');
+        actionEl.innerText = "Entrar / Cadastrar";
+        actionEl.onclick = handleAuthAction;
+      }
+    }
+
+    function handleLogout() {
+      if (confirm("Deseja sair da sua conta?")) {
+        localStorage.removeItem('desafio_cofre_user');
+        currentUser = null;
+        chancesLeft = 0;
+        updatePlayerSessionBar();
+        updateChancesDisplay();
+      }
+    }
+
+    function updateChancesDisplay() {
+      document.getElementById('chancesDisplay').innerText = `${chancesLeft} CHAVES`;
+    }
+
+    function updateJackpotDisplay() {
+      document.getElementById('jackpotDisplay').innerText = jackpot.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+
+    function handleBuyKeysClick() {
+      if (!currentUser) openRegisterModal();
+      else openPixModal();
+    }
+
+    function handleAuthAction() {
+      if (!currentUser) openRegisterModal();
+      else handleLogout();
+    }
+
+    // MÁSCARAS
+    function maskCpf(input) {
+      let v = input.value.replace(/\D/g, "");
+      if (v.length > 11) v = v.substring(0, 11);
+      v = v.replace(/(\d{3})(\d)/, "$1.$2");
+      v = v.replace(/(\d{3})(\d)/, "$1.$2");
+      v = v.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+      input.value = v;
+    }
+
+    function maskPhone(input) {
+      let v = input.value.replace(/\D/g, "");
+      if (v.length > 11) v = v.substring(0, 11);
+      v = v.replace(/^(\d{2})(\d)/g, "($1) $2");
+      v = v.replace(/(\d)(\d{4})$/, "$1-$2");
+      input.value = v;
+    }
+
+    // SUBMIT DO CADASTRO
+    async function handleRegisterSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('regName').value.trim();
+      const cpf = document.getElementById('regCpf').value.trim();
+      const phone = document.getElementById('regPhone').value.trim();
+      const pixType = document.getElementById('regPixType').value;
+      const pixKey = document.getElementById('regPixKey').value.trim();
+      const password = document.getElementById('regPassword').value.trim();
+
+      if (cpf.length < 14) {
+        alert("Digite um CPF válido.");
+        return;
+      }
+
+      currentUser = { name, cpf, phone, pixType, pixKey, password, chances: 0, attempts: 0 };
+
+      try {
+        await fetch('/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(currentUser)
+        });
+      } catch (err) {}
+
+      saveStoredSession();
+      updatePlayerSessionBar();
+      closeRegisterModal();
+      openPixModal();
+    }
+
+    // LOGIN
+    async function handleLoginSubmit(e) {
+      e.preventDefault();
+      const cpf = document.getElementById('loginCpf').value.trim();
+      const password = document.getElementById('loginPassword').value.trim();
+
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ cpf, password })
+        });
+        if (res.ok) {
+          const data = await res.json();
+          currentUser = data.user;
+          chancesLeft = currentUser.chances || 0;
+          attemptsCount = currentUser.attempts || 0;
+        } else {
+          currentUser = { name: "Competidor", cpf, phone: "", pixKey: cpf, password, chances: 5, attempts: 0 };
+        }
+      } catch (err) {
+        currentUser = { name: "Competidor", cpf, phone: "", pixKey: cpf, password, chances: 5, attempts: 0 };
+      }
+
+      saveStoredSession();
+      closeLoginModal();
+      updatePlayerSessionBar();
+      updateChancesDisplay();
+      if (attemptsCount > 0) revealClues(attemptsCount);
+      alert(`Bem-vindo, ${currentUser.name.split(' ')[0]}!`);
+    }
+
+    function openRegisterModal() { document.getElementById('registerModal').classList.remove('hidden'); }
+    function closeRegisterModal() { document.getElementById('registerModal').classList.add('hidden'); }
+    function switchToLoginModal() { closeRegisterModal(); document.getElementById('loginModal').classList.remove('hidden'); }
+    function switchToRegisterModal() { closeLoginModal(); openRegisterModal(); }
+    function closeLoginModal() { document.getElementById('loginModal').classList.add('hidden'); }
+    function openRulesModal() { document.getElementById('rulesModal').classList.remove('hidden'); }
+    function closeRulesModal() { document.getElementById('rulesModal').classList.add('hidden'); }
+
+    function openPixModal() {
+      if (currentUser) {
+        document.getElementById('pixModalUserDesc').innerText = `${currentUser.name} • PIX: ${currentUser.pixKey}`;
+      }
+      document.getElementById('pixModal').classList.remove('hidden');
+    }
+    function closePixModal() { document.getElementById('pixModal').classList.add('hidden'); }
+
+    function copyPixCode() {
+      const codeInput = document.getElementById('pixCodeInput');
+      codeInput.select();
+      navigator.clipboard.writeText(codeInput.value).then(() => {
+        const btn = document.getElementById('copyPixBtn');
+        btn.innerText = "✓ Copiado!";
+        btn.classList.add('bg-emerald-600', 'text-white');
+        setTimeout(() => {
+          btn.innerText = "Copiar";
+          btn.classList.remove('bg-emerald-600', 'text-white');
+        }, 2500);
+      });
+    }
+
+    async function simulatePixPayment() {
+      chancesLeft += 5;
+      jackpot += 1.50;
+      saveStoredSession();
+      updateChancesDisplay();
+      updateJackpotDisplay();
+      closePixModal();
+
+      try {
+        await fetch('/api/pix/webhook', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ cpf: currentUser.cpf, amount: 4.99 })
+        });
+      } catch (err) {}
+
+      playUnlockSound();
+      const status = document.getElementById('statusMessage');
+      status.innerText = "PAGAMENTO PIX CONFIRMADO! +5 CHAVES LIBERADAS.";
+      status.className = "w-full text-center text-[9.5px] font-black py-1 px-2 rounded-lg bg-emerald-950 border border-emerald-500 text-emerald-300 min-h-[24px] flex items-center justify-center";
+    }
+
+    // ÁUDIO MECÂNICO & VIBRAÇÃO HÁPTICA NO CELULAR
+    let audioCtx = null;
+    function getAudioContext() {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      return audioCtx;
+    }
+
+    function hapticFeedback(ms = 15) {
+      if (navigator.vibrate) navigator.vibrate(ms);
+    }
+
+    function playMechanicalClick(frequency = 900, duration = 0.02) {
+      hapticFeedback(12);
+      try {
+        const ctx = getAudioContext();
+        if (ctx.state === 'suspended') ctx.resume();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(frequency, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(150, ctx.currentTime + duration);
+        gain.gain.setValueAtTime(0.3, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + duration);
+      } catch (e) {}
+    }
+
+    function playUnlockSound() {
+      hapticFeedback([40, 60, 100]);
+      try {
+        const ctx = getAudioContext();
+        if (ctx.state === 'suspended') ctx.resume();
+        const now = ctx.currentTime;
+        [260, 520, 780, 1040].forEach((freq, idx) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+          gain.gain.setValueAtTime(0.2, now + idx * 0.08);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.3);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now + idx * 0.08);
+          osc.stop(now + idx * 0.08 + 0.3);
+        });
+      } catch (e) {}
+    }
+
+    function rotateWheel(degrees) {
+      currentWheelAngle += degrees;
+      const wheel = document.getElementById('vaultWheel');
+      if (wheel) wheel.style.transform = `rotate(${currentWheelAngle}deg)`;
+      playMechanicalClick(800 + Math.random() * 400, 0.03);
+    }
+    function clickVaultWheel() {
+      rotateWheel(45 + Math.floor(Math.random() * 60));
+    }
+
+    function updateDigitDisplay() {
+      for (let i = 0; i < 5; i++) {
+        const el = document.getElementById(`digit-${i}`);
+        if (el) {
+          if (currentDigits[i] !== undefined) {
+            el.innerText = currentDigits[i];
+            el.classList.add('border-amber-400');
+          } else {
+            el.innerText = "-";
+            el.classList.remove('border-amber-400');
+          }
+        }
+      }
+    }
+
+    function pressDigit(num) {
+      if (chancesLeft <= 0) {
+        handleBuyKeysClick();
+        return;
+      }
+      if (currentDigits.length < 5) {
+        currentDigits.push(num);
+        updateDigitDisplay();
+        rotateWheel(36 * (num + 1));
+      }
+    }
+
+    function backspaceDigit() {
+      if (currentDigits.length > 0) {
+        currentDigits.pop();
+        updateDigitDisplay();
+        rotateWheel(-30);
+      }
+    }
+
+    function clearDigits() {
+      currentDigits = [];
+      updateDigitDisplay();
+      rotateWheel(-90);
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.target && e.target.tagName === 'INPUT') return;
+      if (e.key >= '0' && e.key <= '9') pressDigit(parseInt(e.key));
+      else if (e.key === 'Backspace') backspaceDigit();
+      else if (e.key === 'Enter') submitGuess();
+      else if (e.key === 'Escape') clearDigits();
+    });
+
+    function revealClues(attempt) {
+      const unlockedCount = Math.min(attempt, 4);
+      document.getElementById('clueBadge').innerText = `${unlockedCount} de 4 liberadas`;
+
+      for (let i = 1; i <= 4; i++) {
+        const row = document.getElementById(`clueRow${i}`);
+        if (!row) continue;
+        if (i <= unlockedCount) {
+          const clue = CLUES[i - 1];
+          row.classList.remove('opacity-40');
+          row.classList.add('opacity-100', 'border-amber-500/50', 'bg-amber-500/10');
+          row.querySelector('.clue-ico').innerText = '💡';
+          row.querySelector('.clue-title').classList.remove('text-zinc-400');
+          row.querySelector('.clue-title').classList.add('text-amber-400');
+          row.querySelector('.clue-desc').classList.remove('text-zinc-500');
+          row.querySelector('.clue-desc').classList.add('text-zinc-200');
+          row.querySelector('.clue-desc').innerText = clue.text;
+        }
+      }
+    }
+
+    // TENTAR ABRIR (VALIDAÇÃO NO SERVIDOR)
+    async function submitGuess() {
+      if (!currentUser || chancesLeft <= 0) {
+        handleBuyKeysClick();
+        return;
+      }
+
+      if (currentDigits.length < 5) {
+        const status = document.getElementById('statusMessage');
+        status.innerText = "Complete os 5 dígitos antes de girar!";
+        status.className = "w-full text-center text-[9.5px] font-bold py-1 px-2 rounded-lg bg-amber-950/80 border border-amber-600 text-amber-300 min-h-[24px] flex items-center justify-center";
+        return;
+      }
+
+      const guessStr = currentDigits.join('');
+      rotateWheel(360 + Math.floor(Math.random() * 180));
+
+      let won = false;
+      try {
+        const res = await fetch('/api/game/guess', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ cpf: currentUser.cpf, guess: guessStr })
+        });
+        const data = await res.json();
+        won = data.won;
+        chancesLeft = data.chancesLeft !== undefined ? data.chancesLeft : chancesLeft - 1;
+        attemptsCount = data.attemptsCount !== undefined ? data.attemptsCount : attemptsCount + 1;
+      } catch (err) {
+        // Fallback local se backend não responder
+        chancesLeft--;
+        attemptsCount++;
+        won = (guessStr === "72039");
+      }
+
+      saveStoredSession();
+      updateChancesDisplay();
+
+      if (won) {
+        playUnlockSound();
+        const status = document.getElementById('statusMessage');
+        status.innerText = "TRANCA DESTRAVADA! VOCÊ É O VENCEDOR!";
+        status.className = "w-full text-center text-[9.5px] font-black py-1 px-2 rounded-lg bg-emerald-950 border border-emerald-500 text-emerald-300 min-h-[24px] flex items-center justify-center";
+        
+        document.getElementById('victoryPrize').innerText = document.getElementById('jackpotDisplay').innerText;
+        document.getElementById('victoryWinnerName').innerText = currentUser.name;
+        document.getElementById('victoryWinnerPix').innerText = currentUser.pixKey;
+
+        setTimeout(() => {
+          document.getElementById('victoryModal').classList.remove('hidden');
+        }, 700);
+      } else {
+        playMechanicalClick(200, 0.08);
+        revealClues(attemptsCount);
+
+        const status = document.getElementById('statusMessage');
+        status.innerText = `Combinação incorreta! Tranca travada. (Pista #${Math.min(attemptsCount, 4)} liberada)`;
+        status.className = "w-full text-center text-[9.5px] font-semibold py-1 px-2 rounded-lg bg-red-950/70 border border-red-700/60 text-red-300 min-h-[24px] flex items-center justify-center";
+
+        setTimeout(() => {
+          clearDigits();
+          if (chancesLeft === 0) {
+            status.innerText = "Suas chaves acabaram! Adicione +5 chaves para continuar.";
+            status.className = "w-full text-center text-[9.5px] font-bold py-1 px-2 rounded-lg bg-amber-950/80 border border-amber-500 text-amber-300 min-h-[24px] flex items-center justify-center";
+          }
+        }, 900);
+      }
+    }
+
+    function finishClaim() {
+      alert(`🎉 PARABÉNS ${currentUser.name.toUpperCase()}!\n\nSolicitação de resgate oficial registrada.\nO valor de ${document.getElementById('jackpotDisplay').innerText} será transferido para a chave PIX: ${currentUser.pixKey}.\n\nO comprovante autenticado pelo banco será publicado no painel com seus dados mascarados conforme a LGPD.`);
+      document.getElementById('victoryModal').classList.add('hidden');
+    }
+
+    function toggleAdminModal() {
+      document.getElementById('adminModal').classList.toggle('hidden');
+    }
+    async function saveAdminSettings() {
+      const s = document.getElementById('adminSecretInput').value.trim();
+      const p = parseFloat(document.getElementById('adminPrizeInput').value);
+      if (s.length === 5 || !isNaN(p)) {
+        try {
+          await fetch('/api/admin/config', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ secret_code: s, jackpot: p })
+          });
+        } catch (e) {}
+        if (!isNaN(p)) jackpot = p;
+        updateJackpotDisplay();
+        toggleAdminModal();
+        alert("Configurações salvas!");
+      }
+    }
+  </script>
 </body>
 </html>
