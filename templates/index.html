@@ -318,73 +318,75 @@
   </div>
 
   <!-- MODAL 1: IDENTIFICAÇÃO DO COMPETIDOR & REGULAMENTO -->
-  <div id="registerModal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-3 overflow-y-auto">
-    <div class="bg-zinc-900 border border-zinc-700 rounded-3xl max-w-sm w-full p-4 space-y-3 shadow-2xl my-auto">
+  <div id="registerModal" class="fixed inset-0 bg-black/95 backdrop-blur-md z-50 hidden flex flex-col justify-start sm:justify-center items-center p-0 sm:p-4 overflow-y-auto">
+    <div class="w-full min-h-[100dvh] sm:min-h-0 sm:max-w-lg bg-gradient-to-b from-[#2a0854] via-[#210743] to-[#16032c] sm:border-2 sm:border-[#8b5cf6] rounded-none sm:rounded-3xl p-6 sm:p-7 shadow-2xl flex flex-col justify-between my-0 sm:my-auto">
       
-      <div class="flex items-center justify-between border-b border-zinc-800 pb-2">
-        <div>
-          <h3 class="text-xs font-bold text-white flex items-center gap-1.5">
-            <span>🛡️</span> Identificação do Competidor
-          </h3>
-          <p class="text-[8.5px] text-zinc-400">Necessário para resgate seguro do prêmio via PIX</p>
+      <div>
+        <div class="flex items-center justify-between border-b border-purple-800/80 pb-3 mb-4">
+          <div>
+            <h3 class="text-xl sm:text-2xl font-black text-white flex items-center gap-2">
+              <span class="text-2xl">🛡️</span> Identificação do Competidor
+            </h3>
+            <p class="text-xs sm:text-sm text-purple-200 mt-1">Necessário para resgate seguro do prêmio via PIX</p>
+          </div>
+          <button onclick="closeRegisterModal()" class="w-10 h-10 rounded-full bg-purple-900/60 hover:bg-purple-800 text-purple-200 hover:text-white flex items-center justify-center text-lg active:scale-95 transition">✕</button>
         </div>
-        <button onclick="closeRegisterModal()" class="text-zinc-500 hover:text-white p-1">✕</button>
+
+        <form id="registerForm" onsubmit="handleRegisterSubmit(event)" class="space-y-4">
+          <div>
+            <label class="text-xs sm:text-sm text-purple-200 font-bold block mb-1.5">Nome Completo:</label>
+            <input type="text" id="regName" required placeholder="Seu nome completo" class="w-full bg-[#120326] border-2 border-purple-700/70 focus:border-amber-400 rounded-2xl px-4 py-3.5 text-white text-base focus:outline-none placeholder-purple-400/40 transition">
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+            <div>
+              <label class="text-xs sm:text-sm text-purple-200 font-bold block mb-1.5">CPF:</label>
+              <input type="tel" id="regCpf" required placeholder="000.000.000-00" maxlength="14" oninput="maskCpf(this)" class="w-full bg-[#120326] border-2 border-purple-700/70 focus:border-amber-400 rounded-2xl px-4 py-3.5 text-white font-mono text-base focus:outline-none placeholder-purple-400/40 transition">
+            </div>
+            <div>
+              <label class="text-xs sm:text-sm text-purple-200 font-bold block mb-1.5">WhatsApp (com DDD):</label>
+              <input type="tel" id="regPhone" required placeholder="(00) 00000-0000" maxlength="15" oninput="maskPhone(this)" class="w-full bg-[#120326] border-2 border-purple-700/70 focus:border-amber-400 rounded-2xl px-4 py-3.5 text-white font-mono text-base focus:outline-none placeholder-purple-400/40 transition">
+            </div>
+          </div>
+
+          <div>
+            <label class="text-xs sm:text-sm text-purple-200 font-bold block mb-1.5">Chave PIX (Para Receber o Prêmio):</label>
+            <div class="grid grid-cols-3 gap-2.5">
+              <select id="regPixType" class="bg-[#120326] border-2 border-purple-700/70 focus:border-amber-400 rounded-2xl px-3 py-3.5 text-sm text-purple-200 focus:outline-none transition">
+                <option value="cpf">CPF</option>
+                <option value="telefone">Celular</option>
+                <option value="email">E-mail</option>
+                <option value="aleatoria">Aleatória</option>
+              </select>
+              <input type="text" id="regPixKey" required placeholder="Chave PIX do titular" class="col-span-2 bg-[#120326] border-2 border-purple-700/70 focus:border-amber-400 rounded-2xl px-4 py-3.5 text-white font-mono text-base focus:outline-none placeholder-purple-400/40 transition">
+            </div>
+          </div>
+
+          <div>
+            <label class="text-xs sm:text-sm text-purple-200 font-bold block mb-1.5">Criar Senha de Acesso (PIN 4 a 6 dígitos):</label>
+            <input type="password" id="regPassword" required placeholder="Para entrar depois" maxlength="8" class="w-full bg-[#120326] border-2 border-purple-700/70 focus:border-amber-400 rounded-2xl px-4 py-3.5 text-white font-mono text-base focus:outline-none placeholder-purple-400/40 transition">
+          </div>
+
+          <!-- ACEITE DOS TERMOS LEGAIS -->
+          <div class="bg-black/50 p-4 rounded-2xl border border-purple-800/70 mt-3">
+            <label class="flex items-start gap-3 cursor-pointer">
+              <input type="checkbox" id="regTerms" required class="mt-1 w-5 h-5 accent-amber-500 rounded flex-shrink-0">
+              <span class="text-xs text-purple-200 leading-relaxed">
+                Declaro ter +18 anos e concordo com o 
+                <a href="javascript:void(0)" onclick="openRulesModal()" class="text-amber-400 underline font-black">Regulamento Oficial do Torneio</a>.
+                Estou ciente de que o prêmio acumula progressivamente e de que a premiação é líquida com retenção de IRRF pela Empresa Promotora.
+              </span>
+            </label>
+          </div>
+
+          <button type="submit" class="w-full py-4 rounded-2xl gold-metallic-btn text-zinc-950 font-black text-base uppercase tracking-wider shadow-xl hover:brightness-110 active:scale-95 transition mt-3">
+            CONFIRMAR E GERAR PIX (R$ 4,99)
+          </button>
+        </form>
       </div>
 
-      <form id="registerForm" onsubmit="handleRegisterSubmit(event)" class="space-y-2 text-xs">
-        <div>
-          <label class="text-[9.5px] text-zinc-300 font-semibold block mb-0.5">Nome Completo:</label>
-          <input type="text" id="regName" required placeholder="Seu nome completo" class="w-full bg-zinc-950 border border-zinc-700 rounded-xl px-2.5 py-1.5 text-white focus:outline-none focus:border-amber-400 text-xs">
-        </div>
-
-        <div class="grid grid-cols-2 gap-2">
-          <div>
-            <label class="text-[9.5px] text-zinc-300 font-semibold block mb-0.5">CPF:</label>
-            <input type="tel" id="regCpf" required placeholder="000.000.000-00" maxlength="14" oninput="maskCpf(this)" class="w-full bg-zinc-950 border border-zinc-700 rounded-xl px-2.5 py-1.5 text-white font-mono focus:outline-none focus:border-amber-400 text-xs">
-          </div>
-          <div>
-            <label class="text-[9.5px] text-zinc-300 font-semibold block mb-0.5">WhatsApp:</label>
-            <input type="tel" id="regPhone" required placeholder="(00) 00000-0000" maxlength="15" oninput="maskPhone(this)" class="w-full bg-zinc-950 border border-zinc-700 rounded-xl px-2.5 py-1.5 text-white font-mono focus:outline-none focus:border-amber-400 text-xs">
-          </div>
-        </div>
-
-        <div>
-          <label class="text-[9.5px] text-zinc-300 font-semibold block mb-0.5">Chave PIX (Para Receber o Prêmio):</label>
-          <div class="grid grid-cols-3 gap-1.5 mb-1">
-            <select id="regPixType" class="bg-zinc-950 border border-zinc-700 rounded-xl px-1.5 py-1.5 text-[9px] text-zinc-300 focus:outline-none focus:border-amber-400">
-              <option value="cpf">CPF</option>
-              <option value="telefone">Celular</option>
-              <option value="email">E-mail</option>
-              <option value="aleatoria">Aleatória</option>
-            </select>
-            <input type="text" id="regPixKey" required placeholder="Chave PIX do titular" class="col-span-2 bg-zinc-950 border border-zinc-700 rounded-xl px-2.5 py-1.5 text-white font-mono text-[10.5px] focus:outline-none focus:border-amber-400">
-          </div>
-        </div>
-
-        <div>
-          <label class="text-[9.5px] text-zinc-300 font-semibold block mb-0.5">Criar Senha de Acesso (PIN 4 a 6 dígitos):</label>
-          <input type="password" id="regPassword" required placeholder="Para entrar depois" maxlength="8" class="w-full bg-zinc-950 border border-zinc-700 rounded-xl px-2.5 py-1.5 text-white font-mono focus:outline-none focus:border-amber-400 text-xs">
-        </div>
-
-        <!-- ACEITE DOS TERMOS LEGAIS -->
-        <div class="bg-black/60 p-2 rounded-xl border border-zinc-800 space-y-1">
-          <label class="flex items-start gap-2 cursor-pointer">
-            <input type="checkbox" id="regTerms" required class="mt-0.5 accent-amber-500 rounded">
-            <span class="text-[8px] text-zinc-300 leading-tight">
-              Declaro ter +18 anos e concordo com o 
-              <a href="javascript:void(0)" onclick="openRulesModal()" class="text-amber-400 underline font-bold">Regulamento Oficial do Torneio</a>.
-              Estou ciente de que o prêmio acumula progressivamente e de que a premiação é líquida com retenção de IRRF pela Empresa Promotora.
-            </span>
-          </label>
-        </div>
-
-        <button type="submit" class="w-full py-2.5 rounded-xl gold-metallic-btn text-zinc-950 font-black text-xs uppercase tracking-wider shadow hover:brightness-110 active:scale-95 transition mt-2">
-          CONFIRMAR E GERAR PIX (R$ 4,99)
-        </button>
-      </form>
-
-      <div class="text-center pt-1 border-t border-zinc-800/80">
-        <button onclick="switchToLoginModal()" class="text-[9.5px] text-zinc-400 hover:text-amber-300 underline">
+      <div class="text-center pt-4 pb-2 border-t border-purple-800/80 mt-4">
+        <button onclick="switchToLoginModal()" class="text-sm text-purple-300 hover:text-amber-300 underline font-semibold py-1">
           Já tem cadastro? Entrar com CPF e Senha
         </button>
       </div>
@@ -393,32 +395,35 @@
   </div>
 
   <!-- MODAL DE LOGIN -->
-  <div id="loginModal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-3">
-    <div class="bg-zinc-900 border border-zinc-700 rounded-3xl max-w-xs w-full p-4 space-y-3 shadow-2xl">
-      <div class="flex items-center justify-between border-b border-zinc-800 pb-2">
-        <h3 class="text-xs font-bold text-white flex items-center gap-1.5">
-          <span>🔐</span> Acessar Minha Conta
-        </h3>
-        <button onclick="closeLoginModal()" class="text-zinc-500 hover:text-white">✕</button>
+  <div id="loginModal" class="fixed inset-0 bg-black/95 backdrop-blur-md z-50 hidden flex flex-col justify-start sm:justify-center items-center p-0 sm:p-4 overflow-y-auto">
+    <div class="w-full min-h-[100dvh] sm:min-h-0 sm:max-w-md bg-gradient-to-b from-[#2a0854] via-[#210743] to-[#16032c] sm:border-2 sm:border-[#8b5cf6] rounded-none sm:rounded-3xl p-6 sm:p-7 shadow-2xl flex flex-col justify-between my-0 sm:my-auto">
+      
+      <div>
+        <div class="flex items-center justify-between border-b border-purple-800/80 pb-3 mb-4">
+          <h3 class="text-xl sm:text-2xl font-black text-white flex items-center gap-2">
+            <span class="text-2xl">🔐</span> Acessar Minha Conta
+          </h3>
+          <button onclick="closeLoginModal()" class="w-10 h-10 rounded-full bg-purple-900/60 hover:bg-purple-800 text-purple-200 hover:text-white flex items-center justify-center text-lg active:scale-95 transition">✕</button>
+        </div>
+
+        <form onsubmit="handleLoginSubmit(event)" class="space-y-4">
+          <div>
+            <label class="text-xs sm:text-sm text-purple-200 font-bold block mb-1.5">CPF:</label>
+            <input type="tel" id="loginCpf" required placeholder="000.000.000-00" maxlength="14" oninput="maskCpf(this)" class="w-full bg-[#120326] border-2 border-purple-700/70 focus:border-amber-400 rounded-2xl px-4 py-3.5 text-white font-mono text-base focus:outline-none placeholder-purple-400/40 transition">
+          </div>
+          <div>
+            <label class="text-xs sm:text-sm text-purple-200 font-bold block mb-1.5">Senha / PIN:</label>
+            <input type="password" id="loginPassword" required placeholder="Sua senha cadastrada" class="w-full bg-[#120326] border-2 border-purple-700/70 focus:border-amber-400 rounded-2xl px-4 py-3.5 text-white font-mono text-base focus:outline-none placeholder-purple-400/40 transition">
+          </div>
+
+          <button type="submit" class="w-full py-4 rounded-2xl bg-amber-500 hover:bg-amber-400 text-zinc-950 font-black uppercase tracking-wider text-base shadow-xl active:scale-95 transition mt-4">
+            ENTRAR
+          </button>
+        </form>
       </div>
 
-      <form onsubmit="handleLoginSubmit(event)" class="space-y-2.5 text-xs">
-        <div>
-          <label class="text-[9.5px] text-zinc-300 font-semibold block mb-0.5">CPF:</label>
-          <input type="tel" id="loginCpf" required placeholder="000.000.000-00" maxlength="14" oninput="maskCpf(this)" class="w-full bg-zinc-950 border border-zinc-700 rounded-xl px-2.5 py-1.5 text-white font-mono focus:outline-none focus:border-amber-400 text-xs">
-        </div>
-        <div>
-          <label class="text-[9.5px] text-zinc-300 font-semibold block mb-0.5">Senha / PIN:</label>
-          <input type="password" id="loginPassword" required placeholder="Sua senha cadastrada" class="w-full bg-zinc-950 border border-zinc-700 rounded-xl px-2.5 py-1.5 text-white font-mono focus:outline-none focus:border-amber-400 text-xs">
-        </div>
-
-        <button type="submit" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-zinc-950 font-bold uppercase tracking-wider text-xs shadow active:scale-95 transition">
-          ENTRAR
-        </button>
-      </form>
-
-      <div class="text-center pt-1 border-t border-zinc-800/80">
-        <button onclick="switchToRegisterModal()" class="text-[9.5px] text-zinc-400 hover:text-amber-300 underline">
+      <div class="text-center pt-4 pb-2 border-t border-purple-800/80 mt-4">
+        <button onclick="switchToRegisterModal()" class="text-sm text-purple-300 hover:text-amber-300 underline font-semibold py-1">
           Não tem cadastro? Crie sua conta grátis
         </button>
       </div>
@@ -426,89 +431,91 @@
   </div>
 
   <!-- MODAL 2: PAGAMENTO PIX -->
-  <div id="pixModal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-3 overflow-y-auto">
-    <div class="bg-zinc-900 border border-zinc-700 rounded-3xl max-w-sm w-full p-4 space-y-3 shadow-2xl my-auto">
+  <div id="pixModal" class="fixed inset-0 bg-black/95 backdrop-blur-md z-50 hidden flex flex-col justify-start sm:justify-center items-center p-0 sm:p-4 overflow-y-auto">
+    <div class="w-full min-h-[100dvh] sm:min-h-0 sm:max-w-md bg-gradient-to-b from-[#2a0854] via-[#210743] to-[#16032c] sm:border-2 sm:border-[#8b5cf6] rounded-none sm:rounded-3xl p-6 sm:p-7 shadow-2xl flex flex-col justify-between my-0 sm:my-auto">
       
-      <div class="flex items-center justify-between border-b border-zinc-800 pb-2">
-        <div class="flex items-center gap-2">
-          <span class="w-6 h-6 rounded-lg bg-emerald-500 flex items-center justify-center text-zinc-950 font-black text-xs">⚡</span>
-          <div>
-            <h3 class="text-xs font-bold text-white">Pacote +5 Chaves</h3>
-            <p class="text-[8.5px] text-zinc-400" id="pixModalUserDesc">Competidor Identificado</p>
+      <div>
+        <div class="flex items-center justify-between border-b border-purple-800/80 pb-3 mb-4">
+          <div class="flex items-center gap-2.5">
+            <span class="w-8 h-8 rounded-xl bg-emerald-500 flex items-center justify-center text-zinc-950 font-black text-sm">⚡</span>
+            <div>
+              <h3 class="text-lg font-black text-white">Pacote +5 Chaves</h3>
+              <p class="text-xs text-purple-200" id="pixModalUserDesc">Competidor Identificado</p>
+            </div>
           </div>
+          <button onclick="closePixModal()" class="w-10 h-10 rounded-full bg-purple-900/60 hover:bg-purple-800 text-purple-200 hover:text-white flex items-center justify-center text-lg active:scale-95 transition">✕</button>
         </div>
-        <button onclick="closePixModal()" class="text-zinc-500 hover:text-white p-1">✕</button>
-      </div>
 
-      <!-- VALOR E BENEFÍCIO -->
-      <div class="bg-black/60 border border-zinc-800 rounded-2xl p-2.5 text-center">
-        <span class="text-2xl font-black text-emerald-400 font-mono">R$ 4,99</span>
-        <div class="text-[9.5px] text-zinc-300 font-semibold mt-0.5">
-          Libera <span class="text-amber-400 font-bold">5 Tentativas</span> de abrir o cofre
+        <!-- VALOR E BENEFÍCIO -->
+        <div class="bg-black/50 border border-purple-800/70 rounded-2xl p-4 text-center mb-4">
+          <span class="text-3xl font-black text-emerald-400 font-mono">R$ 4,99</span>
+          <div class="text-sm text-purple-100 font-bold mt-1">
+            Libera <span class="text-amber-400 font-black">5 Tentativas</span> de abrir o cofre
+          </div>
+          <p class="text-xs text-purple-300/80 mt-1">R$ 1,50 (30%) entra direto no prêmio do cofre acumulado</p>
         </div>
-        <p class="text-[7.5px] text-zinc-500 mt-0.5">R$ 1,50 (30%) entra direto no prêmio do cofre acumulado</p>
-      </div>
 
-      <!-- QR CODE PIX REALÍSTICO -->
-      <div class="flex flex-col items-center justify-center bg-white p-2.5 rounded-2xl w-40 h-40 mx-auto border-2 border-emerald-500/50 shadow-lg relative">
-        <svg class="w-full h-full" viewBox="0 0 100 100" fill="none">
-          <rect width="100" height="100" fill="white"/>
-          <rect x="5" y="5" width="28" height="28" fill="black" rx="4"/>
-          <rect x="9" y="9" width="20" height="20" fill="white" rx="2"/>
-          <rect x="13" y="13" width="12" height="12" fill="black" rx="1"/>
+        <!-- QR CODE PIX REALÍSTICO -->
+        <div class="flex flex-col items-center justify-center bg-white p-3.5 rounded-2xl w-48 h-48 mx-auto border-2 border-emerald-500 shadow-xl relative mb-4">
+          <svg class="w-full h-full" viewBox="0 0 100 100" fill="none">
+            <rect width="100" height="100" fill="white"/>
+            <rect x="5" y="5" width="28" height="28" fill="black" rx="4"/>
+            <rect x="9" y="9" width="20" height="20" fill="white" rx="2"/>
+            <rect x="13" y="13" width="12" height="12" fill="black" rx="1"/>
 
-          <rect x="67" y="5" width="28" height="28" fill="black" rx="4"/>
-          <rect x="71" y="9" width="20" height="20" fill="white" rx="2"/>
-          <rect x="75" y="13" width="12" height="12" fill="black" rx="1"/>
+            <rect x="67" y="5" width="28" height="28" fill="black" rx="4"/>
+            <rect x="71" y="9" width="20" height="20" fill="white" rx="2"/>
+            <rect x="75" y="13" width="12" height="12" fill="black" rx="1"/>
 
-          <rect x="5" y="67" width="28" height="28" fill="black" rx="4"/>
-          <rect x="9" y="71" width="20" height="20" fill="white" rx="2"/>
-          <rect x="13" y="75" width="12" height="12" fill="black" rx="1"/>
+            <rect x="5" y="67" width="28" height="28" fill="black" rx="4"/>
+            <rect x="9" y="71" width="20" height="20" fill="white" rx="2"/>
+            <rect x="13" y="75" width="12" height="12" fill="black" rx="1"/>
 
-          <rect x="38" y="10" width="6" height="6" fill="black"/>
-          <rect x="48" y="14" width="8" height="6" fill="black"/>
-          <rect x="38" y="24" width="14" height="6" fill="black"/>
-          <rect x="10" y="38" width="6" height="14" fill="black"/>
-          <rect x="22" y="42" width="10" height="8" fill="black"/>
-          <rect x="38" y="38" width="8" height="8" fill="#047857"/>
-          <rect x="50" y="38" width="10" height="6" fill="black"/>
-          <rect x="44" y="50" width="14" height="8" fill="black"/>
-          <rect x="65" y="40" width="8" height="12" fill="black"/>
-          <rect x="80" y="38" width="10" height="8" fill="black"/>
-          <rect x="70" y="65" width="12" height="6" fill="black"/>
-          <rect x="65" y="78" width="8" height="12" fill="black"/>
-          <rect x="80" y="78" width="10" height="8" fill="black"/>
-          <rect x="40" y="70" width="12" height="8" fill="black"/>
-          <rect x="38" y="84" width="16" height="6" fill="black"/>
-        </svg>
-        <span class="absolute bottom-1 bg-emerald-600 text-white font-mono text-[6.5px] font-black px-1.5 py-0.2 rounded uppercase">
-          PIX BANCO INTER • SW DIGITAL
-        </span>
-      </div>
-
-      <!-- PIX COPIA E COLA -->
-      <div class="space-y-1">
-        <div class="flex items-center justify-between text-[9px]">
-          <span class="text-zinc-400 font-semibold">Pix Copia e Cola:</span>
-          <span class="text-amber-400 font-mono text-[8.5px]">Expira em <span id="pixTimer">09:59</span></span>
+            <rect x="38" y="10" width="6" height="6" fill="black"/>
+            <rect x="48" y="14" width="8" height="6" fill="black"/>
+            <rect x="38" y="24" width="14" height="6" fill="black"/>
+            <rect x="10" y="38" width="6" height="14" fill="black"/>
+            <rect x="22" y="42" width="10" height="8" fill="black"/>
+            <rect x="38" y="38" width="8" height="8" fill="#047857"/>
+            <rect x="50" y="38" width="10" height="6" fill="black"/>
+            <rect x="44" y="50" width="14" height="8" fill="black"/>
+            <rect x="65" y="40" width="8" height="12" fill="black"/>
+            <rect x="80" y="38" width="10" height="8" fill="black"/>
+            <rect x="70" y="65" width="12" height="6" fill="black"/>
+            <rect x="65" y="78" width="8" height="12" fill="black"/>
+            <rect x="80" y="78" width="10" height="8" fill="black"/>
+            <rect x="40" y="70" width="12" height="8" fill="black"/>
+            <rect x="38" y="84" width="16" height="6" fill="black"/>
+          </svg>
+          <span class="absolute bottom-1 bg-emerald-600 text-white font-mono text-[7.5px] font-black px-2 py-0.5 rounded uppercase">
+            PIX BANCO INTER • SW DIGITAL
+          </span>
         </div>
-        
-        <div class="flex items-center gap-1.5">
-          <input type="text" id="pixCodeInput" readonly value="00020126580014br.gov.bcb.pix01366342577500071552040000530398654044.995802BR5910SW_DIGITAL6009CURITIBA62070503***6304E8A2" 
-            class="w-full bg-zinc-950 border border-zinc-700 rounded-xl px-2.5 py-1.5 text-[9.5px] text-zinc-400 font-mono truncate select-all focus:outline-none">
-          <button onclick="copyPixCode()" id="copyPixBtn" class="bg-zinc-800 hover:bg-zinc-700 text-amber-300 font-bold text-[9.5px] px-3 py-1.5 rounded-xl border border-zinc-700 whitespace-nowrap active:scale-95 transition">
-            Copiar
-          </button>
+
+        <!-- PIX COPIA E COLA -->
+        <div class="space-y-1.5 mb-4">
+          <div class="flex items-center justify-between text-xs sm:text-sm">
+            <span class="text-purple-200 font-bold">Pix Copia e Cola:</span>
+            <span class="text-amber-400 font-mono text-xs font-bold">Expira em <span id="pixTimer">09:59</span></span>
+          </div>
+          
+          <div class="flex items-center gap-2">
+            <input type="text" id="pixCodeInput" readonly value="00020126580014br.gov.bcb.pix01366342577500071552040000530398654044.995802BR5910SW_DIGITAL6009CURITIBA62070503***6304E8A2" 
+              class="w-full bg-[#120326] border-2 border-purple-700/70 rounded-2xl px-4 py-3 text-xs text-purple-200 font-mono truncate select-all focus:outline-none">
+            <button onclick="copyPixCode()" id="copyPixBtn" class="bg-amber-500 hover:bg-amber-400 text-zinc-950 font-black text-sm px-4 py-3 rounded-2xl whitespace-nowrap active:scale-95 transition shadow">
+              Copiar
+            </button>
+          </div>
         </div>
       </div>
 
       <!-- BOTÃO DE SIMULAÇÃO PARA TESTE -->
-      <div class="pt-1">
-        <button onclick="simulatePixPayment()" class="w-full py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-black text-xs uppercase active:scale-95 transition shadow flex items-center justify-center gap-1.5">
+      <div class="pt-3 border-t border-purple-800/80">
+        <button onclick="simulatePixPayment()" class="w-full py-4 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-black text-sm uppercase active:scale-95 transition shadow-xl flex items-center justify-center gap-2">
           <span>⚡</span>
           <span>SIMULAR PAGAMENTO PIX APROVADO</span>
         </button>
-        <p class="text-[7.5px] text-zinc-500 text-center mt-1">
+        <p class="text-xs text-purple-300 text-center mt-2">
           No ar: webhook do Banco Inter aprova instantaneamente
         </p>
       </div>
@@ -517,155 +524,162 @@
   </div>
 
   <!-- MODAL 3: REGULAMENTO OFICIAL -->
-  <div id="rulesModal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-3 overflow-y-auto">
-    <div class="bg-zinc-900 border border-zinc-700 rounded-3xl max-w-md w-full p-4 space-y-3 shadow-2xl my-auto text-xs max-h-[85vh] overflow-y-auto">
+  <div id="rulesModal" class="fixed inset-0 bg-black/95 backdrop-blur-md z-50 hidden flex flex-col justify-start sm:justify-center items-center p-0 sm:p-4 overflow-y-auto">
+    <div class="w-full min-h-[100dvh] sm:min-h-0 sm:max-w-md bg-gradient-to-b from-[#2a0854] via-[#210743] to-[#16032c] sm:border-2 sm:border-[#8b5cf6] rounded-none sm:rounded-3xl p-6 sm:p-7 shadow-2xl flex flex-col justify-between my-0 sm:my-auto text-xs">
       
-      <div class="flex items-center justify-between border-b border-zinc-800 pb-2">
-        <div>
-          <h3 class="text-xs font-bold text-amber-400 flex items-center gap-1.5">
-            <span>⚖️</span> Regulamento Oficial do Torneio
-          </h3>
-          <p class="text-[8.5px] text-zinc-400">Torneio de Habilidade Mental • O Desafio do Enigma</p>
+      <div>
+        <div class="flex items-center justify-between border-b border-purple-800/80 pb-3 mb-4">
+          <div>
+            <h3 class="text-lg sm:text-xl font-black text-amber-400 flex items-center gap-2">
+              <span class="text-xl">⚖️</span> Regulamento Oficial do Torneio
+            </h3>
+            <p class="text-xs text-purple-200 mt-0.5">Torneio de Habilidade Mental • O Desafio do Enigma</p>
+          </div>
+          <button onclick="closeRulesModal()" class="w-10 h-10 rounded-full bg-purple-900/60 hover:bg-purple-800 text-purple-200 hover:text-white flex items-center justify-center text-lg active:scale-95 transition">✕</button>
         </div>
-        <button onclick="closeRulesModal()" class="text-zinc-500 hover:text-white p-1 text-sm font-bold">✕</button>
+
+        <div class="space-y-4 text-purple-100 text-xs sm:text-sm leading-relaxed overflow-y-auto max-h-[65vh] pr-1">
+          <div>
+            <h4 class="font-black text-white text-sm mb-1">1. Natureza Jurídica e Enquadramento Legal</h4>
+            <p class="text-purple-200">
+              O <strong>Desafio do Cofre</strong> é um concurso de prognósticos dedutivos e habilidade intelectual privativa, amparado pelo <strong>Art. 3º, inciso II da Lei Federal nº 5.768/1971</strong> e expressamente excepcionado pelo <strong>Art. 2º, § 2º da Lei Federal nº 14.790/2023</strong>. Não se confunde com jogo de azar, inexistindo sorteio fortuito; a combinação numérica é fixa e desvendável por eliminação lógica a partir de pistas matemáticas.
+            </p>
+          </div>
+
+          <div>
+            <h4 class="font-black text-white text-sm mb-1">2. Mecânica do Enigma e Pistas Progressivas</h4>
+            <p class="text-purple-200">
+              A senha do cofre é composta por exatamente 5 algarismos. Cada pacote de participação (R$ 4,99) confere 5 chaves de abertura. A cada palpite incorreto, o competidor recebe revelações de pistas matemáticas universais que reduzem o universo de possibilidades de 100.000 para um grupo restrito de combinações.
+            </p>
+          </div>
+
+          <div>
+            <h4 class="font-black text-white text-sm mb-1">3. Acúmulo do Prêmio e Arrecadação</h4>
+            <p class="text-purple-200">
+              O valor anunciado na tela representa o prêmio acumulado em tempo real. A cada pacote adquirido (R$ 4,99), o montante correspondente a <strong>30% do valor bruto (R$ 1,50)</strong> é creditado instantaneamente ao cofre.
+            </p>
+          </div>
+
+          <div>
+            <h4 class="font-black text-white text-sm mb-1">4. Retenção de IRRF e Pagamento Líquido</h4>
+            <p class="text-purple-200">
+              A Empresa Promotora é responsável pelo recolhimento na fonte do IRRF à alíquota de 30% via DARF código 0916. O vencedor recebe o valor anunciado de forma líquida e integral diretamente em sua chave PIX no prazo máximo de 24 horas úteis.
+            </p>
+          </div>
+
+          <div>
+            <h4 class="font-black text-white text-sm mb-1">5. Auditoria Pública e LGPD</h4>
+            <p class="text-purple-200">
+              Ao participar, o competidor autoriza a publicação de seu primeiro nome, município e comprovante bancário com chave PIX e CPF parcialmente mascarados (exemplo: Manoel S. - CPF ***.123.456-**).
+            </p>
+          </div>
+        </div>
       </div>
 
-      <div class="space-y-2.5 text-zinc-300 text-[10px] leading-relaxed">
-        <div>
-          <h4 class="font-bold text-white text-[11px] mb-0.5">1. Natureza Jurídica e Enquadramento Legal</h4>
-          <p class="text-zinc-400">
-            O <strong>Desafio do Cofre</strong> é um concurso de prognósticos dedutivos e habilidade intelectual privativa, amparado pelo <strong>Art. 3º, inciso II da Lei Federal nº 5.768/1971</strong> e expressamente excepcionado pelo <strong>Art. 2º, § 2º da Lei Federal nº 14.790/2023</strong>. Não se confunde com jogo de azar, inexistindo sorteio fortuito; a combinação numérica é fixa e desvendável por eliminação lógica a partir de pistas matemáticas.
-          </p>
-        </div>
-
-        <div>
-          <h4 class="font-bold text-white text-[11px] mb-0.5">2. Mecânica do Enigma e Pistas Progressivas</h4>
-          <p class="text-zinc-400">
-            A senha do cofre é composta por exatamente 5 algarismos. Cada pacote de participação (R$ 4,99) confere 5 chaves de abertura. A cada palpite incorreto, o competidor recebe revelações de pistas matemáticas universais que reduzem o universo de possibilidades de 100.000 para um grupo restrito de combinações.
-          </p>
-        </div>
-
-        <div>
-          <h4 class="font-bold text-white text-[11px] mb-0.5">3. Acúmulo do Prêmio e Arrecadação</h4>
-          <p class="text-zinc-400">
-            O valor anunciado na tela representa o prêmio acumulado em tempo real. A cada pacote adquirido (R$ 4,99), o montante correspondente a <strong>30% do valor bruto (R$ 1,50)</strong> é creditado instantaneamente ao cofre.
-          </p>
-        </div>
-
-        <div>
-          <h4 class="font-bold text-white text-[11px] mb-0.5">4. Retenção de IRRF e Pagamento Líquido</h4>
-          <p class="text-zinc-400">
-            A Empresa Promotora é responsável pelo recolhimento na fonte do IRRF à alíquota de 30% via DARF código 0916. O vencedor recebe o valor anunciado de forma líquida e integral diretamente em sua chave PIX no prazo máximo de 24 horas úteis.
-          </p>
-        </div>
-
-        <div>
-          <h4 class="font-bold text-white text-[11px] mb-0.5">5. Auditoria Pública e LGPD</h4>
-          <p class="text-zinc-400">
-            Ao participar, o competidor autoriza a publicação de seu primeiro nome, município e comprovante bancário com chave PIX e CPF parcialmente mascarados (exemplo: Manoel S. - CPF ***.123.456-**).
-          </p>
-        </div>
+      <div class="pt-4 border-t border-purple-800/80 mt-4">
+        <button onclick="closeRulesModal()" class="w-full py-4 rounded-2xl bg-purple-800 hover:bg-purple-700 text-white font-bold text-sm uppercase transition border border-purple-600 active:scale-95">
+          Entendi e Fechar
+        </button>
       </div>
-
-      <button onclick="closeRulesModal()" class="w-full py-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-white font-bold text-xs uppercase transition border border-zinc-700">
-        Entendi e Fechar
-      </button>
 
     </div>
   </div>
 
   <!-- MODAL DE VITÓRIA / COFRE ABERTO (FOGOS E AVISO AO GANHADOR) -->
-  <div id="victoryModal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-[#240846] border-2 border-amber-400 rounded-3xl max-w-sm w-full p-4 text-center space-y-3 shadow-2xl animate-[pulse-gold_2s_infinite]">
-      <div class="w-16 h-16 mx-auto rounded-full bg-gradient-to-tr from-amber-400 to-yellow-200 flex items-center justify-center text-3xl shadow-lg animate-bounce">
+  <div id="victoryModal" class="fixed inset-0 bg-black/95 backdrop-blur-md z-50 hidden flex flex-col justify-start sm:justify-center items-center p-0 sm:p-4 overflow-y-auto">
+    <div class="w-full min-h-[100dvh] sm:min-h-0 sm:max-w-md bg-[#240846] border-2 border-amber-400 rounded-none sm:rounded-3xl p-6 text-center space-y-4 shadow-2xl my-0 sm:my-auto animate-[pulse-gold_2s_infinite]">
+      <div class="w-20 h-20 mx-auto rounded-full bg-gradient-to-tr from-amber-400 to-yellow-200 flex items-center justify-center text-4xl shadow-xl animate-bounce">
         🏆
       </div>
       <div>
-        <span class="text-xs bg-amber-500/20 text-amber-300 font-black px-3 py-1 rounded-full uppercase border border-amber-500/40 tracking-wider">
+        <span class="text-xs sm:text-sm bg-amber-500/20 text-amber-300 font-black px-4 py-1.5 rounded-full uppercase border border-amber-500/40 tracking-wider">
           🎉 VOCÊ ACERTOU O DESAFIO!
         </span>
-        <h2 class="text-2xl font-black text-white mt-1.5 uppercase">VOCÊ GANHOU!</h2>
+        <h2 class="text-3xl font-black text-white mt-2 uppercase">VOCÊ GANHOU!</h2>
       </div>
 
-      <div class="bg-[#16042c] p-3 rounded-2xl border border-amber-500/40 text-center space-y-2">
+      <div class="bg-[#16042c] p-4 rounded-2xl border border-amber-500/40 text-center space-y-3">
         <div>
-          <span class="text-[9px] text-purple-200 uppercase font-bold block">Prêmio PIX Líquido:</span>
-          <span class="text-2xl font-black text-amber-300 font-mono tracking-tight drop-shadow-[0_0_10px_rgba(250,204,21,0.6)]" id="victoryPrize">R$ 500,00</span>
-          <span class="text-[8.5px] text-emerald-400 block mt-0.5 font-bold">✓ Pagamento Líquido com retenção de IRRF</span>
+          <span class="text-xs text-purple-200 uppercase font-bold block">Prêmio PIX Líquido:</span>
+          <span class="text-3xl font-black text-amber-300 font-mono tracking-tight drop-shadow-[0_0_12px_rgba(250,204,21,0.6)]" id="victoryPrize">R$ 500,00</span>
+          <span class="text-xs text-emerald-400 block mt-1 font-bold">✓ Pagamento Líquido com retenção de IRRF</span>
         </div>
         
-        <div class="bg-[#2a0b52] p-2.5 rounded-xl text-left text-xs space-y-1 text-purple-100 border border-purple-500/30">
-          <p class="text-amber-300 font-black flex items-center gap-1.5 text-[11.5px]">
+        <div class="bg-[#2a0b52] p-3.5 rounded-xl text-left text-xs sm:text-sm space-y-1.5 text-purple-100 border border-purple-500/30">
+          <p class="text-amber-300 font-black flex items-center gap-1.5 text-xs sm:text-sm">
             <span>📞</span> Aguarde o contato da administração em até 24 horas para receber o prêmio!
           </p>
-          <p class="text-[10px]">
+          <p class="text-xs">
             <strong>Nome:</strong> <span id="victoryWinnerName" class="text-white font-bold"></span>
           </p>
-          <p class="text-[10px]">
+          <p class="text-xs">
             <strong>WhatsApp para Contato:</strong> <span id="victoryWinnerPhone" class="text-amber-300 font-mono font-bold"></span>
           </p>
-          <p class="text-[10px]">
+          <p class="text-xs">
             <strong>Chave PIX:</strong> <span id="victoryWinnerPix" class="text-emerald-300 font-mono font-bold"></span>
           </p>
         </div>
       </div>
 
-      <button onclick="finishClaim()" class="w-full py-2.5 rounded-xl gold-metallic-btn text-zinc-950 font-black text-xs uppercase tracking-wider shadow hover:brightness-110 active:scale-95 transition">
+      <button onclick="finishClaim()" class="w-full py-4 rounded-2xl gold-metallic-btn text-zinc-950 font-black text-sm uppercase tracking-wider shadow hover:brightness-110 active:scale-95 transition">
         ✓ ENTENDI! AGUARDO O CONTATO
       </button>
     </div>
   </div>
 
   <!-- PAINEL ADMIN SECRETO (SENHA MANUAL, VALOR INICIAL E DADOS DO GANHADOR) -->
-  <div id="adminModal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-3 overflow-y-auto">
-    <div class="bg-[#220745] border-2 border-[#7c3aed] rounded-3xl max-w-sm w-full p-4 space-y-3 shadow-2xl text-xs my-auto">
-      <div class="flex items-center justify-between border-b border-purple-800/80 pb-2">
-        <h3 class="font-black text-amber-300 flex items-center gap-1.5 text-sm">
-          <span>⚙️</span> Painel Administrativo do Cofre
-        </h3>
-        <button onclick="toggleAdminModal()" class="text-purple-300 hover:text-white p-1">✕</button>
-      </div>
+  <div id="adminModal" class="fixed inset-0 bg-black/95 backdrop-blur-md z-50 hidden flex flex-col justify-start sm:justify-center items-center p-0 sm:p-4 overflow-y-auto">
+    <div class="w-full min-h-[100dvh] sm:min-h-0 sm:max-w-lg bg-gradient-to-b from-[#2a0854] via-[#210743] to-[#16032c] sm:border-2 sm:border-[#8b5cf6] rounded-none sm:rounded-3xl p-6 sm:p-7 shadow-2xl flex flex-col justify-between my-0 sm:my-auto">
+      
+      <div>
+        <div class="flex items-center justify-between border-b border-purple-800/80 pb-3 mb-4">
+          <h3 class="font-black text-amber-300 flex items-center gap-2 text-lg sm:text-xl">
+            <span class="text-2xl">⚙️</span> Painel Administrativo do Cofre
+          </h3>
+          <button onclick="toggleAdminModal()" class="w-10 h-10 rounded-full bg-purple-900/60 hover:bg-purple-800 text-purple-200 hover:text-white flex items-center justify-center text-lg active:scale-95 transition">✕</button>
+        </div>
 
-      <!-- SEÇÃO 1: DADOS DO GANHADOR DO COFRE ATUAL -->
-      <div id="adminWinnerCard" class="bg-[#17052e] p-2.5 rounded-2xl border border-amber-400/40 space-y-1.5">
-        <div class="flex items-center justify-between">
-          <span class="text-[10px] font-black text-amber-300 uppercase flex items-center gap-1">
-            <span>🏆</span> Ganhador Desta Rodada
+        <!-- SEÇÃO 1: DADOS DO GANHADOR DO COFRE ATUAL -->
+        <div id="adminWinnerCard" class="bg-[#17052e] p-4 rounded-2xl border border-amber-400/40 space-y-2 mb-4">
+          <div class="flex items-center justify-between">
+            <span class="text-xs sm:text-sm font-black text-amber-300 uppercase flex items-center gap-1.5">
+              <span>🏆</span> Ganhador Desta Rodada
+            </span>
+            <span id="adminWinnerStatusBadge" class="text-xs px-2.5 py-0.5 rounded-full font-bold bg-amber-500/20 text-amber-300 border border-amber-400/40">Rodada Ativa</span>
+          </div>
+          <div id="adminWinnerDetails" class="text-xs sm:text-sm text-purple-100 space-y-2 pt-1">
+            <p class="text-zinc-400 italic">Cofre ainda não violado nesta rodada.</p>
+          </div>
+        </div>
+
+        <!-- SEÇÃO 2: DEFINIR SENHA MANUAL E VALOR DO PRÊMIO INICIAL -->
+        <div class="space-y-4 bg-[#1c0738] p-4 sm:p-5 rounded-2xl border border-purple-800/60">
+          <span class="text-xs sm:text-sm font-black text-purple-200 uppercase tracking-wider block">
+            Configuração da Rodada
           </span>
-          <span id="adminWinnerStatusBadge" class="text-[8.5px] px-1.5 py-0.2 rounded-full font-bold bg-amber-500/20 text-amber-300 border border-amber-400/40">Ativo</span>
-        </div>
-        <div id="adminWinnerDetails" class="text-[10px] text-purple-100 space-y-1 pt-0.5">
-          <p class="text-zinc-400 italic">Cofre ainda não violado nesta rodada.</p>
-        </div>
-      </div>
+          <div>
+            <label class="text-xs sm:text-sm text-purple-200 block font-bold mb-1.5">Senha Secreta Manual (5 Dígitos):</label>
+            <input type="text" id="adminSecretInput" maxlength="5" placeholder="Ex: 58319" class="w-full bg-[#120326] border-2 border-purple-700/70 focus:border-amber-400 rounded-2xl px-4 py-3.5 text-amber-300 font-mono text-2xl font-black text-center tracking-widest focus:outline-none transition">
+          </div>
 
-      <!-- SEÇÃO 2: DEFINIR SENHA MANUAL E VALOR DO PRÊMIO INICIAL -->
-      <div class="space-y-2 bg-[#1c0738] p-2.5 rounded-2xl border border-purple-800/60">
-        <span class="text-[10px] font-black text-purple-200 uppercase block">
-          Configuração da Rodada
-        </span>
-        <div>
-          <label class="text-[9.5px] text-purple-200 block font-semibold mb-0.5">Senha Secreta Manual (5 Dígitos):</label>
-          <input type="text" id="adminSecretInput" maxlength="5" placeholder="Ex: 58319" class="w-full bg-[#120326] border border-purple-700 rounded-xl px-2.5 py-1.5 text-amber-300 font-mono text-sm focus:outline-none focus:border-amber-400">
-        </div>
+          <div>
+            <label class="text-xs sm:text-sm text-purple-200 block font-bold mb-1.5">Valor Inicial do Prêmio (R$):</label>
+            <input type="number" id="adminPrizeInput" placeholder="Ex: 500" class="w-full bg-[#120326] border-2 border-purple-700/70 focus:border-amber-400 rounded-2xl px-4 py-3.5 text-white font-mono text-2xl font-black text-center focus:outline-none transition">
+          </div>
 
-        <div>
-          <label class="text-[9.5px] text-purple-200 block font-semibold mb-0.5">Valor Inicial do Prêmio (R$):</label>
-          <input type="number" id="adminPrizeInput" placeholder="Ex: 500" class="w-full bg-[#120326] border border-purple-700 rounded-xl px-2.5 py-1.5 text-white font-mono text-sm focus:outline-none focus:border-amber-400">
-        </div>
-
-        <div class="grid grid-cols-2 gap-2 pt-1">
-          <button onclick="saveAdminSettings(false)" class="py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-black uppercase text-[10px] transition">
-            Salvar Dados
-          </button>
-          <button onclick="saveAdminSettings(true)" class="py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-black uppercase text-[10px] transition shadow">
-            Iniciar Novo Cofre
-          </button>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+            <button onclick="saveAdminSettings(false)" class="w-full py-4 rounded-2xl bg-purple-600 hover:bg-purple-500 text-white font-black uppercase text-sm shadow-md active:scale-95 transition">
+              Salvar Dados
+            </button>
+            <button onclick="saveAdminSettings(true)" class="w-full py-4 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-black uppercase text-sm shadow-md active:scale-95 transition">
+              Iniciar Novo Cofre
+            </button>
+          </div>
         </div>
       </div>
 
       <!-- SEÇÃO 3: TOTAL DE JOGADORES -->
-      <div id="adminCompetitorsCount" class="text-center text-[10px] text-purple-300">
+      <div id="adminCompetitorsCount" class="text-center text-xs sm:text-sm text-purple-300 font-semibold py-4 border-t border-purple-800/80 mt-4">
         Carregando dados dos competidores...
       </div>
     </div>
@@ -1197,20 +1211,20 @@
             const w = data.winners[0];
             const cleanPhone = (w.phone || '').replace(/\D/g, '');
             document.getElementById('adminWinnerDetails').innerHTML = `
-              <div class="space-y-1 bg-[#120324] p-2 rounded-xl border border-amber-400/30">
+              <div class="space-y-2 bg-[#120324] p-3.5 rounded-2xl border border-amber-400/40 text-xs sm:text-sm">
                 <p><strong>Nome:</strong> <span class="text-white font-bold">${w.name}</span></p>
                 <p><strong>WhatsApp:</strong> <span class="text-amber-300 font-mono font-bold">${w.phone}</span></p>
                 <p><strong>Chave PIX:</strong> <span class="text-emerald-300 font-mono font-bold">${w.pix_key}</span></p>
                 <p><strong>Prêmio Conquistado:</strong> <span class="text-amber-300 font-mono font-bold">R$ ${w.prize_amount ? Number(w.prize_amount).toFixed(2).replace('.', ',') : '0,00'}</span></p>
                 <p><strong>Senha Acertada:</strong> <span class="text-yellow-200 font-mono font-bold">${w.guess}</span></p>
-                <a href="https://wa.me/55${cleanPhone}" target="_blank" class="inline-flex items-center gap-1.5 bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-black px-2.5 py-1 rounded-lg text-[9.5px] shadow mt-1">
+                <a href="https://wa.me/55${cleanPhone}" target="_blank" class="w-full mt-2 inline-flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-black px-4 py-3 rounded-xl text-sm shadow active:scale-95 transition">
                   <span>💬</span> Chamar Ganhador no WhatsApp
                 </a>
               </div>
             `;
           } else {
             document.getElementById('adminWinnerDetails').innerHTML = `
-              <p class="text-zinc-400 italic">Cofre ainda não violado nesta rodada.</p>
+              <p class="text-zinc-400 italic text-xs sm:text-sm">Cofre ainda não violado nesta rodada.</p>
             `;
           }
 
