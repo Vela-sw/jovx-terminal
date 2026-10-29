@@ -150,7 +150,7 @@
     <!-- CABEÇALHO DO COFRE: IDENTIDADE DO TORNEIO -->
     <div class="flex items-center justify-between px-1.5 pt-0.5">
       <div class="flex items-center gap-1.5">
-        <span class="text-base filter drop-shadow-[0_0_8px_rgba(250,204,21,0.7)]">⭐</span>
+        <span onclick="handleStarSecretClick()" id="adminStarTrigger" class="text-base filter drop-shadow-[0_0_8px_rgba(250,204,21,0.7)] cursor-pointer select-none active:scale-125 transition-transform" title="Desafio do Cofre">⭐</span>
         <div>
           <h1 class="text-[11px] font-black tracking-widest text-white uppercase leading-none">
             DESAFIO DO COFRE
@@ -162,7 +162,7 @@
         <button onclick="openRulesModal()" class="text-[9.5px] text-amber-300 hover:text-amber-200 underline font-black">
           Regras
         </button>
-        <button onclick="toggleAdminModal()" class="text-purple-300 hover:text-amber-300 p-0.5 text-xs">
+        <button id="adminGearBtn" onclick="toggleAdminModal()" class="hidden text-purple-300 hover:text-amber-300 p-0.5 text-xs transition" title="Painel de Controle">
           ⚙️
         </button>
       </div>
@@ -742,6 +742,9 @@
     window.addEventListener('DOMContentLoaded', () => {
       loadStoredSession();
       updateDevModeUI();
+      if (localStorage.getItem('cofre_admin_revealed') === 'true') {
+        revealAdminGear();
+      }
       fetchGameState();
       // SINCRONIZAÇÃO EM TEMPO REAL: checa o estado do cofre a cada 2.5 segundos para todos os jogadores
       setInterval(fetchGameState, 2500);
@@ -1358,6 +1361,37 @@
     function finishClaim() {
       alert(`🎉 PARABÉNS ${currentUser.name.toUpperCase()}!\n\nSeus dados foram registrados com sucesso no sistema.\nNossa equipe de administração entrará em contato via WhatsApp no número ${currentUser.phone} em até 24 horas para o pagamento do prêmio via PIX.`);
       document.getElementById('victoryModal').classList.add('hidden');
+    }
+
+    // ACESSO ADMINISTRATIVO RESTRITO: 5 TOQUES NA ESTRELA ⭐
+    let starTapCount = 0;
+    let starTapTimer = null;
+
+    function handleStarSecretClick() {
+      starTapCount++;
+      clearTimeout(starTapTimer);
+      starTapTimer = setTimeout(() => {
+        starTapCount = 0;
+      }, 2500); // 2.5s para completar os 5 toques rápidos
+
+      if (starTapCount >= 5) {
+        starTapCount = 0;
+        const pass = prompt("⭐ Painel do Administrador\nDigite a senha mestre:");
+        if (pass === "vela2026" || pass === "admin" || pass === "1234") {
+          localStorage.setItem('cofre_admin_revealed', 'true');
+          revealAdminGear();
+          const modal = document.getElementById('adminModal');
+          modal.classList.remove('hidden');
+          loadAdminData();
+        } else if (pass !== null) {
+          alert("Senha incorreta!");
+        }
+      }
+    }
+
+    function revealAdminGear() {
+      const gear = document.getElementById('adminGearBtn');
+      if (gear) gear.classList.remove('hidden');
     }
 
     async function toggleAdminModal() {
