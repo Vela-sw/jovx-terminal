@@ -3,9 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <meta name="theme-color" content="#1a1e28">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#181d28">
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#181d28">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#181d28">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Desafio do Cofre">
   <title>Desafio do Cofre | Torneio de Habilidade Mental</title>
   <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
   <style>
@@ -15,12 +19,27 @@
       box-sizing: border-box;
     }
     
+    :root {
+      color-scheme: dark;
+    }
+
+    html {
+      background-color: #181d28;
+      color-scheme: dark;
+      height: 100%;
+      -webkit-text-size-adjust: 100%;
+    }
+
     body {
-      background: radial-gradient(circle at 50% 10%, #2a3142 0%, #1a1e28 55%, #12151d 100%);
+      background-color: #181d28;
+      background: radial-gradient(circle at 50% 10%, #252c3c 0%, #181d28 55%, #10131b 100%);
       color: #ffffff;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      min-height: 100vh;
+      min-height: 100%;
       min-height: 100dvh;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
     }
 
     /* Carcaça do cofre em aço titânio claro */
@@ -115,19 +134,19 @@
     }
   </style>
 </head>
-<body class="flex flex-col items-center justify-start p-2 sm:p-3 select-none antialiased">
+<body class="flex flex-col items-center justify-start sm:justify-center p-0 sm:p-3 select-none antialiased min-h-screen">
 
-  <!-- CONTAINER MOBILE PRINCIPAL (Formato Original Perfeito) -->
-  <div class="w-full max-w-[390px] vault-outer-frame rounded-[24px] p-2.5 sm:p-3 relative flex flex-col gap-2 my-auto shadow-2xl">
+  <!-- CONTAINER MOBILE PRINCIPAL (EDGE-TO-EDGE NO CELULAR COMO OFFY) -->
+  <div class="w-full max-w-[400px] min-h-[100dvh] sm:min-h-0 vault-outer-frame rounded-none sm:rounded-[24px] border-x-0 sm:border-2 border-y-0 sm:border-y-2 p-2 sm:p-2.5 pt-[max(10px,env(safe-area-inset-top))] pb-[max(14px,calc(env(safe-area-inset-bottom)+8px))] relative flex flex-col justify-between shadow-2xl sm:my-auto">
     
-    <!-- 4 REBITES NOS CANTOS DA CARCAÇA -->
-    <div class="bolt-rivet top-2.5 left-2.5"></div>
-    <div class="bolt-rivet top-2.5 right-2.5"></div>
-    <div class="bolt-rivet bottom-2.5 left-2.5"></div>
-    <div class="bolt-rivet bottom-2.5 right-2.5"></div>
+    <!-- 4 REBITES NOS CANTOS DA CARCAÇA (VISÍVEIS NO DESKTOP) -->
+    <div class="hidden sm:block bolt-rivet top-2.5 left-2.5"></div>
+    <div class="hidden sm:block bolt-rivet top-2.5 right-2.5"></div>
+    <div class="hidden sm:block bolt-rivet bottom-2.5 left-2.5"></div>
+    <div class="hidden sm:block bolt-rivet bottom-2.5 right-2.5"></div>
 
     <!-- CABEÇALHO DO COFRE: IDENTIDADE DO TORNEIO -->
-    <div class="flex items-center justify-between px-2 pt-0.5">
+    <div class="flex items-center justify-between px-1.5 pt-0.5">
       <div class="flex items-center gap-1.5">
         <span class="text-base filter drop-shadow-[0_0_8px_rgba(250,204,21,0.7)]">⭐</span>
         <div>
@@ -161,10 +180,10 @@
     </div>
 
     <!-- PORTA INTERNA DO COFRE (LAYOUT ORIGINAL CENTRALIZADO) -->
-    <div class="vault-inner-door rounded-2xl p-2.5 flex flex-col items-center relative">
+    <div class="vault-inner-door rounded-2xl p-2 sm:p-2.5 flex flex-col items-center relative">
       
       <!-- MINI VISOR OLED DO VALOR ACUMULADO (CENTRALIZADO NO TOPO) -->
-      <div class="w-full flex flex-col items-center justify-center bg-[#13161f] border border-[#3c4458] rounded-xl py-1 px-2.5 mb-1.5 shadow-inner text-center">
+      <div class="w-full flex flex-col items-center justify-center bg-[#13161f] border border-[#3c4458] rounded-xl py-1 px-2.5 mb-1 shadow-inner text-center">
         <div class="flex items-center gap-1.5">
           <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
           <span class="text-[8px] text-zinc-300 uppercase tracking-widest font-black">Cofre Acumulado</span>
@@ -177,73 +196,73 @@
         </span>
       </div>
 
-      <!-- SEÇÃO DA TRANCA DOURADA (CENTRALIZADA, TAMANHO EQUILIBRADO 125px) -->
+      <!-- SEÇÃO DA TRANCA DOURADA (CENTRALIZADA, TAMANHO EQUILIBRADO 120px) -->
       <div class="relative flex flex-col items-center justify-center my-0.5">
         
         <!-- INDICADOR TRIANGULAR DE PRECISÃO NO TOPO -->
-        <div class="z-20 -mb-1.5 flex flex-col items-center">
-          <div class="w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-t-[7px] border-t-amber-400 filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]"></div>
+        <div class="z-20 -mb-1 flex flex-col items-center">
+          <div class="w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-t-[6px] border-t-amber-400 filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]"></div>
         </div>
 
-        <!-- ANEL DE ROLAMENTO E DISCO DOURADO 3D (124px) -->
+        <!-- ANEL DE ROLAMENTO E DISCO DOURADO 3D (120px) -->
         <div class="dial-bearing-ring rounded-full p-1.5 relative cursor-pointer active:scale-98 transition flex items-center justify-center" onclick="clickVaultWheel()" title="Toque para girar">
-          <div style="width: 124px; height: 124px;" class="rounded-full overflow-hidden flex items-center justify-center relative">
+          <div style="width: 120px; height: 120px;" class="rounded-full overflow-hidden flex items-center justify-center relative">
             <img id="vaultWheel" src="/static/dial_luxo.png" alt="Disco Dourado do Cofre"
               class="w-full h-full object-cover transition-transform duration-700 ease-out select-none pointer-events-none drop-shadow-2xl" />
           </div>
         </div>
 
-        <span class="text-[8.5px] text-amber-300 font-mono tracking-widest uppercase font-black mt-1">
+        <span class="text-[8px] text-amber-300 font-mono tracking-widest uppercase font-black mt-1">
           COMBINAÇÃO MECÂNICA • 5 DÍGITOS
         </span>
       </div>
 
       <!-- DISPLAY OLED DOS 5 DÍGITOS (AMPLO E DESTACADO) -->
-      <div class="flex items-center justify-center gap-1.5 my-1.5 w-full">
-        <div id="digit-0" class="digit-box w-11 h-12 sm:w-12 sm:h-13 rounded-xl flex items-center justify-center text-2xl font-black font-mono text-amber-300">
+      <div class="flex items-center justify-center gap-1.5 my-1 w-full">
+        <div id="digit-0" class="digit-box w-10 h-11 sm:w-11 sm:h-12 rounded-xl flex items-center justify-center text-xl sm:text-2xl font-black font-mono text-amber-300">
           -
         </div>
-        <div id="digit-1" class="digit-box w-11 h-12 sm:w-12 sm:h-13 rounded-xl flex items-center justify-center text-2xl font-black font-mono text-amber-300">
+        <div id="digit-1" class="digit-box w-10 h-11 sm:w-11 sm:h-12 rounded-xl flex items-center justify-center text-xl sm:text-2xl font-black font-mono text-amber-300">
           -
         </div>
-        <div id="digit-2" class="digit-box w-11 h-12 sm:w-12 sm:h-13 rounded-xl flex items-center justify-center text-2xl font-black font-mono text-amber-300">
+        <div id="digit-2" class="digit-box w-10 h-11 sm:w-11 sm:h-12 rounded-xl flex items-center justify-center text-xl sm:text-2xl font-black font-mono text-amber-300">
           -
         </div>
-        <div id="digit-3" class="digit-box w-11 h-12 sm:w-12 sm:h-13 rounded-xl flex items-center justify-center text-2xl font-black font-mono text-amber-300">
+        <div id="digit-3" class="digit-box w-10 h-11 sm:w-11 sm:h-12 rounded-xl flex items-center justify-center text-xl sm:text-2xl font-black font-mono text-amber-300">
           -
         </div>
-        <div id="digit-4" class="digit-box w-11 h-12 sm:w-12 sm:h-13 rounded-xl flex items-center justify-center text-2xl font-black font-mono text-amber-300">
+        <div id="digit-4" class="digit-box w-10 h-11 sm:w-11 sm:h-12 rounded-xl flex items-center justify-center text-xl sm:text-2xl font-black font-mono text-amber-300">
           -
         </div>
       </div>
 
       <!-- MENSAGEM DE STATUS DO COFRE -->
-      <div id="statusMessage" class="w-full text-center text-[9.5px] font-bold py-1 px-2 rounded-lg bg-[#151922] border border-[#3c4458] text-amber-200 min-h-[22px] flex items-center justify-center">
+      <div id="statusMessage" class="w-full text-center text-[9px] font-bold py-0.5 px-2 rounded-lg bg-[#151922] border border-[#3c4458] text-amber-200 min-h-[20px] flex items-center justify-center">
         Digite a senha no teclado ou toque abaixo
       </div>
 
       <!-- TECLADO NUMÉRICO TÁTIL DE COFRE -->
-      <div class="w-full max-w-[270px] mt-1 space-y-1">
-        <div class="grid grid-cols-3 gap-1.5">
-          <button onclick="pressDigit(1)" class="vault-key h-9.5 rounded-xl text-base font-mono font-black text-amber-300">1</button>
-          <button onclick="pressDigit(2)" class="vault-key h-9.5 rounded-xl text-base font-mono font-black text-amber-300">2</button>
-          <button onclick="pressDigit(3)" class="vault-key h-9.5 rounded-xl text-base font-mono font-black text-amber-300">3</button>
+      <div class="w-full max-w-[270px] mt-0.5 space-y-1">
+        <div class="grid grid-cols-3 gap-1">
+          <button onclick="pressDigit(1)" class="vault-key h-9 rounded-xl text-base font-mono font-black text-amber-300">1</button>
+          <button onclick="pressDigit(2)" class="vault-key h-9 rounded-xl text-base font-mono font-black text-amber-300">2</button>
+          <button onclick="pressDigit(3)" class="vault-key h-9 rounded-xl text-base font-mono font-black text-amber-300">3</button>
 
-          <button onclick="pressDigit(4)" class="vault-key h-9.5 rounded-xl text-base font-mono font-black text-amber-300">4</button>
-          <button onclick="pressDigit(5)" class="vault-key h-9.5 rounded-xl text-base font-mono font-black text-amber-300">5</button>
-          <button onclick="pressDigit(6)" class="vault-key h-9.5 rounded-xl text-base font-mono font-black text-amber-300">6</button>
+          <button onclick="pressDigit(4)" class="vault-key h-9 rounded-xl text-base font-mono font-black text-amber-300">4</button>
+          <button onclick="pressDigit(5)" class="vault-key h-9 rounded-xl text-base font-mono font-black text-amber-300">5</button>
+          <button onclick="pressDigit(6)" class="vault-key h-9 rounded-xl text-base font-mono font-black text-amber-300">6</button>
 
-          <button onclick="pressDigit(7)" class="vault-key h-9.5 rounded-xl text-base font-mono font-black text-amber-300">7</button>
-          <button onclick="pressDigit(8)" class="vault-key h-9.5 rounded-xl text-base font-mono font-black text-amber-300">8</button>
-          <button onclick="pressDigit(9)" class="vault-key h-9.5 rounded-xl text-base font-mono font-black text-amber-300">9</button>
+          <button onclick="pressDigit(7)" class="vault-key h-9 rounded-xl text-base font-mono font-black text-amber-300">7</button>
+          <button onclick="pressDigit(8)" class="vault-key h-9 rounded-xl text-base font-mono font-black text-amber-300">8</button>
+          <button onclick="pressDigit(9)" class="vault-key h-9 rounded-xl text-base font-mono font-black text-amber-300">9</button>
 
-          <button onclick="clearDigits()" class="vault-key h-9.5 rounded-xl text-[9px] font-black text-red-400 uppercase tracking-tight">Limpar</button>
-          <button onclick="pressDigit(0)" class="vault-key h-9.5 rounded-xl text-base font-mono font-black text-amber-300">0</button>
-          <button onclick="backspaceDigit()" class="vault-key h-9.5 rounded-xl text-sm font-black text-zinc-200">⌫</button>
+          <button onclick="clearDigits()" class="vault-key h-9 rounded-xl text-[8.5px] font-black text-red-400 uppercase tracking-tight">Limpar</button>
+          <button onclick="pressDigit(0)" class="vault-key h-9 rounded-xl text-base font-mono font-black text-amber-300">0</button>
+          <button onclick="backspaceDigit()" class="vault-key h-9 rounded-xl text-sm font-black text-zinc-200">⌫</button>
         </div>
 
         <!-- BOTÃO DE AÇÃO MECÂNICA: DESTRAVAR COFRE -->
-        <button onclick="submitGuess()" class="gold-metallic-btn w-full py-2.5 rounded-xl font-black text-xs uppercase tracking-wider text-zinc-950 flex items-center justify-center gap-1.5 shadow-md">
+        <button onclick="submitGuess()" class="gold-metallic-btn w-full py-2 rounded-xl font-black text-[11px] uppercase tracking-wider text-zinc-950 flex items-center justify-center gap-1.5 shadow-md">
           <span>DESTRAVAR TRANCA DO COFRE</span>
           <span class="text-xs">🔓</span>
         </button>
@@ -252,12 +271,12 @@
     </div>
 
     <!-- PAINEL DAS 4 PISTAS PROGRESSIVAS (CORES FORTES E LETRAS NÍTIDAS) -->
-    <div class="bg-gradient-to-b from-[#1e2330] to-[#161a24] border-2 border-[#3d465d] rounded-2xl p-2.5 space-y-1 shadow-md">
+    <div class="bg-gradient-to-b from-[#1e2330] to-[#161a24] border-2 border-[#3d465d] rounded-2xl p-2 space-y-1 shadow-md">
       <div class="flex items-center justify-between px-1 mb-0.5">
-        <h3 class="text-[10px] font-black uppercase tracking-wider text-amber-300 flex items-center gap-1">
+        <h3 class="text-[9.5px] font-black uppercase tracking-wider text-amber-300 flex items-center gap-1">
           <span>🧩</span> PISTAS ESTRATÉGICAS DO SEGREDO
         </h3>
-        <span id="clueBadge" class="text-[9px] bg-amber-500/25 text-amber-200 font-black px-2 py-0.2 rounded-full border border-amber-400/50">
+        <span id="clueBadge" class="text-[8.5px] bg-amber-500/25 text-amber-200 font-black px-1.5 py-0.2 rounded-full border border-amber-400/50">
           0 de 4 liberadas
         </span>
       </div>
