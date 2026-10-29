@@ -1204,6 +1204,75 @@
       } catch (e) {}
     }
 
+    // SOM DE VITÓRIA: FANFARRA TRIUNFAL + ESTOUROS DE FOGOS DE ARTIFÍCIO
+    function playVictoryCelebrationSound() {
+      hapticFeedback([80, 40, 80, 40, 150, 80, 250]);
+      try {
+        const ctx = getAudioContext();
+        if (ctx.state === 'suspended') ctx.resume();
+        const now = ctx.currentTime;
+
+        // 1. Fanfarra Triunfal de Campeão (Notas C5, E5, G5, C6 com harmônicos brilhantes)
+        const notes = [
+          { f: 523.25, time: 0.00, dur: 0.22 }, // Dó 5
+          { f: 659.25, time: 0.18, dur: 0.22 }, // Mi 5
+          { f: 783.99, time: 0.36, dur: 0.30 }, // Sol 5
+          { f: 1046.50, time: 0.58, dur: 1.60 }  // Dó 6 (Grande final triunfal sustentado)
+        ];
+
+        notes.forEach(n => {
+          // Tom melódico
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(n.f, now + n.time);
+          gain.gain.setValueAtTime(0.001, now + n.time);
+          gain.gain.exponentialRampToValueAtTime(0.35, now + n.time + 0.03);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + n.time + n.dur);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now + n.time);
+          osc.stop(now + n.time + n.dur);
+
+          // Brilho dourado (oitava harmônica para dar ar de trompete de vitória)
+          const harm = ctx.createOscillator();
+          const harmGain = ctx.createGain();
+          harm.type = 'sine';
+          harm.frequency.setValueAtTime(n.f * 2, now + n.time);
+          harmGain.gain.setValueAtTime(0.001, now + n.time);
+          harmGain.gain.exponentialRampToValueAtTime(0.18, now + n.time + 0.03);
+          harmGain.gain.exponentialRampToValueAtTime(0.0001, now + n.time + n.dur);
+          harm.connect(harmGain);
+          harmGain.connect(ctx.destination);
+          harm.start(now + n.time);
+          harm.stop(now + n.time + n.dur);
+        });
+
+        // 2. Efeito dos Fogos de Artifício (Boom sonoro dos rojões sincronizado com os confetes)
+        [0.15, 0.7, 1.3, 1.9, 2.5].forEach(fireworkTime => {
+          setTimeout(() => {
+            try {
+              if (ctx.state === 'suspended') ctx.resume();
+              const fNow = ctx.currentTime;
+              // Explosão grave de rojão
+              const boom = ctx.createOscillator();
+              const boomGain = ctx.createGain();
+              boom.type = 'sine';
+              boom.frequency.setValueAtTime(160, fNow);
+              boom.frequency.exponentialRampToValueAtTime(30, fNow + 0.45);
+              boomGain.gain.setValueAtTime(0.35, fNow);
+              boomGain.gain.exponentialRampToValueAtTime(0.001, fNow + 0.45);
+              boom.connect(boomGain);
+              boomGain.connect(ctx.destination);
+              boom.start(fNow);
+              boom.stop(fNow + 0.45);
+            } catch(e) {}
+          }, fireworkTime * 1000);
+        });
+
+      } catch (e) {}
+    }
+
     function rotateWheel(degrees) {
       currentWheelAngle += degrees;
       const wheel = document.getElementById('vaultWheel');
@@ -1343,7 +1412,7 @@
       updateChancesDisplay();
 
       if (won) {
-        playUnlockSound();
+        playVictoryCelebrationSound();
         launchFireworks();
         const status = document.getElementById('statusMessage');
         status.innerText = "TRANCA DESTRAVADA! VOCÊ É O VENCEDOR!";
