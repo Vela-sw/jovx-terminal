@@ -31,6 +31,7 @@ const DB_URL = findDatabaseUrl();
 
 let isPostgres = false;
 let pgPool = null;
+let pgConnectionError = null;
 
 // SQLite sempre disponível como fallback 100% seguro
 const sqliteDb = new DatabaseSync(path.join(__dirname, 'desafio_cofre.db'));
@@ -112,25 +113,40 @@ initSqlite();
 
 // Inicialização segura do PostgreSQL
 async function initDb() {
-  if (DB_URL) {
+  const currentDbUrl = findDatabaseUrl();
+  if (currentDbUrl) {
     try {
       const { Pool } = require('pg');
-      const isInternal = DB_URL.includes('railway.internal') || DB_URL.includes('localhost') || DB_URL.includes('127.0.0.1');
-      pgPool = new Pool({
-        connectionString: DB_URL,
-        ssl: isInternal ? false : { rejectUnauthorized: false },
-        connectionTimeoutMillis: 5000
-      });
+      let connected = false;
+      const isInternal = currentDbUrl.includes('railway.internal') || currentDbUrl.includes('localhost') || currentDbUrl.includes('127.0.0.1');
+      const sslModes = isInternal ? [false, { rejectUnauthorized: false }] : [{ rejectUnauthorized: false }, false];
+
+      for (const sslMode of sslModes) {
+        try {
+          const pool = new Pool({
+            connectionString: currentDbUrl,
+            ssl: sslMode,
+            connectionTimeoutMillis: 5000
+          });
+          await pool.query('SELECT 1');
+          pgPool = pool;
+          isPostgres = true;
+          connected = true;
+          console.log('🐘 Conectado com sucesso ao PostgreSQL na Railway! (SSL:', Boolean(sslMode), ')');
+          break;
+        } catch (e) {
+          pgConnectionError = e.message;
+        }
+      }
+
+      if (!connected) {
+        throw new Error(pgConnectionError || 'Falha ao conectar pool Postgres');
+      }
 
       // Evita queda por erro ocioso do pool
       pgPool.on('error', (err) => {
         console.warn('⚠️ [Postgres Pool Warning]:', err.message);
       });
-
-      // Testa conexão
-      await pgPool.query('SELECT 1');
-      isPostgres = true;
-      console.log('🐘 Conectado com sucesso ao PostgreSQL na Railway!');
 
       const tables = [
         `CREATE TABLE IF NOT EXISTS game_state (
@@ -660,7 +676,9 @@ const server = http.createServer(async (req, res) => {
         dbStatus: {
           isPostgres,
           type: isPostgres ? 'PostgreSQL' : 'SQLite',
-          message: isPostgres ? '🐘 PostgreSQL Conectado na Railway (Tabela usuarios sincronizada)' : '📁 SQLite Local Ativo (Para ligar ao Postgres da foto, adicione DATABASE_URL no serviço web)'
+          message: isPostgres ? '🐘 PostgreSQL Conectado na Railway (Tabela usuarios sincronizada)' : (pgConnectionError ? `⚠️ Erro Postgres: ${pgConnectionError}` : '📁 SQLite Local Ativo (Para ligar ao Postgres da foto, adicione DATABASE_URL no serviço web)'),
+          error: pgConnectionError,
+          hasUrl: Boolean(findDatabaseUrl())
         },
         interStatus: {
           configured: Boolean(process.env.INTER_CLIENT_ID && process.env.INTER_CLIENT_SECRET),
