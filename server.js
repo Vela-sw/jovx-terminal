@@ -14,7 +14,10 @@ db.exec(`
     id INTEGER PRIMARY KEY,
     jackpot REAL,
     secret_code TEXT,
-    total_arrecadado REAL
+    total_arrecadado REAL,
+    is_locked INTEGER DEFAULT 0,
+    winner_name TEXT,
+    winner_prize REAL
   );
   CREATE TABLE IF NOT EXISTS competitors (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -27,6 +30,17 @@ db.exec(`
     chances INTEGER DEFAULT 0,
     attempts INTEGER DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  );
+  CREATE TABLE IF NOT EXISTS winners (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT,
+    cpf TEXT,
+    phone TEXT,
+    pix_type TEXT,
+    pix_key TEXT,
+    guess TEXT,
+    prize_amount REAL,
+    won_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
   );
   CREATE TABLE IF NOT EXISTS attempts (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -44,10 +58,15 @@ db.exec(`
   );
 `);
 
+// Migrações seguras de colunas caso a tabela já exista
+try { db.exec('ALTER TABLE game_state ADD COLUMN is_locked INTEGER DEFAULT 0'); } catch(e) {}
+try { db.exec('ALTER TABLE game_state ADD COLUMN winner_name TEXT'); } catch(e) {}
+try { db.exec('ALTER TABLE game_state ADD COLUMN winner_prize REAL'); } catch(e) {}
+
 // Estado inicial
 const stateCheck = db.prepare('SELECT * FROM game_state WHERE id = 1').get();
 if (!stateCheck) {
-  db.prepare('INSERT INTO game_state (id, jackpot, secret_code, total_arrecadado) VALUES (1, 3424.50, ?, 0.0)').run('72039');
+  db.prepare('INSERT INTO game_state (id, jackpot, secret_code, total_arrecadado, is_locked) VALUES (1, 500.00, ?, 0.0, 0)').run('72039');
 }
 
 const MIME_TYPES = {
@@ -87,15 +106,20 @@ const server = http.createServer(async (req, res) => {
 
   // ROTAS DE API
   if (req.method === 'GET' && pathname === '/api/game/state') {
-    const row = db.prepare('SELECT jackpot FROM game_state WHERE id = 1').get();
-    return sendJson(res, { jackpot: row ? row.jackpot : 3424.50 });
+    const row = db.prepare('SELECT jackpot, is_locked, winner_name, winner_prize FROM game_state WHERE id = 1').get();
+    return sendJson(res, {
+      jackpot: row ? row.jackpot : 500.00,
+      isLocked: Boolean(row && row.is_locked),
+      winnerName: row ? row.winner_name : null,
+      winnerPrize: row ? row.winner_prize : null
+    });
   }
 
   if (req.method === 'POST' && pathname === '/api/auth/register') {
     const data = await parseJsonBody(req);
     const { name, cpf, phone, pixType = 'cpf', pixKey, password } = data;
-    if (!cpf || !name) {
-      return sendJson(res, { error: 'Dados incompletos' }, 400);
+    if (!cpf || !name || !phone) {
+      return sendJson(res, { error: 'Nome, CPF e WhatsApp são obrigatórios' }, 400);
     }
     db.prepare(`
       INSERT INTO competitors (cpf, name, phone, pix_type, pix_key, password, chances, attempts)
@@ -154,11 +178,20 @@ const server = http.createServer(async (req, res) => {
   if (req.method === 'POST' && pathname === '/api/game/guess') {
     const data = await parseJsonBody(req);
     const { cpf, guess } = data;
-    const user = db.prepare('SELECT chances, attempts FROM competitors WHERE cpf = ?').get(cpf);
+    const game = db.prepare('SELECT * FROM game_state WHERE id = 1').get();
+    if (game && game.is_locked) {
+      return sendJson(res, {
+        error: 'Cofre já encerrado! O prêmio já foi ganho.',
+        isLocked: true,
+        winnerName: game.winner_name,
+        winnerPrize: game.winner_prize
+      }, 400);
+    }
+
+    const user = db.prepare('SELECT * FROM competitors WHERE cpf = ?').get(cpf);
     if (!user || user.chances <= 0) {
       return sendJson(res, { error: 'Sem chaves disponíveis' }, 403);
     }
-    const game = db.prepare('SELECT secret_code FROM game_state WHERE id = 1').get();
     const secret = game ? game.secret_code : '72039';
 
     const newChances = user.chances - 1;
@@ -168,22 +201,53 @@ const server = http.createServer(async (req, res) => {
     db.prepare('UPDATE competitors SET chances = ?, attempts = ? WHERE cpf = ?').run(newChances, newAttempts, cpf);
     db.prepare('INSERT INTO attempts (cpf, guess, is_correct) VALUES (?, ?, ?)').run(cpf, guess, isCorrect);
 
+    if (isCorrect) {
+      db.prepare(`
+        UPDATE game_state SET 
+          is_locked = 1,
+          winner_name = ?,
+          winner_prize = jackpot
+        WHERE id = 1
+      `).run(user.name);
+
+      db.prepare(`
+        INSERT INTO winners (name, cpf, phone, pix_type, pix_key, guess, prize_amount)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+      `).run(user.name, user.cpf, user.phone, user.pix_type, user.pix_key, guess, game.jackpot);
+    }
+
     return sendJson(res, {
       success: true,
       won: Boolean(isCorrect),
       chancesLeft: newChances,
-      attemptsCount: newAttempts
+      attemptsCount: newAttempts,
+      winnerName: isCorrect ? user.name : null,
+      winnerPrize: isCorrect ? game.jackpot : null
+    });
+  }
+
+  if (req.method === 'GET' && pathname === '/api/admin/data') {
+    const game = db.prepare('SELECT * FROM game_state WHERE id = 1').get();
+    const winners = db.prepare('SELECT * FROM winners ORDER BY won_at DESC LIMIT 10').all();
+    const competitors = db.prepare('SELECT name, cpf, phone, pix_key, chances, attempts, created_at FROM competitors ORDER BY created_at DESC LIMIT 50').all();
+    return sendJson(res, {
+      game,
+      winners,
+      competitors
     });
   }
 
   if (req.method === 'POST' && pathname === '/api/admin/config') {
     const data = await parseJsonBody(req);
-    const { secret_code, jackpot } = data;
+    const { secret_code, jackpot, reset } = data;
     if (secret_code && secret_code.length === 5) {
       db.prepare('UPDATE game_state SET secret_code = ? WHERE id = 1').run(secret_code);
     }
     if (jackpot !== undefined && !isNaN(jackpot)) {
       db.prepare('UPDATE game_state SET jackpot = ? WHERE id = 1').run(parseFloat(jackpot));
+    }
+    if (reset) {
+      db.prepare('UPDATE game_state SET is_locked = 0, winner_name = NULL, winner_prize = NULL WHERE id = 1').run();
     }
     return sendJson(res, { success: true });
   }

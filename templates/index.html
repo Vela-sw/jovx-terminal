@@ -12,6 +12,7 @@
   <meta name="apple-mobile-web-app-title" content="Desafio do Cofre">
   <title>Desafio do Cofre | Torneio de Habilidade Mental</title>
   <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
   <style>
     * {
       -webkit-tap-highlight-color: transparent;
@@ -372,7 +373,7 @@
             <span class="text-[8px] text-zinc-300 leading-tight">
               Declaro ter +18 anos e concordo com o 
               <a href="javascript:void(0)" onclick="openRulesModal()" class="text-amber-400 underline font-bold">Regulamento Oficial do Torneio</a>.
-              Estou ciente de que o prêmio acumula progressivamente e de que a premiação é líquida com retenção de IRRF (CNPJ 63.425.775/0007-15).
+              Estou ciente de que o prêmio acumula progressivamente e de que a premiação é líquida com retenção de IRRF pela Empresa Promotora.
             </span>
           </label>
         </div>
@@ -412,7 +413,7 @@
         </div>
 
         <button type="submit" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-zinc-950 font-bold uppercase tracking-wider text-xs shadow active:scale-95 transition">
-          ENTRAR E JOGAR
+          ENTRAR
         </button>
       </form>
 
@@ -554,7 +555,7 @@
         <div>
           <h4 class="font-bold text-white text-[11px] mb-0.5">4. Retenção de IRRF e Pagamento Líquido</h4>
           <p class="text-zinc-400">
-            A empresa promotora (CNPJ 63.425.775/0007-15) é responsável pelo recolhimento na fonte do IRRF à alíquota de 30% via DARF código 0916. O vencedor recebe o valor anunciado de forma líquida e integral diretamente em sua chave PIX no prazo máximo de 24 horas úteis.
+            A Empresa Promotora é responsável pelo recolhimento na fonte do IRRF à alíquota de 30% via DARF código 0916. O vencedor recebe o valor anunciado de forma líquida e integral diretamente em sua chave PIX no prazo máximo de 24 horas úteis.
           </p>
         </div>
 
@@ -573,61 +574,99 @@
     </div>
   </div>
 
-  <!-- MODAL DE VITÓRIA / COFRE ABERTO -->
+  <!-- MODAL DE VITÓRIA / COFRE ABERTO (FOGOS E AVISO AO GANHADOR) -->
   <div id="victoryModal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-zinc-900 border-2 border-amber-400 rounded-3xl max-w-sm w-full p-4 text-center space-y-3 shadow-2xl animate-[pulse-gold_2s_infinite]">
-      <div class="w-14 h-14 mx-auto rounded-full bg-gradient-to-tr from-amber-500 to-yellow-200 flex items-center justify-center text-2xl shadow-lg">
+    <div class="bg-[#240846] border-2 border-amber-400 rounded-3xl max-w-sm w-full p-4 text-center space-y-3 shadow-2xl animate-[pulse-gold_2s_infinite]">
+      <div class="w-16 h-16 mx-auto rounded-full bg-gradient-to-tr from-amber-400 to-yellow-200 flex items-center justify-center text-3xl shadow-lg animate-bounce">
         🏆
       </div>
       <div>
-        <span class="text-[9px] bg-amber-500/20 text-amber-300 font-bold px-3 py-0.5 rounded-full uppercase border border-amber-500/40">
-          SEGREDO DESVENDADO!
+        <span class="text-xs bg-amber-500/20 text-amber-300 font-black px-3 py-1 rounded-full uppercase border border-amber-500/40 tracking-wider">
+          🎉 VOCÊ ACERTOU O DESAFIO!
         </span>
-        <h2 class="text-lg font-black text-white mt-1">O COFRE FOI ABERTO!</h2>
+        <h2 class="text-2xl font-black text-white mt-1.5 uppercase">VOCÊ GANHOU!</h2>
       </div>
 
-      <div class="bg-zinc-950 p-2.5 rounded-2xl border border-amber-500/30 text-left space-y-1">
-        <div class="text-center pb-1 border-b border-zinc-800">
-          <span class="text-[8.5px] text-zinc-400 uppercase block">Prêmio PIX Líquido:</span>
-          <span class="text-xl font-black gold-gradient-text font-mono" id="victoryPrize">R$ 3.424,50</span>
-          <span class="text-[8px] text-emerald-400 block mt-0.5">✓ IRRF 30% recolhido na fonte pelo CNPJ 63.425.775/0007-15</span>
+      <div class="bg-[#16042c] p-3 rounded-2xl border border-amber-500/40 text-center space-y-2">
+        <div>
+          <span class="text-[9px] text-purple-200 uppercase font-bold block">Prêmio PIX Líquido:</span>
+          <span class="text-2xl font-black text-amber-300 font-mono tracking-tight drop-shadow-[0_0_10px_rgba(250,204,21,0.6)]" id="victoryPrize">R$ 500,00</span>
+          <span class="text-[8.5px] text-emerald-400 block mt-0.5 font-bold">✓ Pagamento Líquido com retenção de IRRF</span>
         </div>
-        <div class="text-[9.5px] text-zinc-300 pt-1 space-y-0.5">
-          <p><strong>Ganhador:</strong> <span id="victoryWinnerName" class="text-white">Competidor</span></p>
-          <p><strong>Chave PIX:</strong> <span id="victoryWinnerPix" class="text-amber-300 font-mono">Cadastrada</span></p>
+        
+        <div class="bg-[#2a0b52] p-2.5 rounded-xl text-left text-xs space-y-1 text-purple-100 border border-purple-500/30">
+          <p class="text-amber-300 font-black flex items-center gap-1.5 text-[11.5px]">
+            <span>📞</span> Aguarde o contato da administração em até 24 horas para receber o prêmio!
+          </p>
+          <p class="text-[10px]">
+            <strong>Nome:</strong> <span id="victoryWinnerName" class="text-white font-bold"></span>
+          </p>
+          <p class="text-[10px]">
+            <strong>WhatsApp para Contato:</strong> <span id="victoryWinnerPhone" class="text-amber-300 font-mono font-bold"></span>
+          </p>
+          <p class="text-[10px]">
+            <strong>Chave PIX:</strong> <span id="victoryWinnerPix" class="text-emerald-300 font-mono font-bold"></span>
+          </p>
         </div>
       </div>
 
       <button onclick="finishClaim()" class="w-full py-2.5 rounded-xl gold-metallic-btn text-zinc-950 font-black text-xs uppercase tracking-wider shadow hover:brightness-110 active:scale-95 transition">
-        CONFIRMAR RESGATE DO PIX
+        ✓ ENTENDI! AGUARDO O CONTATO
       </button>
     </div>
   </div>
 
-  <!-- PAINEL ADMIN SECRETO -->
-  <div id="adminModal" class="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-zinc-900 border border-zinc-700 rounded-3xl max-w-sm w-full p-4 space-y-3 shadow-2xl text-xs">
-      <div class="flex items-center justify-between border-b border-zinc-800 pb-2">
-        <h3 class="font-bold text-amber-400 flex items-center gap-1.5">
-          <span>⚙️</span> Painel Administrativo
+  <!-- PAINEL ADMIN SECRETO (SENHA MANUAL, VALOR INICIAL E DADOS DO GANHADOR) -->
+  <div id="adminModal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-3 overflow-y-auto">
+    <div class="bg-[#220745] border-2 border-[#7c3aed] rounded-3xl max-w-sm w-full p-4 space-y-3 shadow-2xl text-xs my-auto">
+      <div class="flex items-center justify-between border-b border-purple-800/80 pb-2">
+        <h3 class="font-black text-amber-300 flex items-center gap-1.5 text-sm">
+          <span>⚙️</span> Painel Administrativo do Cofre
         </h3>
-        <button onclick="toggleAdminModal()" class="text-zinc-500 hover:text-white">✕</button>
+        <button onclick="toggleAdminModal()" class="text-purple-300 hover:text-white p-1">✕</button>
       </div>
 
-      <div class="space-y-2">
+      <!-- SEÇÃO 1: DADOS DO GANHADOR DO COFRE ATUAL -->
+      <div id="adminWinnerCard" class="bg-[#17052e] p-2.5 rounded-2xl border border-amber-400/40 space-y-1.5">
+        <div class="flex items-center justify-between">
+          <span class="text-[10px] font-black text-amber-300 uppercase flex items-center gap-1">
+            <span>🏆</span> Ganhador Desta Rodada
+          </span>
+          <span id="adminWinnerStatusBadge" class="text-[8.5px] px-1.5 py-0.2 rounded-full font-bold bg-amber-500/20 text-amber-300 border border-amber-400/40">Ativo</span>
+        </div>
+        <div id="adminWinnerDetails" class="text-[10px] text-purple-100 space-y-1 pt-0.5">
+          <p class="text-zinc-400 italic">Cofre ainda não violado nesta rodada.</p>
+        </div>
+      </div>
+
+      <!-- SEÇÃO 2: DEFINIR SENHA MANUAL E VALOR DO PRÊMIO INICIAL -->
+      <div class="space-y-2 bg-[#1c0738] p-2.5 rounded-2xl border border-purple-800/60">
+        <span class="text-[10px] font-black text-purple-200 uppercase block">
+          Configuração da Rodada
+        </span>
         <div>
-          <label class="text-[9.5px] text-zinc-400 block font-semibold">Nova Senha Secreta (5 Dígitos):</label>
-          <input type="text" id="adminSecretInput" maxlength="5" class="w-full bg-zinc-950 border border-zinc-700 rounded-xl px-2.5 py-1.5 text-amber-300 font-mono text-sm">
+          <label class="text-[9.5px] text-purple-200 block font-semibold mb-0.5">Senha Secreta Manual (5 Dígitos):</label>
+          <input type="text" id="adminSecretInput" maxlength="5" placeholder="Ex: 58319" class="w-full bg-[#120326] border border-purple-700 rounded-xl px-2.5 py-1.5 text-amber-300 font-mono text-sm focus:outline-none focus:border-amber-400">
         </div>
 
         <div>
-          <label class="text-[9.5px] text-zinc-400 block font-semibold">Valor do Prêmio (R$):</label>
-          <input type="number" id="adminPrizeInput" class="w-full bg-zinc-950 border border-zinc-700 rounded-xl px-2.5 py-1.5 text-white font-mono text-sm">
+          <label class="text-[9.5px] text-purple-200 block font-semibold mb-0.5">Valor Inicial do Prêmio (R$):</label>
+          <input type="number" id="adminPrizeInput" placeholder="Ex: 500" class="w-full bg-[#120326] border border-purple-700 rounded-xl px-2.5 py-1.5 text-white font-mono text-sm focus:outline-none focus:border-amber-400">
         </div>
 
-        <button onclick="saveAdminSettings()" class="w-full py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-zinc-950 font-bold uppercase transition">
-          Salvar Alterações
-        </button>
+        <div class="grid grid-cols-2 gap-2 pt-1">
+          <button onclick="saveAdminSettings(false)" class="py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-black uppercase text-[10px] transition">
+            Salvar Dados
+          </button>
+          <button onclick="saveAdminSettings(true)" class="py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-black uppercase text-[10px] transition shadow">
+            Iniciar Novo Cofre
+          </button>
+        </div>
+      </div>
+
+      <!-- SEÇÃO 3: TOTAL DE JOGADORES -->
+      <div id="adminCompetitorsCount" class="text-center text-[10px] text-purple-300">
+        Carregando dados dos competidores...
       </div>
     </div>
   </div>
@@ -653,6 +692,8 @@
       fetchGameState();
     });
 
+    let isCofreLocked = false;
+
     async function fetchGameState() {
       try {
         const res = await fetch('/api/game/state');
@@ -660,6 +701,15 @@
           const data = await res.json();
           jackpot = data.jackpot || jackpot;
           updateJackpotDisplay();
+          if (data.isLocked) {
+            isCofreLocked = true;
+            const status = document.getElementById('statusMessage');
+            if (status) {
+              const pVal = data.winnerPrize ? ('R$ ' + Number(data.winnerPrize).toFixed(2).replace('.', ',')) : '';
+              status.innerText = `🚨 COFRE ABERTO! ${data.winnerName || 'Competidor'} levou ${pVal}! Aguarde nova rodada!`;
+              status.className = "w-full text-center text-[9px] font-black py-1 px-2 rounded-lg bg-amber-500/20 border border-amber-400 text-amber-200 min-h-[22px] flex items-center justify-center animate-pulse";
+            }
+          }
         }
       } catch (e) {
         updateJackpotDisplay();
@@ -772,6 +822,12 @@
 
       if (cpf.length < 14) {
         alert("Digite um CPF válido.");
+        return;
+      }
+
+      const cleanPhone = phone.replace(/\D/g, '');
+      if (cleanPhone.length < 10) {
+        alert("O número de Celular / WhatsApp com DDD é obrigatório para contato em caso de premiação.");
         return;
       }
 
@@ -1049,17 +1105,19 @@
 
       if (won) {
         playUnlockSound();
+        launchFireworks();
         const status = document.getElementById('statusMessage');
         status.innerText = "TRANCA DESTRAVADA! VOCÊ É O VENCEDOR!";
         status.className = "w-full text-center text-[9.5px] font-black py-1 px-2 rounded-lg bg-emerald-950 border border-emerald-400 text-emerald-200 min-h-[22px] flex items-center justify-center";
         
         document.getElementById('victoryPrize').innerText = document.getElementById('jackpotDisplay').innerText;
         document.getElementById('victoryWinnerName').innerText = currentUser.name;
-        document.getElementById('victoryWinnerPix').innerText = currentUser.pixKey;
+        document.getElementById('victoryWinnerPhone').innerText = currentUser.phone || 'Não informado';
+        document.getElementById('victoryWinnerPix').innerText = `${currentUser.pixKey} (${currentUser.pixType || 'PIX'})`;
 
         setTimeout(() => {
           document.getElementById('victoryModal').classList.remove('hidden');
-        }, 700);
+        }, 500);
       } else {
         playMechanicalClick(200, 0.08);
         revealClues(attemptsCount);
@@ -1078,29 +1136,115 @@
       }
     }
 
+    function launchFireworks() {
+      if (typeof confetti === 'function') {
+        const duration = 4000;
+        const animationEnd = Date.now() + duration;
+        const interval = setInterval(function() {
+          const timeLeft = animationEnd - Date.now();
+          if (timeLeft <= 0) {
+            return clearInterval(interval);
+          }
+          confetti({
+            particleCount: 50,
+            spread: 80,
+            origin: { y: 0.6 }
+          });
+        }, 300);
+      }
+    }
+
     function finishClaim() {
-      alert(`🎉 PARABÉNS ${currentUser.name.toUpperCase()}!\n\nSolicitação de resgate oficial registrada.\nO valor de ${document.getElementById('jackpotDisplay').innerText} será transferido para a chave PIX: ${currentUser.pixKey}.\n\nO comprovante autenticado pelo banco será publicado no painel com seus dados mascarados conforme a LGPD.`);
+      alert(`🎉 PARABÉNS ${currentUser.name.toUpperCase()}!\n\nSeus dados foram registrados com sucesso no sistema.\nNossa equipe de administração entrará em contato via WhatsApp no número ${currentUser.phone} em até 24 horas para o pagamento do prêmio via PIX.`);
       document.getElementById('victoryModal').classList.add('hidden');
     }
 
-    function toggleAdminModal() {
-      document.getElementById('adminModal').classList.toggle('hidden');
+    async function toggleAdminModal() {
+      const modal = document.getElementById('adminModal');
+      const isHidden = modal.classList.contains('hidden');
+      if (isHidden) {
+        const pass = prompt("Digite a senha de administrador:");
+        if (pass !== "vela2026" && pass !== "admin" && pass !== "1234") {
+          alert("Senha incorreta!");
+          return;
+        }
+        modal.classList.remove('hidden');
+        loadAdminData();
+      } else {
+        modal.classList.add('hidden');
+      }
     }
-    async function saveAdminSettings() {
+
+    async function loadAdminData() {
+      try {
+        const res = await fetch('/api/admin/data');
+        if (res.ok) {
+          const data = await res.json();
+          if (data.game) {
+            document.getElementById('adminSecretInput').value = data.game.secret_code || '';
+            document.getElementById('adminPrizeInput').value = data.game.jackpot || '';
+            const statusBadge = document.getElementById('adminWinnerStatusBadge');
+            if (data.game.is_locked) {
+              statusBadge.innerText = "COFRE VIOLADO!";
+              statusBadge.className = "text-[8.5px] px-2 py-0.5 rounded-full font-black bg-red-500/20 text-red-300 border border-red-500/50";
+            } else {
+              statusBadge.innerText = "RODADA ATIVA";
+              statusBadge.className = "text-[8.5px] px-2 py-0.5 rounded-full font-black bg-emerald-500/20 text-emerald-300 border border-emerald-500/50";
+            }
+          }
+
+          if (data.winners && data.winners.length > 0) {
+            const w = data.winners[0];
+            const cleanPhone = (w.phone || '').replace(/\D/g, '');
+            document.getElementById('adminWinnerDetails').innerHTML = `
+              <div class="space-y-1 bg-[#120324] p-2 rounded-xl border border-amber-400/30">
+                <p><strong>Nome:</strong> <span class="text-white font-bold">${w.name}</span></p>
+                <p><strong>WhatsApp:</strong> <span class="text-amber-300 font-mono font-bold">${w.phone}</span></p>
+                <p><strong>Chave PIX:</strong> <span class="text-emerald-300 font-mono font-bold">${w.pix_key}</span></p>
+                <p><strong>Prêmio Conquistado:</strong> <span class="text-amber-300 font-mono font-bold">R$ ${w.prize_amount ? Number(w.prize_amount).toFixed(2).replace('.', ',') : '0,00'}</span></p>
+                <p><strong>Senha Acertada:</strong> <span class="text-yellow-200 font-mono font-bold">${w.guess}</span></p>
+                <a href="https://wa.me/55${cleanPhone}" target="_blank" class="inline-flex items-center gap-1.5 bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-black px-2.5 py-1 rounded-lg text-[9.5px] shadow mt-1">
+                  <span>💬</span> Chamar Ganhador no WhatsApp
+                </a>
+              </div>
+            `;
+          } else {
+            document.getElementById('adminWinnerDetails').innerHTML = `
+              <p class="text-zinc-400 italic">Cofre ainda não violado nesta rodada.</p>
+            `;
+          }
+
+          if (data.competitors) {
+            document.getElementById('adminCompetitorsCount').innerText = `Total de competidores cadastrados no banco: ${data.competitors.length}`;
+          }
+        }
+      } catch (err) {}
+    }
+
+    async function saveAdminSettings(resetCofre = false) {
       const s = document.getElementById('adminSecretInput').value.trim();
       const p = parseFloat(document.getElementById('adminPrizeInput').value);
-      if (s.length === 5 || !isNaN(p)) {
-        try {
-          await fetch('/api/admin/config', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ secret_code: s, jackpot: p })
-          });
-        } catch (e) {}
+      if (s.length !== 5 && !resetCofre) {
+        alert("A senha do cofre deve ter exatamente 5 dígitos!");
+        return;
+      }
+      try {
+        await fetch('/api/admin/config', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ secret_code: s, jackpot: p, reset: resetCofre })
+        });
         if (!isNaN(p)) jackpot = p;
         updateJackpotDisplay();
         toggleAdminModal();
-        alert("Configurações salvas!");
+        if (resetCofre) {
+          alert("🎉 NOVO COFRE INICIADO COM SUCESSO!\n\nSenha e valor inicial configurados. O cofre foi reaberto!");
+          window.location.reload();
+        } else {
+          alert("Configurações salvas com sucesso!");
+        }
+      } catch (e) {
+        alert("Erro ao salvar configurações.");
       }
     }
   </script>
