@@ -1033,7 +1033,8 @@
 
     async function devAddKeysToSelf(amount = 10) {
       if (!currentUser || !currentUser.cpf) {
-        alert("Você precisa estar cadastrado/logado na sua conta primeiro para receber as chaves de desenvolvedor.");
+        alert("⚠️ Você precisa estar cadastrado/logado na sua conta primeiro para receber as chaves de desenvolvedor.");
+        openRegisterModal();
         return;
       }
       try {
@@ -1043,10 +1044,12 @@
           body: JSON.stringify({ cpf: currentUser.cpf, amount, secret: 'vela2026' })
         });
         if (res.ok) {
-          chancesLeft += amount;
+          const data = await res.json();
+          chancesLeft = data.chances !== undefined ? data.chances : (chancesLeft + amount);
           saveStoredSession();
           updateChancesDisplay();
-          alert(`✅ +${amount} chaves adicionadas com sucesso à sua conta DEV!`);
+          playUnlockSound();
+          alert(`🔑 SUCESSO! +${amount} chaves adicionadas à sua conta DEV! Saldo atual: ${chancesLeft} chaves.`);
         } else {
           alert("Erro ao adicionar chaves.");
         }
@@ -1157,6 +1160,11 @@
     }
 
     async function simulatePixPayment() {
+      if (!currentUser || !currentUser.cpf) {
+        alert("⚠️ Você precisa estar cadastrado/logado na sua conta primeiro para receber as 10 chaves!");
+        openRegisterModal();
+        return;
+      }
       chancesLeft += 10;
       jackpot += 1.50;
       saveStoredSession();
@@ -1170,12 +1178,15 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ cpf: currentUser.cpf, amount: 4.99 })
         });
+        await fetchGameState();
       } catch (err) {}
 
       playUnlockSound();
       const status = document.getElementById('statusMessage');
-      status.innerText = "PAGAMENTO PIX CONFIRMADO! +10 CHAVES LIBERADAS.";
-      status.className = "w-full text-center text-[9.5px] font-black py-1 px-2 rounded-lg bg-emerald-950 border border-emerald-500 text-emerald-300 min-h-[22px] flex items-center justify-center";
+      if (status) {
+        status.innerText = "PAGAMENTO PIX CONFIRMADO! +10 CHAVES LIBERADAS.";
+        status.className = "w-full text-center text-[9.5px] font-black py-1 px-2 rounded-lg bg-emerald-950 border border-emerald-500 text-emerald-300 min-h-[22px] flex items-center justify-center";
+      }
     }
 
     // ÁUDIO MECÂNICO & VIBRAÇÃO HÁPTICA NO CELULAR

@@ -326,26 +326,35 @@ async function getGameState() {
   }
 }
 
-async function getCompetitor(cpf) {
+async function getCompetitor(rawCpf) {
+  if (!rawCpf) return null;
+  const cpf = String(rawCpf).trim();
+  const cleanCpf = cpf.replace(/\D/g, '');
   if (isPostgres && pgPool) {
     try {
-      const res = await pgPool.query('SELECT * FROM competitors WHERE cpf = $1', [cpf]);
+      const res = await pgPool.query('SELECT * FROM usuarios WHERE cpf = $1 OR cpf = $2', [cpf, cleanCpf]);
+      if (res.rows[0]) return res.rows[0];
+    } catch (e) {}
+    try {
+      const res = await pgPool.query('SELECT * FROM competitors WHERE cpf = $1 OR cpf = $2', [cpf, cleanCpf]);
       if (res.rows[0]) return res.rows[0];
     } catch (e) {}
   }
   try {
-    return sqliteDb.prepare('SELECT * FROM competitors WHERE cpf = ?').get(cpf) || null;
+    return sqliteDb.prepare('SELECT * FROM competitors WHERE cpf = ? OR cpf = ?').get(cpf, cleanCpf) || null;
   } catch (e) {
     return null;
   }
 }
 
 async function upsertCompetitor(user) {
-  const { cpf, name, phone, pixType = 'cpf', pixKey = '', password = '' } = user;
+  const { name, phone, pixType = 'cpf', pixKey = '', password = '' } = user;
+  const cpf = String(user.cpf || '').trim();
+  const cleanCpf = cpf.replace(/\D/g, '');
   
   // 1. Salva no SQLite de forma segura (SELECT antes de INSERT/UPDATE)
   try {
-    const existing = sqliteDb.prepare('SELECT id FROM competitors WHERE cpf = ?').get(cpf);
+    const existing = sqliteDb.prepare('SELECT id FROM competitors WHERE cpf = ? OR cpf = ?').get(cpf, cleanCpf);
     if (existing) {
       sqliteDb.prepare(`
         UPDATE competitors SET name = ?, phone = ?, pix_type = ?, pix_key = ?, password = ? WHERE cpf = ?
@@ -360,10 +369,10 @@ async function upsertCompetitor(user) {
     console.warn('Erro ao salvar competitor no SQLite:', e.message);
   }
 
-  // 2. Salva no PostgreSQL se ativo
+  // 2. Salva no PostgreSQL se ativo (atualiza tanto competitors quanto usuarios)
   if (isPostgres && pgPool) {
     try {
-      const checkComp = await pgPool.query('SELECT id FROM competitors WHERE cpf = $1', [cpf]);
+      const checkComp = await pgPool.query('SELECT id FROM competitors WHERE cpf = $1 OR cpf = $2', [cpf, cleanCpf]);
       if (checkComp.rows.length > 0) {
         await pgPool.query(`
           UPDATE competitors SET name = $1, phone = $2, pix_type = $3, pix_key = $4, password = $5 WHERE cpf = $6
@@ -380,7 +389,7 @@ async function upsertCompetitor(user) {
 
     // Salva na tabela 'usuarios' que o usuário visualiza no Railway
     try {
-      const checkUser = await pgPool.query('SELECT id FROM usuarios WHERE cpf = $1', [cpf]);
+      const checkUser = await pgPool.query('SELECT id FROM usuarios WHERE cpf = $1 OR cpf = $2', [cpf, cleanCpf]);
       if (checkUser.rows.length > 0) {
         await pgPool.query(`
           UPDATE usuarios SET name = $1, phone = $2, pix_type = $3, pix_key = $4, password = $5 WHERE cpf = $6
@@ -397,10 +406,14 @@ async function upsertCompetitor(user) {
   }
 }
 
-async function creditChances(cpf, amount = 4.99) {
+async function creditChances(rawCpf, amount = 4.99) {
+  if (!rawCpf) return;
+  const cpf = String(rawCpf).trim();
+  const cleanCpf = cpf.replace(/\D/g, '');
+
   // SQLite
   try {
-    sqliteDb.prepare('UPDATE competitors SET chances = chances + 10 WHERE cpf = ?').run(cpf);
+    sqliteDb.prepare('UPDATE competitors SET chances = chances + 10 WHERE cpf = ? OR cpf = ?').run(cpf, cleanCpf);
     sqliteDb.prepare('UPDATE game_state SET jackpot = jackpot + 1.50, total_arrecadado = total_arrecadado + ? WHERE id = 1').run(amount);
     sqliteDb.prepare('INSERT INTO transactions (cpf, amount, status) VALUES (?, ?, ?)').run(cpf, amount, 'PAID');
   } catch (e) {}
@@ -408,11 +421,13 @@ async function creditChances(cpf, amount = 4.99) {
   // Postgres
   if (isPostgres && pgPool) {
     try {
-      await pgPool.query('UPDATE competitors SET chances = chances + 10 WHERE cpf = $1', [cpf]);
-      await pgPool.query('UPDATE usuarios SET chances = chances + 10 WHERE cpf = $1', [cpf]);
+      await pgPool.query('UPDATE competitors SET chances = chances + 10 WHERE cpf = $1 OR cpf = $2', [cpf, cleanCpf]);
+      await pgPool.query('UPDATE usuarios SET chances = chances + 10 WHERE cpf = $1 OR cpf = $2', [cpf, cleanCpf]);
       await pgPool.query('UPDATE game_state SET jackpot = jackpot + 1.50, total_arrecadado = total_arrecadado + $1 WHERE id = 1', [amount]);
       await pgPool.query('INSERT INTO transactions (cpf, amount, status) VALUES ($1, $2, $3)', [cpf, amount, 'PAID']);
-    } catch (e) {}
+    } catch (e) {
+      console.warn('Erro ao creditar chances no Postgres:', e.message);
+    }
   }
 }
 
@@ -712,16 +727,11 @@ const server = http.createServer(async (req, res) => {
         return sendJson(res, { error: 'Não autorizado' }, 403);
       }
       if (cpf) {
-        try {
-          sqliteDb.prepare('UPDATE competitors SET chances = chances + ? WHERE cpf = ?').run(amount, cpf);
-          sqliteDb.prepare('UPDATE usuarios SET chances = chances + ? WHERE cpf = ?').run(amount, cpf);
-          if (isPostgres && pgPool) {
-            await pgPool.query('UPDATE competitors SET chances = chances + $1 WHERE cpf = $2', [amount, cpf]);
-            await pgPool.query('UPDATE usuarios SET chances = chances + $1 WHERE cpf = $2', [amount, cpf]);
-          }
-        } catch (e) {}
+        await creditChances(cpf, 0);
+        const user = await getCompetitor(cpf);
+        return sendJson(res, { success: true, message: `+${amount} chaves adicionadas ao desenvolvedor`, chances: user ? user.chances : 10 });
       }
-      return sendJson(res, { success: true, message: `+${amount} chaves adicionadas ao desenvolvedor` });
+      return sendJson(res, { error: 'CPF obrigatório' }, 400);
     }
 
     if (req.method === 'POST' && pathname === '/api/pix/webhook') {
