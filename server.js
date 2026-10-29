@@ -485,6 +485,8 @@ async function saveAdminConfig({ secret_code, jackpot, reset, clue_1, clue_2, cl
     if (clue_4 !== undefined) sqliteDb.prepare('UPDATE game_state SET clue_4 = ? WHERE id = 1').run(clue_4);
     if (reset) {
       sqliteDb.prepare('UPDATE game_state SET is_locked = 0, winner_name = NULL, winner_prize = NULL WHERE id = 1').run();
+      sqliteDb.prepare('UPDATE competitors SET attempts = 0').run();
+      sqliteDb.prepare('UPDATE usuarios SET attempts = 0').run();
     }
   } catch (e) {}
 
@@ -503,6 +505,8 @@ async function saveAdminConfig({ secret_code, jackpot, reset, clue_1, clue_2, cl
       if (clue_4 !== undefined) await pgPool.query('UPDATE game_state SET clue_4 = $1 WHERE id = 1', [clue_4]);
       if (reset) {
         await pgPool.query('UPDATE game_state SET is_locked = 0, winner_name = NULL, winner_prize = NULL WHERE id = 1');
+        await pgPool.query('UPDATE competitors SET attempts = 0');
+        await pgPool.query('UPDATE usuarios SET attempts = 0');
       }
     } catch (e) {}
   }

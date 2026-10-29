@@ -806,6 +806,16 @@
             }
           }
 
+          // Sincroniza palpites da rodada atual (reseta pistas a cada nova rodada)
+          if (currentUser && data.userAttempts !== null && data.userAttempts !== undefined) {
+            if (attemptsCount !== data.userAttempts) {
+              attemptsCount = data.userAttempts;
+              currentUser.attempts = attemptsCount;
+              saveStoredSession();
+              revealClues(attemptsCount);
+            }
+          }
+
           const status = document.getElementById('statusMessage');
           const unlockBtn = document.querySelector('button[onclick="submitGuess()"]') || document.getElementById('unlockBtn');
 
@@ -823,6 +833,12 @@
             // Se o ADM reabriu o cofre (iniciou nova rodada)
             if (isCofreLocked) {
               isCofreLocked = false;
+              attemptsCount = 0;
+              if (currentUser) {
+                currentUser.attempts = 0;
+                saveStoredSession();
+              }
+              revealClues(0);
               if (status) {
                 status.innerText = "NOVA RODADA ABERTA! O cofre está pronto para seus palpites.";
                 status.className = "w-full text-center text-[10px] font-bold py-1 px-2 rounded-lg bg-emerald-950 border border-emerald-500 text-emerald-300 min-h-[22px] flex items-center justify-center";
@@ -1340,23 +1356,45 @@
       else if (e.key === 'Escape') clearDigits();
     });
 
-    // PISTAS ESTRATÉGICAS (REVELAÇÃO COM CORES VIVAS E FORTES)
+    // PISTAS ESTRATÉGICAS (REVELAÇÃO COM CORES VIVAS E BLOQUEIO NA NOVA RODADA)
     function revealClues(attempt) {
       const unlockedCount = Math.min(attempt, 4);
-      document.getElementById('clueBadge').innerText = `${unlockedCount} de 4 liberadas`;
+      const badge = document.getElementById('clueBadge');
+      if (badge) badge.innerText = `${unlockedCount} de 4 liberadas`;
 
       for (let i = 1; i <= 4; i++) {
         const row = document.getElementById(`clueRow${i}`);
         if (!row) continue;
+        const ico = row.querySelector('.clue-ico');
+        const title = row.querySelector('.clue-title');
+        const desc = row.querySelector('.clue-desc');
+
         if (i <= unlockedCount) {
           const clue = CLUES[i - 1];
           row.classList.remove('bg-[#340e65]', 'border-[#6b21a8]', 'bg-[#252b3b]', 'border-[#48536f]');
           row.classList.add('bg-amber-400/25', 'border-amber-400', 'shadow-md');
-          row.querySelector('.clue-ico').innerText = '💡';
-          row.querySelector('.clue-title').innerText = clue.title;
-          row.querySelector('.clue-title').className = "font-black text-amber-300 clue-title text-[11px] sm:text-xs whitespace-nowrap";
-          row.querySelector('.clue-desc').className = "text-yellow-100 font-black text-[11px] sm:text-xs clue-desc leading-tight";
-          row.querySelector('.clue-desc').innerText = clue.text;
+          if (ico) ico.innerText = '💡';
+          if (title) {
+            title.innerText = clue ? clue.title : `${i}ª Pista:`;
+            title.className = "font-black text-amber-300 clue-title text-[11px] sm:text-xs whitespace-nowrap";
+          }
+          if (desc) {
+            desc.className = "text-yellow-100 font-black text-[11px] sm:text-xs clue-desc leading-tight";
+            desc.innerText = clue ? clue.text : '';
+          }
+        } else {
+          // Bloqueada para a nova rodada
+          row.classList.remove('bg-amber-400/25', 'border-amber-400', 'shadow-md');
+          row.classList.add('bg-[#340e65]', 'border-[#6b21a8]');
+          if (ico) ico.innerText = '🔒';
+          if (title) {
+            title.innerText = `${i}ª Pista:`;
+            title.className = "font-black text-amber-300 clue-title text-[11px] sm:text-xs whitespace-nowrap";
+          }
+          if (desc) {
+            desc.className = "text-white font-bold text-[11px] sm:text-xs clue-desc leading-tight";
+            desc.innerText = `Tente ${i} palpite${i > 1 ? 's' : ''} para liberar a ${i}ª pista`;
+          }
         }
       }
     }
@@ -1660,7 +1698,13 @@
         updateJackpotDisplay();
         toggleAdminModal();
         if (resetCofre) {
-          alert("🎉 NOVO COFRE INICIADO COM SUCESSO!\n\nSenha, prêmio inicial e as 4 pistas personalizadas foram configuradas!");
+          attemptsCount = 0;
+          if (currentUser) {
+            currentUser.attempts = 0;
+            saveStoredSession();
+          }
+          revealClues(0);
+          alert("🎉 NOVO COFRE INICIADO COM SUCESSO!\n\nSenha, prêmio inicial e as 4 pistas configuradas. Todas as pistas foram rebloqueadas para a nova partida!");
           window.location.reload();
         } else {
           alert("Configurações e pistas salvas com sucesso!");
