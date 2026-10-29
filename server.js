@@ -12,7 +12,21 @@ process.on('unhandledRejection', (reason) => {
 });
 
 const PORT = process.env.PORT || 8080;
-const DB_URL = process.env.DATABASE_URL || process.env.POSTGRES_URL;
+
+function findDatabaseUrl() {
+  if (process.env.DATABASE_URL) return process.env.DATABASE_URL;
+  if (process.env.DATABASE_PRIVATE_URL) return process.env.DATABASE_PRIVATE_URL;
+  if (process.env.DATABASE_PUBLIC_URL) return process.env.DATABASE_PUBLIC_URL;
+  if (process.env.POSTGRES_URL) return process.env.POSTGRES_URL;
+  for (const [k, v] of Object.entries(process.env)) {
+    if (typeof v === 'string' && (v.startsWith('postgres://') || v.startsWith('postgresql://'))) {
+      return v;
+    }
+  }
+  return null;
+}
+
+const DB_URL = findDatabaseUrl();
 
 let isPostgres = false;
 let pgPool = null;
