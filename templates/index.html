@@ -453,39 +453,14 @@
           <p class="text-xs text-purple-300/80 mt-1">R$ 1,50 (30%) entra direto no prêmio do cofre acumulado</p>
         </div>
 
-        <!-- QR CODE PIX REALÍSTICO -->
-        <div class="flex flex-col items-center justify-center bg-white p-3.5 rounded-2xl w-48 h-48 mx-auto border-2 border-emerald-500 shadow-xl relative mb-4">
-          <svg class="w-full h-full" viewBox="0 0 100 100" fill="none">
-            <rect width="100" height="100" fill="white"/>
-            <rect x="5" y="5" width="28" height="28" fill="black" rx="4"/>
-            <rect x="9" y="9" width="20" height="20" fill="white" rx="2"/>
-            <rect x="13" y="13" width="12" height="12" fill="black" rx="1"/>
-
-            <rect x="67" y="5" width="28" height="28" fill="black" rx="4"/>
-            <rect x="71" y="9" width="20" height="20" fill="white" rx="2"/>
-            <rect x="75" y="13" width="12" height="12" fill="black" rx="1"/>
-
-            <rect x="5" y="67" width="28" height="28" fill="black" rx="4"/>
-            <rect x="9" y="71" width="20" height="20" fill="white" rx="2"/>
-            <rect x="13" y="75" width="12" height="12" fill="black" rx="1"/>
-
-            <rect x="38" y="10" width="6" height="6" fill="black"/>
-            <rect x="48" y="14" width="8" height="6" fill="black"/>
-            <rect x="38" y="24" width="14" height="6" fill="black"/>
-            <rect x="10" y="38" width="6" height="14" fill="black"/>
-            <rect x="22" y="42" width="10" height="8" fill="black"/>
-            <rect x="38" y="38" width="8" height="8" fill="#047857"/>
-            <rect x="50" y="38" width="10" height="6" fill="black"/>
-            <rect x="44" y="50" width="14" height="8" fill="black"/>
-            <rect x="65" y="40" width="8" height="12" fill="black"/>
-            <rect x="80" y="38" width="10" height="8" fill="black"/>
-            <rect x="70" y="65" width="12" height="6" fill="black"/>
-            <rect x="65" y="78" width="8" height="12" fill="black"/>
-            <rect x="80" y="78" width="10" height="8" fill="black"/>
-            <rect x="40" y="70" width="12" height="8" fill="black"/>
-            <rect x="38" y="84" width="16" height="6" fill="black"/>
-          </svg>
-          <span class="absolute bottom-1 bg-emerald-600 text-white font-mono text-[7.5px] font-black px-2 py-0.5 rounded uppercase">
+        <!-- QR CODE PIX REALÍSTICO BANCO INTER -->
+        <div class="flex flex-col items-center justify-center bg-white p-3 rounded-2xl w-48 h-48 mx-auto border-2 border-emerald-500 shadow-xl relative mb-4">
+          <img id="pixQrImg" src="" alt="QR Code Pix" class="w-full h-full object-contain transition-opacity duration-300">
+          <div id="pixQrLoading" class="absolute inset-0 bg-white rounded-2xl flex flex-col items-center justify-center gap-2 p-2 text-center">
+            <span class="w-7 h-7 border-3 border-emerald-500 border-t-transparent rounded-full animate-spin"></span>
+            <span class="text-[10px] font-black text-zinc-800 leading-tight">Gerando Pix no Banco Inter...</span>
+          </div>
+          <span class="absolute bottom-1 bg-emerald-600 text-white font-mono text-[7.5px] font-black px-2 py-0.5 rounded uppercase shadow">
             PIX BANCO INTER • SW DIGITAL
           </span>
         </div>
@@ -1081,13 +1056,16 @@
     }
 
     let pixPollInterval = null;
+    let activePixTxid = null;
+
     function startPixPolling() {
       stopPixPolling();
       if (!currentUser || !currentUser.cpf) return;
       const initialChances = chancesLeft;
       pixPollInterval = setInterval(async () => {
         try {
-          const res = await fetch(`/api/pix/status?cpf=${encodeURIComponent(currentUser.cpf)}`);
+          const url = `/api/pix/status?cpf=${encodeURIComponent(currentUser.cpf)}${activePixTxid ? '&txid=' + encodeURIComponent(activePixTxid) : ''}`;
+          const res = await fetch(url);
           if (res.ok) {
             const data = await res.json();
             if (data.paid || data.chances > initialChances) {
@@ -1099,7 +1077,7 @@
               playUnlockSound();
               const status = document.getElementById('statusMessage');
               if (status) {
-                status.innerText = "PAGAMENTO PIX CONFIRMADO! +10 CHAVES LIBERADAS.";
+                status.innerText = "🎉 PAGAMENTO PIX CONFIRMADO! +10 CHAVES LIBERADAS.";
                 status.className = "w-full text-center text-[9.5px] font-black py-1 px-2 rounded-lg bg-emerald-950 border border-emerald-500 text-emerald-300 min-h-[22px] flex items-center justify-center";
               }
             }
@@ -1115,12 +1093,48 @@
       }
     }
 
-    function openPixModal() {
+    async function openPixModal() {
       if (currentUser) {
         document.getElementById('pixModalUserDesc').innerText = `${currentUser.name} • PIX: ${currentUser.pixKey}`;
       }
       updateDevModeUI();
       document.getElementById('pixModal').classList.remove('hidden');
+
+      // Estado de carregamento do QR Code
+      const codeInput = document.getElementById('pixCodeInput');
+      const qrImg = document.getElementById('pixQrImg');
+      const qrLoading = document.getElementById('pixQrLoading');
+
+      if (codeInput) codeInput.value = "Gerando Pix oficial do Banco Inter...";
+      if (qrLoading) qrLoading.classList.remove('hidden');
+      if (qrImg) qrImg.style.opacity = '0';
+
+      try {
+        const res = await fetch('/api/pix/create', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ cpf: currentUser ? currentUser.cpf : '' })
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.pix_code) {
+            activePixTxid = data.txid;
+            if (codeInput) codeInput.value = data.pix_code;
+            if (qrImg) {
+              qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(data.pix_code)}`;
+              qrImg.onload = () => {
+                if (qrLoading) qrLoading.classList.add('hidden');
+                qrImg.style.opacity = '1';
+              };
+            }
+          }
+        }
+      } catch (err) {
+        console.error('Erro ao gerar cobrança Pix:', err);
+        if (qrLoading) qrLoading.classList.add('hidden');
+        if (qrImg) qrImg.style.opacity = '1';
+      }
+
       startPixPolling();
     }
     function closePixModal() {

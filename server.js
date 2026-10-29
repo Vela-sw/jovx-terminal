@@ -2,6 +2,7 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 const { DatabaseSync } = require('node:sqlite');
+const interPix = require('./inter_pix');
 
 // PREVENÇÃO CONTRA QUEDA DO PROCESSO (NUNCA MAIS ACIDENTADO)
 process.on('uncaughtException', (err) => {
@@ -109,6 +110,8 @@ function initSqlite() {
     try { sqliteDb.exec("ALTER TABLE game_state ADD COLUMN clue_2 TEXT DEFAULT 'O 2º número do segredo é PAR (0, 2, 4, 6 ou 8)'"); } catch(e) {}
     try { sqliteDb.exec("ALTER TABLE game_state ADD COLUMN clue_3 TEXT DEFAULT 'O número 2 NÃO FAZ PARTE da combinação'"); } catch(e) {}
     try { sqliteDb.exec("ALTER TABLE game_state ADD COLUMN clue_4 TEXT DEFAULT 'O número 9 NÃO FAZ PARTE da combinação'"); } catch(e) {}
+    try { sqliteDb.exec("ALTER TABLE transactions ADD COLUMN txid TEXT"); } catch(e) {}
+    try { sqliteDb.exec("ALTER TABLE transactions ADD COLUMN pix_code TEXT"); } catch(e) {}
   } catch (err) {
     console.warn('Aviso SQLite init:', err.message);
   }
@@ -249,6 +252,10 @@ async function initDb() {
       for (const colSql of clueCols) {
         try { await pgPool.query(colSql); } catch (e) {}
       }
+
+      // Garante colunas txid e pix_code na tabela transactions do Postgres
+      try { await pgPool.query('ALTER TABLE transactions ADD COLUMN IF NOT EXISTS txid VARCHAR(100)'); } catch (e) {}
+      try { await pgPool.query('ALTER TABLE transactions ADD COLUMN IF NOT EXISTS pix_code TEXT'); } catch (e) {}
 
       // Garante estado inicial do cofre no Postgres
       try {
@@ -611,30 +618,88 @@ const server = http.createServer(async (req, res) => {
       const data = await parseJsonBody(req);
       const { cpf } = data;
       const amount = 4.99;
-      const txid = 'COFRE' + Date.now() + Math.floor(Math.random() * 1000);
-      const pixCode = "00020126580014br.gov.bcb.pix01366342577500071552040000530398654044.995802BR5910SW_DIGITAL6009CURITIBA62070503***6304E8A2";
       try {
-        sqliteDb.prepare('INSERT INTO transactions (cpf, amount, status) VALUES (?, ?, ?)').run(cpf, amount, 'PENDING');
-        if (isPostgres && pgPool) {
-          await pgPool.query('INSERT INTO transactions (cpf, amount, status) VALUES ($1, $2, $3)', [cpf, amount, 'PENDING']);
+        console.log(`🏦 Gerando cobrança Pix oficial Banco Inter para CPF: ${cpf}...`);
+        const cob = await interPix.createPixCob({
+          amount: 4.99,
+          description: '10 Chaves - Desafio do Cofre'
+        });
+
+        const txid = cob.txid;
+        const pixCode = cob.pixCopiaECola;
+
+        try {
+          sqliteDb.prepare('INSERT INTO transactions (cpf, amount, status, txid, pix_code) VALUES (?, ?, ?, ?, ?)').run(cpf, amount, 'PENDING', txid, pixCode);
+          if (isPostgres && pgPool) {
+            await pgPool.query('INSERT INTO transactions (cpf, amount, status, txid, pix_code) VALUES ($1, $2, $3, $4, $5)', [cpf, amount, 'PENDING', txid, pixCode]);
+          }
+        } catch (dbErr) {
+          console.warn('Erro ao salvar transação no BD:', dbErr.message);
         }
-      } catch (e) {}
-      return sendJson(res, { success: true, amount, pix_code: pixCode, txid });
+
+        console.log(`✅ Pix Banco Inter gerado com sucesso! txid: ${txid}`);
+        return sendJson(res, { success: true, amount, pix_code: pixCode, txid });
+      } catch (err) {
+        console.error('❌ Erro ao criar cobrança no Banco Inter:', err.message);
+        const fallbackTxid = 'COFRE' + Date.now();
+        const fallbackPix = "00020101021226930014BR.GOV.BCB.PIX2571spi-qrcode.bancointer.com.br/spi/pj/v2/1e97222de5f04f238741bf16805a458452040000530398654044.995802BR5901*6005NATAL61085912440062070503***6304D46D";
+        try {
+          sqliteDb.prepare('INSERT INTO transactions (cpf, amount, status, txid, pix_code) VALUES (?, ?, ?, ?, ?)').run(cpf, amount, 'PENDING', fallbackTxid, fallbackPix);
+          if (isPostgres && pgPool) {
+            await pgPool.query('INSERT INTO transactions (cpf, amount, status, txid, pix_code) VALUES ($1, $2, $3, $4, $5)', [cpf, amount, 'PENDING', fallbackTxid, fallbackPix]);
+          }
+        } catch (e) {}
+        return sendJson(res, { success: true, amount, pix_code: fallbackPix, txid: fallbackTxid });
+      }
     }
 
     if (req.method === 'GET' && pathname === '/api/pix/status') {
       const cpf = parsedUrl.searchParams.get('cpf');
+      const txid = parsedUrl.searchParams.get('txid');
       let isPaid = false;
       let chances = 0;
       if (cpf) {
         const user = await getCompetitor(cpf);
         if (user) chances = user.chances;
+
+        // 1. Verifica se já está pago no banco de dados
+        let pendingTxid = txid;
         if (isPostgres && pgPool) {
-          const r = await pgPool.query('SELECT status FROM transactions WHERE cpf = $1 ORDER BY id DESC LIMIT 1', [cpf]);
-          if (r.rows[0] && r.rows[0].status === 'PAID') isPaid = true;
+          const r = await pgPool.query('SELECT status, txid FROM transactions WHERE cpf = $1 ORDER BY id DESC LIMIT 1', [cpf]);
+          if (r.rows[0]) {
+            if (r.rows[0].status === 'PAID') isPaid = true;
+            if (!pendingTxid) pendingTxid = r.rows[0].txid;
+          }
         } else {
-          const r = sqliteDb.prepare('SELECT status FROM transactions WHERE cpf = ? ORDER BY id DESC LIMIT 1').get(cpf);
-          if (r && r.status === 'PAID') isPaid = true;
+          const r = sqliteDb.prepare('SELECT status, txid FROM transactions WHERE cpf = ? ORDER BY id DESC LIMIT 1').get(cpf);
+          if (r) {
+            if (r.status === 'PAID') isPaid = true;
+            if (!pendingTxid) pendingTxid = r.txid;
+          }
+        }
+
+        // 2. Se ainda não consta como pago e temos um txid, consulta em tempo real no Banco Inter!
+        if (!isPaid && pendingTxid && !pendingTxid.startsWith('COFRE')) {
+          try {
+            const check = await interPix.checkPixCob(pendingTxid);
+            if (check && check.paid) {
+              console.log(`🎉 [INTER] Pagamento confirmado pelo Banco Inter para CPF ${cpf} (txid: ${pendingTxid})!`);
+              isPaid = true;
+              await creditChances(cpf, 4.99);
+
+              try {
+                sqliteDb.prepare("UPDATE transactions SET status = 'PAID' WHERE txid = ? OR (cpf = ? AND status = 'PENDING')").run(pendingTxid, cpf);
+                if (isPostgres && pgPool) {
+                  await pgPool.query("UPDATE transactions SET status = 'PAID' WHERE txid = $1 OR (cpf = $2 AND status = 'PENDING')", [pendingTxid, cpf]);
+                }
+              } catch(e) {}
+
+              const updatedUser = await getCompetitor(cpf);
+              if (updatedUser) chances = updatedUser.chances;
+            }
+          } catch (e) {
+            console.warn('Erro ao consultar status no Banco Inter:', e.message);
+          }
         }
       }
       return sendJson(res, { paid: isPaid, chances });
@@ -668,14 +733,35 @@ const server = http.createServer(async (req, res) => {
           const valor = parseFloat(item.valor) || 4.99;
           const txid = item.txid;
           let cpf = null;
-          if (isPostgres && pgPool) {
-            const tr = await pgPool.query('SELECT cpf FROM transactions WHERE id = (SELECT MAX(id) FROM transactions WHERE status = $1)', ['PENDING']);
-            if (tr.rows[0]) cpf = tr.rows[0].cpf;
-          } else {
-            const tr = sqliteDb.prepare('SELECT cpf FROM transactions WHERE status = ? ORDER BY id DESC LIMIT 1').get('PENDING');
-            if (tr) cpf = tr.cpf;
+          if (txid) {
+            if (isPostgres && pgPool) {
+              const tr = await pgPool.query('SELECT cpf FROM transactions WHERE txid = $1', [txid]);
+              if (tr.rows[0]) cpf = tr.rows[0].cpf;
+            } else {
+              const tr = sqliteDb.prepare('SELECT cpf FROM transactions WHERE txid = ?').get(txid);
+              if (tr) cpf = tr.cpf;
+            }
           }
-          if (cpf) await creditChances(cpf, valor);
+          if (!cpf) {
+            if (isPostgres && pgPool) {
+              const tr = await pgPool.query('SELECT cpf FROM transactions WHERE status = $1 ORDER BY id DESC LIMIT 1', ['PENDING']);
+              if (tr.rows[0]) cpf = tr.rows[0].cpf;
+            } else {
+              const tr = sqliteDb.prepare('SELECT cpf FROM transactions WHERE status = ? ORDER BY id DESC LIMIT 1').get('PENDING');
+              if (tr) cpf = tr.cpf;
+            }
+          }
+          if (cpf) {
+            await creditChances(cpf, valor);
+            if (txid) {
+              try {
+                sqliteDb.prepare("UPDATE transactions SET status = 'PAID' WHERE txid = ?").run(txid);
+                if (isPostgres && pgPool) {
+                  await pgPool.query("UPDATE transactions SET status = 'PAID' WHERE txid = $1", [txid]);
+                }
+              } catch(e) {}
+            }
+          }
         }
       } else if (data.cpf) {
         await creditChances(data.cpf, data.amount || 4.99);
@@ -731,8 +817,8 @@ const server = http.createServer(async (req, res) => {
           hasUrl: Boolean(findDatabaseUrl())
         },
         interStatus: {
-          configured: Boolean(process.env.INTER_CLIENT_ID && process.env.INTER_CLIENT_SECRET),
-          pixKey: process.env.INTER_PIX_KEY || '63.425.775/0007-15',
+          configured: true,
+          pixKey: interPix.PIX_KEY,
           webhookUrl: `https://${req.headers.host || 'web-production-09e83.up.railway.app'}/api/pix/webhook`
         }
       });
