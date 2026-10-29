@@ -437,7 +437,7 @@
           <div class="flex items-center gap-2.5">
             <span class="w-8 h-8 rounded-xl bg-emerald-500 flex items-center justify-center text-zinc-950 font-black text-sm">⚡</span>
             <div>
-              <h3 class="text-lg font-black text-white">Pacote +5 Chaves</h3>
+              <h3 class="text-lg font-black text-white">Pacote +10 Chaves</h3>
               <p class="text-xs text-purple-200" id="pixModalUserDesc">Competidor Identificado</p>
             </div>
           </div>
@@ -448,7 +448,7 @@
         <div class="bg-black/50 border border-purple-800/70 rounded-2xl p-4 text-center mb-4">
           <span class="text-3xl font-black text-emerald-400 font-mono">R$ 4,99</span>
           <div class="text-sm text-purple-100 font-bold mt-1">
-            Libera <span class="text-amber-400 font-black">5 Tentativas</span> de abrir o cofre
+            Libera <span class="text-amber-400 font-black">10 Tentativas</span> de abrir o cofre
           </div>
           <p class="text-xs text-purple-300/80 mt-1">R$ 1,50 (30%) entra direto no prêmio do cofre acumulado</p>
         </div>
@@ -515,7 +515,7 @@
             <span>Aguardando confirmação do Pix em tempo real...</span>
           </div>
           <p class="text-xs text-purple-200 leading-relaxed">
-            Abra o app do seu banco e pague com o QR Code ou Pix Copia e Cola. Suas <strong>5 Chaves</strong> serão creditadas automaticamente nesta tela assim que o pagamento for detectado!
+            Abra o app do seu banco e pague com o QR Code ou Pix Copia e Cola. Suas <strong>10 Chaves</strong> serão creditadas automaticamente nesta tela assim que o pagamento for detectado!
           </p>
         </div>
 
@@ -557,7 +557,7 @@
           <div>
             <h4 class="font-black text-white text-sm mb-1">2. Mecânica do Enigma e Pistas Progressivas</h4>
             <p class="text-purple-200">
-              A senha do cofre é composta por exatamente 5 algarismos. Cada pacote de participação (R$ 4,99) confere 5 chaves de abertura. A cada palpite incorreto, o competidor recebe revelações de pistas matemáticas universais que reduzem o universo de possibilidades de 100.000 para um grupo restrito de combinações.
+              A senha do cofre é composta por exatamente 5 algarismos. Cada pacote de participação (R$ 4,99) confere 10 chaves de abertura. A cada palpite incorreto, o competidor recebe revelações de pistas matemáticas universais que reduzem o universo de possibilidades de 100.000 para um grupo restrito de combinações.
             </p>
           </div>
 
@@ -670,8 +670,8 @@
           </div>
 
           <div id="devQuickActions" class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2 border-t border-purple-800/60 hidden">
-            <button onclick="devAddKeysToSelf(5)" class="w-full py-3 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-black text-xs uppercase shadow transition">
-              🔑 Injetar +5 Chaves Dev
+            <button onclick="devAddKeysToSelf(10)" class="w-full py-3 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-black text-xs uppercase shadow transition">
+              🔑 Injetar +10 Chaves Dev
             </button>
             <button onclick="simulatePixPayment()" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-zinc-950 font-black text-xs uppercase shadow transition">
               ⚡ Simular Pix Aprovado
@@ -1056,7 +1056,7 @@
       alert(isDevMode ? "🛠️ Modo Desenvolvedor ATIVADO!\n\nAgora você vê o selo DEV na sua conta, botões de teste do Pix e atalhos rápidos de depuração." : "Modo Desenvolvedor DESATIVADO.");
     }
 
-    async function devAddKeysToSelf(amount = 5) {
+    async function devAddKeysToSelf(amount = 10) {
       if (!currentUser || !currentUser.cpf) {
         alert("Você precisa estar cadastrado/logado na sua conta primeiro para receber as chaves de desenvolvedor.");
         return;
@@ -1092,14 +1092,14 @@
             const data = await res.json();
             if (data.paid || data.chances > initialChances) {
               stopPixPolling();
-              chancesLeft = data.chances > initialChances ? data.chances : (chancesLeft + 5);
+              chancesLeft = data.chances > initialChances ? data.chances : (chancesLeft + 10);
               saveStoredSession();
               updateChancesDisplay();
               closePixModal();
               playUnlockSound();
               const status = document.getElementById('statusMessage');
               if (status) {
-                status.innerText = "PAGAMENTO PIX CONFIRMADO! +5 CHAVES LIBERADAS.";
+                status.innerText = "PAGAMENTO PIX CONFIRMADO! +10 CHAVES LIBERADAS.";
                 status.className = "w-full text-center text-[9.5px] font-black py-1 px-2 rounded-lg bg-emerald-950 border border-emerald-500 text-emerald-300 min-h-[22px] flex items-center justify-center";
               }
             }
@@ -1143,7 +1143,7 @@
     }
 
     async function simulatePixPayment() {
-      chancesLeft += 5;
+      chancesLeft += 10;
       jackpot += 1.50;
       saveStoredSession();
       updateChancesDisplay();
@@ -1160,7 +1160,7 @@
 
       playUnlockSound();
       const status = document.getElementById('statusMessage');
-      status.innerText = "PAGAMENTO PIX CONFIRMADO! +5 CHAVES LIBERADAS.";
+      status.innerText = "PAGAMENTO PIX CONFIRMADO! +10 CHAVES LIBERADAS.";
       status.className = "w-full text-center text-[9.5px] font-black py-1 px-2 rounded-lg bg-emerald-950 border border-emerald-500 text-emerald-300 min-h-[22px] flex items-center justify-center";
     }
 
@@ -1470,7 +1470,7 @@
         setTimeout(() => {
           clearDigits();
           if (chancesLeft === 0) {
-            status.innerText = "Suas chaves acabaram! Adicione +5 chaves para continuar.";
+            status.innerText = "Suas chaves acabaram! Adicione +10 chaves para continuar.";
             status.className = "w-full text-center text-[9.5px] font-bold py-0.5 px-2 rounded-lg bg-amber-950 border border-amber-500 text-amber-200 min-h-[22px] flex items-center justify-center";
           }
         }, 900);

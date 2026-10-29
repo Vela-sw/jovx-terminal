@@ -393,7 +393,7 @@ async function upsertCompetitor(user) {
 async function creditChances(cpf, amount = 4.99) {
   // SQLite
   try {
-    sqliteDb.prepare('UPDATE competitors SET chances = chances + 5 WHERE cpf = ?').run(cpf);
+    sqliteDb.prepare('UPDATE competitors SET chances = chances + 10 WHERE cpf = ?').run(cpf);
     sqliteDb.prepare('UPDATE game_state SET jackpot = jackpot + 1.50, total_arrecadado = total_arrecadado + ? WHERE id = 1').run(amount);
     sqliteDb.prepare('INSERT INTO transactions (cpf, amount, status) VALUES (?, ?, ?)').run(cpf, amount, 'PAID');
   } catch (e) {}
@@ -401,8 +401,8 @@ async function creditChances(cpf, amount = 4.99) {
   // Postgres
   if (isPostgres && pgPool) {
     try {
-      await pgPool.query('UPDATE competitors SET chances = chances + 5 WHERE cpf = $1', [cpf]);
-      await pgPool.query('UPDATE usuarios SET chances = chances + 5 WHERE cpf = $1', [cpf]);
+      await pgPool.query('UPDATE competitors SET chances = chances + 10 WHERE cpf = $1', [cpf]);
+      await pgPool.query('UPDATE usuarios SET chances = chances + 10 WHERE cpf = $1', [cpf]);
       await pgPool.query('UPDATE game_state SET jackpot = jackpot + 1.50, total_arrecadado = total_arrecadado + $1 WHERE id = 1', [amount]);
       await pgPool.query('INSERT INTO transactions (cpf, amount, status) VALUES ($1, $2, $3)', [cpf, amount, 'PAID']);
     } catch (e) {}
@@ -642,7 +642,7 @@ const server = http.createServer(async (req, res) => {
 
     if (req.method === 'POST' && pathname === '/api/dev/add-keys') {
       const data = await parseJsonBody(req);
-      const { cpf, amount = 5, secret } = data;
+      const { cpf, amount = 10, secret } = data;
       if (secret !== 'vela2026' && secret !== 'admin' && secret !== '1234') {
         return sendJson(res, { error: 'Não autorizado' }, 403);
       }
