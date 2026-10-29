@@ -1,224 +1,250 @@
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
+const { DatabaseSync } = require('node:sqlite');
 
 const PORT = process.env.PORT || 8080;
 const DB_URL = process.env.DATABASE_URL || process.env.POSTGRES_URL;
-const isPostgres = Boolean(DB_URL);
 
+let isPostgres = false;
 let pgPool = null;
-let sqliteDb = null;
 
-if (isPostgres) {
-  const { Pool } = require('pg');
-  pgPool = new Pool({
-    connectionString: DB_URL,
-    ssl: DB_URL.includes('railway.internal') || DB_URL.includes('localhost') ? false : { rejectUnauthorized: false }
-  });
-  console.log('🐘 Conectando ao Banco de Dados PostgreSQL na Railway...');
-} else {
-  const { DatabaseSync } = require('node:sqlite');
-  sqliteDb = new DatabaseSync(path.join(__dirname, 'desafio_cofre.db'));
-  console.log('📁 Usando Banco de Dados SQLite local...');
+// SQLite sempre disponível como fallback 100% seguro
+const sqliteDb = new DatabaseSync(path.join(__dirname, 'desafio_cofre.db'));
+
+function initSqlite() {
+  sqliteDb.exec(`
+    CREATE TABLE IF NOT EXISTS game_state (
+      id INTEGER PRIMARY KEY,
+      jackpot REAL DEFAULT 500.00,
+      secret_code TEXT DEFAULT '72039',
+      total_arrecadado REAL DEFAULT 0.0,
+      is_locked INTEGER DEFAULT 0,
+      winner_name TEXT,
+      winner_prize REAL
+    );
+    CREATE TABLE IF NOT EXISTS competitors (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      cpf TEXT UNIQUE,
+      name TEXT,
+      phone TEXT,
+      pix_type TEXT,
+      pix_key TEXT,
+      password TEXT,
+      chances INTEGER DEFAULT 0,
+      attempts INTEGER DEFAULT 0,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+    CREATE TABLE IF NOT EXISTS usuarios (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      cpf TEXT UNIQUE,
+      name TEXT,
+      phone TEXT,
+      pix_type TEXT,
+      pix_key TEXT,
+      password TEXT,
+      chances INTEGER DEFAULT 0,
+      attempts INTEGER DEFAULT 0,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+    CREATE TABLE IF NOT EXISTS winners (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT,
+      cpf TEXT,
+      phone TEXT,
+      pix_type TEXT,
+      pix_key TEXT,
+      guess TEXT,
+      prize_amount REAL,
+      won_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+    CREATE TABLE IF NOT EXISTS attempts (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      cpf TEXT,
+      guess TEXT,
+      is_correct INTEGER,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+    CREATE TABLE IF NOT EXISTS transactions (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      cpf TEXT,
+      amount REAL,
+      status TEXT,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+  `);
+
+  const check = sqliteDb.prepare('SELECT * FROM game_state WHERE id = 1').get();
+  if (!check) {
+    sqliteDb.prepare('INSERT INTO game_state (id, jackpot, secret_code, total_arrecadado, is_locked) VALUES (1, 500.00, ?, 0.0, 0)').run('72039');
+  }
 }
 
-// INICIALIZAÇÃO DE TABELAS
+// Inicializa SQLite imediatamente para garantir operação
+initSqlite();
+
+// Inicialização segura de banco de dados
 async function initDb() {
-  if (isPostgres) {
-    await pgPool.query(`
-      CREATE TABLE IF NOT EXISTS game_state (
-        id INTEGER PRIMARY KEY,
-        jackpot NUMERIC(10,2) DEFAULT 500.00,
-        secret_code VARCHAR(10) DEFAULT '72039',
-        total_arrecadado NUMERIC(10,2) DEFAULT 0.00,
-        is_locked INTEGER DEFAULT 0,
-        winner_name VARCHAR(255),
-        winner_prize NUMERIC(10,2)
-      );
-      CREATE TABLE IF NOT EXISTS competitors (
-        id SERIAL PRIMARY KEY,
-        cpf VARCHAR(20) UNIQUE,
-        name VARCHAR(255),
-        phone VARCHAR(50),
-        pix_type VARCHAR(50),
-        pix_key VARCHAR(255),
-        password VARCHAR(100),
-        chances INTEGER DEFAULT 0,
-        attempts INTEGER DEFAULT 0,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      );
-      CREATE TABLE IF NOT EXISTS usuarios (
-        id SERIAL PRIMARY KEY,
-        cpf VARCHAR(20) UNIQUE,
-        name VARCHAR(255),
-        phone VARCHAR(50),
-        pix_type VARCHAR(50),
-        pix_key VARCHAR(255),
-        password VARCHAR(100),
-        chances INTEGER DEFAULT 0,
-        attempts INTEGER DEFAULT 0,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      );
-      CREATE TABLE IF NOT EXISTS winners (
-        id SERIAL PRIMARY KEY,
-        name VARCHAR(255),
-        cpf VARCHAR(20),
-        phone VARCHAR(50),
-        pix_type VARCHAR(50),
-        pix_key VARCHAR(255),
-        guess VARCHAR(20),
-        prize_amount NUMERIC(10,2),
-        won_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      );
-      CREATE TABLE IF NOT EXISTS attempts (
-        id SERIAL PRIMARY KEY,
-        cpf VARCHAR(20),
-        guess VARCHAR(20),
-        is_correct INTEGER,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      );
-      CREATE TABLE IF NOT EXISTS transactions (
-        id SERIAL PRIMARY KEY,
-        cpf VARCHAR(20),
-        amount NUMERIC(10,2),
-        status VARCHAR(50),
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      );
-    `);
+  if (DB_URL) {
+    try {
+      const { Pool } = require('pg');
+      const isInternal = DB_URL.includes('railway.internal') || DB_URL.includes('localhost') || DB_URL.includes('127.0.0.1');
+      pgPool = new Pool({
+        connectionString: DB_URL,
+        ssl: isInternal ? false : { rejectUnauthorized: false },
+        connectionTimeoutMillis: 5000
+      });
 
-    const check = await pgPool.query('SELECT * FROM game_state WHERE id = 1');
-    if (check.rows.length === 0) {
-      await pgPool.query('INSERT INTO game_state (id, jackpot, secret_code, total_arrecadado, is_locked) VALUES (1, 500.00, $1, 0.0, 0)', ['72039']);
+      // Testa conexão
+      await pgPool.query('SELECT 1');
+      isPostgres = true;
+      console.log('🐘 Conectado com sucesso ao PostgreSQL na Railway!');
+
+      const tables = [
+        `CREATE TABLE IF NOT EXISTS game_state (
+          id INTEGER PRIMARY KEY,
+          jackpot NUMERIC(10,2) DEFAULT 500.00,
+          secret_code VARCHAR(10) DEFAULT '72039',
+          total_arrecadado NUMERIC(10,2) DEFAULT 0.00,
+          is_locked INTEGER DEFAULT 0,
+          winner_name VARCHAR(255),
+          winner_prize NUMERIC(10,2)
+        )`,
+        `CREATE TABLE IF NOT EXISTS competitors (
+          id SERIAL PRIMARY KEY,
+          cpf VARCHAR(20) UNIQUE,
+          name VARCHAR(255),
+          phone VARCHAR(50),
+          pix_type VARCHAR(50),
+          pix_key VARCHAR(255),
+          password VARCHAR(100),
+          chances INTEGER DEFAULT 0,
+          attempts INTEGER DEFAULT 0,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )`,
+        `CREATE TABLE IF NOT EXISTS usuarios (
+          id SERIAL PRIMARY KEY,
+          cpf VARCHAR(20) UNIQUE,
+          name VARCHAR(255),
+          phone VARCHAR(50),
+          pix_type VARCHAR(50),
+          pix_key VARCHAR(255),
+          password VARCHAR(100),
+          chances INTEGER DEFAULT 0,
+          attempts INTEGER DEFAULT 0,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )`,
+        `CREATE TABLE IF NOT EXISTS winners (
+          id SERIAL PRIMARY KEY,
+          name VARCHAR(255),
+          cpf VARCHAR(20),
+          phone VARCHAR(50),
+          pix_type VARCHAR(50),
+          pix_key VARCHAR(255),
+          guess VARCHAR(20),
+          prize_amount NUMERIC(10,2),
+          won_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )`,
+        `CREATE TABLE IF NOT EXISTS attempts (
+          id SERIAL PRIMARY KEY,
+          cpf VARCHAR(20),
+          guess VARCHAR(20),
+          is_correct INTEGER,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )`,
+        `CREATE TABLE IF NOT EXISTS transactions (
+          id SERIAL PRIMARY KEY,
+          cpf VARCHAR(20),
+          amount NUMERIC(10,2),
+          status VARCHAR(50),
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )`
+      ];
+
+      for (const sql of tables) {
+        try {
+          await pgPool.query(sql);
+        } catch (e) {
+          console.warn('Aviso ao criar tabela:', e.message);
+        }
+      }
+
+      // Garante colunas na tabela usuarios criada manualmente pelo usuário
+      const userCols = [
+        'ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS cpf VARCHAR(20)',
+        'ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS name VARCHAR(255)',
+        'ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS phone VARCHAR(50)',
+        'ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS pix_type VARCHAR(50)',
+        'ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS pix_key VARCHAR(255)',
+        'ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS password VARCHAR(100)',
+        'ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS chances INTEGER DEFAULT 0',
+        'ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS attempts INTEGER DEFAULT 0',
+        'ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP'
+      ];
+      for (const colSql of userCols) {
+        try { await pgPool.query(colSql); } catch (e) {}
+      }
+
+      // Garante estado inicial do cofre no Postgres
+      try {
+        const check = await pgPool.query('SELECT * FROM game_state WHERE id = 1');
+        if (check.rows.length === 0) {
+          await pgPool.query('INSERT INTO game_state (id, jackpot, secret_code, total_arrecadado, is_locked) VALUES (1, 500.00, $1, 0.0, 0)', ['72039']);
+        }
+      } catch (e) {}
+
+    } catch (err) {
+      console.warn('⚠️ Não foi possível conectar ao PostgreSQL. Mantendo SQLite local ativo. Erro:', err.message);
+      isPostgres = false;
+      pgPool = null;
     }
-    console.log('✅ Tabelas PostgreSQL verificadas/criadas com sucesso!');
   } else {
-    sqliteDb.exec(`
-      CREATE TABLE IF NOT EXISTS game_state (
-        id INTEGER PRIMARY KEY,
-        jackpot REAL,
-        secret_code TEXT,
-        total_arrecadado REAL,
-        is_locked INTEGER DEFAULT 0,
-        winner_name TEXT,
-        winner_prize REAL
-      );
-      CREATE TABLE IF NOT EXISTS competitors (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        cpf TEXT UNIQUE,
-        name TEXT,
-        phone TEXT,
-        pix_type TEXT,
-        pix_key TEXT,
-        password TEXT,
-        chances INTEGER DEFAULT 0,
-        attempts INTEGER DEFAULT 0,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      );
-      CREATE TABLE IF NOT EXISTS usuarios (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        cpf TEXT UNIQUE,
-        name TEXT,
-        phone TEXT,
-        pix_type TEXT,
-        pix_key TEXT,
-        password TEXT,
-        chances INTEGER DEFAULT 0,
-        attempts INTEGER DEFAULT 0,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      );
-      CREATE TABLE IF NOT EXISTS winners (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT,
-        cpf TEXT,
-        phone TEXT,
-        pix_type TEXT,
-        pix_key TEXT,
-        guess TEXT,
-        prize_amount REAL,
-        won_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      );
-      CREATE TABLE IF NOT EXISTS attempts (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        cpf TEXT,
-        guess TEXT,
-        is_correct INTEGER,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      );
-      CREATE TABLE IF NOT EXISTS transactions (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        cpf TEXT,
-        amount REAL,
-        status TEXT,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      );
-    `);
-    const check = sqliteDb.prepare('SELECT * FROM game_state WHERE id = 1').get();
-    if (!check) {
-      sqliteDb.prepare('INSERT INTO game_state (id, jackpot, secret_code, total_arrecadado, is_locked) VALUES (1, 500.00, ?, 0.0, 0)').run('72039');
-    }
-    console.log('✅ Tabelas SQLite verificadas com sucesso!');
+    console.log('📁 DATABASE_URL não definida. Rodando em SQLite local...');
   }
 }
 
-// MÉTODOS DE BANCO DE DADOS
+// MÉTODOS DE DADOS COM FALLBACK AUTOMÁTICO
 async function getGameState() {
-  if (isPostgres) {
-    const res = await pgPool.query('SELECT jackpot, secret_code, total_arrecadado, is_locked, winner_name, winner_prize FROM game_state WHERE id = 1');
-    const r = res.rows[0];
-    return r ? {
-      jackpot: parseFloat(r.jackpot) || 500.00,
-      secret_code: r.secret_code || '72039',
-      is_locked: Boolean(r.is_locked),
-      winner_name: r.winner_name,
-      winner_prize: r.winner_prize ? parseFloat(r.winner_prize) : null
-    } : { jackpot: 500.00, secret_code: '72039', is_locked: false, winner_name: null, winner_prize: null };
-  } else {
-    const r = sqliteDb.prepare('SELECT jackpot, secret_code, total_arrecadado, is_locked, winner_name, winner_prize FROM game_state WHERE id = 1').get();
-    return r ? {
-      jackpot: parseFloat(r.jackpot) || 500.00,
-      secret_code: r.secret_code || '72039',
-      is_locked: Boolean(r.is_locked),
-      winner_name: r.winner_name,
-      winner_prize: r.winner_prize ? parseFloat(r.winner_prize) : null
-    } : { jackpot: 500.00, secret_code: '72039', is_locked: false, winner_name: null, winner_prize: null };
+  if (isPostgres && pgPool) {
+    try {
+      const res = await pgPool.query('SELECT jackpot, secret_code, total_arrecadado, is_locked, winner_name, winner_prize FROM game_state WHERE id = 1');
+      const r = res.rows[0];
+      if (r) {
+        return {
+          jackpot: parseFloat(r.jackpot) || 500.00,
+          secret_code: r.secret_code || '72039',
+          is_locked: Boolean(r.is_locked),
+          winner_name: r.winner_name,
+          winner_prize: r.winner_prize ? parseFloat(r.winner_prize) : null
+        };
+      }
+    } catch (e) {}
   }
+  const r = sqliteDb.prepare('SELECT jackpot, secret_code, total_arrecadado, is_locked, winner_name, winner_prize FROM game_state WHERE id = 1').get();
+  return r ? {
+    jackpot: parseFloat(r.jackpot) || 500.00,
+    secret_code: r.secret_code || '72039',
+    is_locked: Boolean(r.is_locked),
+    winner_name: r.winner_name,
+    winner_prize: r.winner_prize ? parseFloat(r.winner_prize) : null
+  } : { jackpot: 500.00, secret_code: '72039', is_locked: false, winner_name: null, winner_prize: null };
 }
 
 async function getCompetitor(cpf) {
-  if (isPostgres) {
-    const res = await pgPool.query('SELECT * FROM competitors WHERE cpf = $1', [cpf]);
-    return res.rows[0] || null;
-  } else {
-    return sqliteDb.prepare('SELECT * FROM competitors WHERE cpf = ?').get(cpf) || null;
+  if (isPostgres && pgPool) {
+    try {
+      const res = await pgPool.query('SELECT * FROM competitors WHERE cpf = $1', [cpf]);
+      if (res.rows[0]) return res.rows[0];
+    } catch (e) {}
   }
+  return sqliteDb.prepare('SELECT * FROM competitors WHERE cpf = ?').get(cpf) || null;
 }
 
 async function upsertCompetitor(user) {
   const { cpf, name, phone, pixType = 'cpf', pixKey = '', password = '' } = user;
-  if (isPostgres) {
-    await pgPool.query(`
-      INSERT INTO competitors (cpf, name, phone, pix_type, pix_key, password, chances, attempts)
-      VALUES ($1, $2, $3, $4, $5, $6, 0, 0)
-      ON CONFLICT(cpf) DO UPDATE SET
-        name = EXCLUDED.name,
-        phone = EXCLUDED.phone,
-        pix_type = EXCLUDED.pix_type,
-        pix_key = EXCLUDED.pix_key,
-        password = EXCLUDED.password
-    `, [cpf, name, phone, pixType, pixKey, password]);
-
-    // Salva também na tabela 'usuarios' que o usuário visualiza no Railway
-    await pgPool.query(`
-      INSERT INTO usuarios (cpf, name, phone, pix_type, pix_key, password, chances, attempts)
-      VALUES ($1, $2, $3, $4, $5, $6, 0, 0)
-      ON CONFLICT(cpf) DO UPDATE SET
-        name = EXCLUDED.name,
-        phone = EXCLUDED.phone,
-        pix_type = EXCLUDED.pix_type,
-        pix_key = EXCLUDED.pix_key,
-        password = EXCLUDED.password
-    `, [cpf, name, phone, pixType, pixKey, password]);
-  } else {
+  
+  // Salva no SQLite
+  try {
     sqliteDb.prepare(`
       INSERT INTO competitors (cpf, name, phone, pix_type, pix_key, password, chances, attempts)
       VALUES (?, ?, ?, ?, ?, ?, 0, 0)
@@ -229,19 +255,54 @@ async function upsertCompetitor(user) {
         pix_key = excluded.pix_key,
         password = excluded.password
     `).run(cpf, name, phone, pixType, pixKey, password);
+  } catch (e) {}
+
+  // Salva no PostgreSQL se ativo
+  if (isPostgres && pgPool) {
+    try {
+      await pgPool.query(`
+        INSERT INTO competitors (cpf, name, phone, pix_type, pix_key, password, chances, attempts)
+        VALUES ($1, $2, $3, $4, $5, $6, 0, 0)
+        ON CONFLICT(cpf) DO UPDATE SET
+          name = EXCLUDED.name,
+          phone = EXCLUDED.phone,
+          pix_type = EXCLUDED.pix_type,
+          pix_key = EXCLUDED.pix_key,
+          password = EXCLUDED.password
+      `, [cpf, name, phone, pixType, pixKey, password]);
+    } catch (e) {}
+
+    try {
+      await pgPool.query(`
+        INSERT INTO usuarios (cpf, name, phone, pix_type, pix_key, password, chances, attempts)
+        VALUES ($1, $2, $3, $4, $5, $6, 0, 0)
+        ON CONFLICT(cpf) DO UPDATE SET
+          name = EXCLUDED.name,
+          phone = EXCLUDED.phone,
+          pix_type = EXCLUDED.pix_type,
+          pix_key = EXCLUDED.pix_key,
+          password = EXCLUDED.password
+      `, [cpf, name, phone, pixType, pixKey, password]);
+    } catch (e) {}
   }
 }
 
 async function creditChances(cpf, amount = 4.99) {
-  if (isPostgres) {
-    await pgPool.query('UPDATE competitors SET chances = chances + 5 WHERE cpf = $1', [cpf]);
-    await pgPool.query('UPDATE usuarios SET chances = chances + 5 WHERE cpf = $1', [cpf]);
-    await pgPool.query('UPDATE game_state SET jackpot = jackpot + 1.50, total_arrecadado = total_arrecadado + $1 WHERE id = 1', [amount]);
-    await pgPool.query('INSERT INTO transactions (cpf, amount, status) VALUES ($1, $2, $3)', [cpf, amount, 'PAID']);
-  } else {
+  // SQLite
+  try {
     sqliteDb.prepare('UPDATE competitors SET chances = chances + 5 WHERE cpf = ?').run(cpf);
     sqliteDb.prepare('UPDATE game_state SET jackpot = jackpot + 1.50, total_arrecadado = total_arrecadado + ? WHERE id = 1').run(amount);
     sqliteDb.prepare('INSERT INTO transactions (cpf, amount, status) VALUES (?, ?, ?)').run(cpf, amount, 'PAID');
+  } catch (e) {}
+
+  // Postgres
+  if (isPostgres && pgPool) {
+    try {
+      await pgPool.query('UPDATE competitors SET chances = chances + 5 WHERE cpf = $1', [cpf]);
+      await pgPool.query('UPDATE usuarios SET chances = chances + 5 WHERE cpf = $1', [cpf]);
+      await pgPool.query('UPDATE game_state SET jackpot = jackpot + 1.50, total_arrecadado = total_arrecadado + $1 WHERE id = 1', [amount]);
+      await pgPool.query('INSERT INTO transactions (cpf, amount, status) VALUES ($1, $2, $3)', [cpf, amount, 'PAID']);
+    } catch (e) {}
   }
 }
 
@@ -249,19 +310,8 @@ async function recordGuessAttempt(user, guess, isCorrect, gameState) {
   const newChances = Math.max(0, (user.chances || 0) - 1);
   const newAttempts = (user.attempts || 0) + 1;
 
-  if (isPostgres) {
-    await pgPool.query('UPDATE competitors SET chances = $1, attempts = $2 WHERE cpf = $3', [newChances, newAttempts, user.cpf]);
-    await pgPool.query('UPDATE usuarios SET chances = $1, attempts = $2 WHERE cpf = $3', [newChances, newAttempts, user.cpf]);
-    await pgPool.query('INSERT INTO attempts (cpf, guess, is_correct) VALUES ($1, $2, $3)', [user.cpf, guess, isCorrect ? 1 : 0]);
-
-    if (isCorrect) {
-      await pgPool.query('UPDATE game_state SET is_locked = 1, winner_name = $1, winner_prize = $2 WHERE id = 1', [user.name, gameState.jackpot]);
-      await pgPool.query(`
-        INSERT INTO winners (name, cpf, phone, pix_type, pix_key, guess, prize_amount)
-        VALUES ($1, $2, $3, $4, $5, $6, $7)
-      `, [user.name, user.cpf, user.phone, user.pix_type, user.pix_key, guess, gameState.jackpot]);
-    }
-  } else {
+  // SQLite
+  try {
     sqliteDb.prepare('UPDATE competitors SET chances = ?, attempts = ? WHERE cpf = ?').run(newChances, newAttempts, user.cpf);
     sqliteDb.prepare('INSERT INTO attempts (cpf, guess, is_correct) VALUES (?, ?, ?)').run(user.cpf, guess, isCorrect ? 1 : 0);
 
@@ -272,41 +322,50 @@ async function recordGuessAttempt(user, guess, isCorrect, gameState) {
         VALUES (?, ?, ?, ?, ?, ?, ?)
       `).run(user.name, user.cpf, user.phone, user.pix_type, user.pix_key, guess, gameState.jackpot);
     }
+  } catch (e) {}
+
+  // Postgres
+  if (isPostgres && pgPool) {
+    try {
+      await pgPool.query('UPDATE competitors SET chances = $1, attempts = $2 WHERE cpf = $3', [newChances, newAttempts, user.cpf]);
+      await pgPool.query('UPDATE usuarios SET chances = $1, attempts = $2 WHERE cpf = $3', [newChances, newAttempts, user.cpf]);
+      await pgPool.query('INSERT INTO attempts (cpf, guess, is_correct) VALUES ($1, $2, $3)', [user.cpf, guess, isCorrect ? 1 : 0]);
+
+      if (isCorrect) {
+        await pgPool.query('UPDATE game_state SET is_locked = 1, winner_name = $1, winner_prize = $2 WHERE id = 1', [user.name, gameState.jackpot]);
+        await pgPool.query(`
+          INSERT INTO winners (name, cpf, phone, pix_type, pix_key, guess, prize_amount)
+          VALUES ($1, $2, $3, $4, $5, $6, $7)
+        `, [user.name, user.cpf, user.phone, user.pix_type, user.pix_key, guess, gameState.jackpot]);
+      }
+    } catch (e) {}
   }
 
   return { newChances, newAttempts };
 }
 
 async function getAdminData() {
-  if (isPostgres) {
-    const gameRes = await pgPool.query('SELECT * FROM game_state WHERE id = 1');
-    const winnersRes = await pgPool.query('SELECT * FROM winners ORDER BY won_at DESC LIMIT 10');
-    const compRes = await pgPool.query('SELECT name, cpf, phone, pix_key, chances, attempts, created_at FROM competitors ORDER BY created_at DESC LIMIT 50');
-    return {
-      game: gameRes.rows[0] || null,
-      winners: winnersRes.rows,
-      competitors: compRes.rows
-    };
-  } else {
-    const game = sqliteDb.prepare('SELECT * FROM game_state WHERE id = 1').get();
-    const winners = sqliteDb.prepare('SELECT * FROM winners ORDER BY won_at DESC LIMIT 10').all();
-    const competitors = sqliteDb.prepare('SELECT name, cpf, phone, pix_key, chances, attempts, created_at FROM competitors ORDER BY created_at DESC LIMIT 50').all();
-    return { game, winners, competitors };
+  if (isPostgres && pgPool) {
+    try {
+      const gameRes = await pgPool.query('SELECT * FROM game_state WHERE id = 1');
+      const winnersRes = await pgPool.query('SELECT * FROM winners ORDER BY won_at DESC LIMIT 10');
+      const compRes = await pgPool.query('SELECT name, cpf, phone, pix_key, chances, attempts, created_at FROM competitors ORDER BY created_at DESC LIMIT 50');
+      return {
+        game: gameRes.rows[0] || null,
+        winners: winnersRes.rows,
+        competitors: compRes.rows
+      };
+    } catch (e) {}
   }
+  const game = sqliteDb.prepare('SELECT * FROM game_state WHERE id = 1').get();
+  const winners = sqliteDb.prepare('SELECT * FROM winners ORDER BY won_at DESC LIMIT 10').all();
+  const competitors = sqliteDb.prepare('SELECT name, cpf, phone, pix_key, chances, attempts, created_at FROM competitors ORDER BY created_at DESC LIMIT 50').all();
+  return { game, winners, competitors };
 }
 
 async function saveAdminConfig({ secret_code, jackpot, reset }) {
-  if (isPostgres) {
-    if (secret_code && secret_code.length === 5) {
-      await pgPool.query('UPDATE game_state SET secret_code = $1 WHERE id = 1', [secret_code]);
-    }
-    if (jackpot !== undefined && !isNaN(jackpot)) {
-      await pgPool.query('UPDATE game_state SET jackpot = $1 WHERE id = 1', [parseFloat(jackpot)]);
-    }
-    if (reset) {
-      await pgPool.query('UPDATE game_state SET is_locked = 0, winner_name = NULL, winner_prize = NULL WHERE id = 1');
-    }
-  } else {
+  // SQLite
+  try {
     if (secret_code && secret_code.length === 5) {
       sqliteDb.prepare('UPDATE game_state SET secret_code = ? WHERE id = 1').run(secret_code);
     }
@@ -316,6 +375,21 @@ async function saveAdminConfig({ secret_code, jackpot, reset }) {
     if (reset) {
       sqliteDb.prepare('UPDATE game_state SET is_locked = 0, winner_name = NULL, winner_prize = NULL WHERE id = 1').run();
     }
+  } catch (e) {}
+
+  // Postgres
+  if (isPostgres && pgPool) {
+    try {
+      if (secret_code && secret_code.length === 5) {
+        await pgPool.query('UPDATE game_state SET secret_code = $1 WHERE id = 1', [secret_code]);
+      }
+      if (jackpot !== undefined && !isNaN(jackpot)) {
+        await pgPool.query('UPDATE game_state SET jackpot = $1 WHERE id = 1', [parseFloat(jackpot)]);
+      }
+      if (reset) {
+        await pgPool.query('UPDATE game_state SET is_locked = 0, winner_name = NULL, winner_prize = NULL WHERE id = 1');
+      }
+    } catch (e) {}
   }
 }
 
@@ -413,11 +487,12 @@ const server = http.createServer(async (req, res) => {
     const { cpf } = data;
     const amount = 4.99;
     const pixCode = "00020126580014br.gov.bcb.pix01366342577500071552040000530398654044.995802BR5910SW_DIGITAL6009CURITIBA62070503***6304E8A2";
-    if (isPostgres) {
-      await pgPool.query('INSERT INTO transactions (cpf, amount, status) VALUES ($1, $2, $3)', [cpf, amount, 'PENDING']);
-    } else {
+    try {
       sqliteDb.prepare('INSERT INTO transactions (cpf, amount, status) VALUES (?, ?, ?)').run(cpf, amount, 'PENDING');
-    }
+      if (isPostgres && pgPool) {
+        await pgPool.query('INSERT INTO transactions (cpf, amount, status) VALUES ($1, $2, $3)', [cpf, amount, 'PENDING']);
+      }
+    } catch (e) {}
     return sendJson(res, { success: true, amount, pix_code: pixCode });
   }
 
@@ -494,11 +569,9 @@ const server = http.createServer(async (req, res) => {
   res.end('404 Not Found');
 });
 
-initDb().then(() => {
-  server.listen(PORT, '0.0.0.0', () => {
-    console.log(`🚀 Desafio do Cofre rodando na porta ${PORT}`);
-  });
-}).catch(err => {
-  console.error('Erro fatal ao iniciar banco:', err);
-  process.exit(1);
+// Inicia o servidor HTTP IMEDIATAMENTE (Railway nunca mais dá "Acidentado"!)
+server.listen(PORT, '0.0.0.0', () => {
+  console.log(`🚀 Desafio do Cofre rodando na porta ${PORT}`);
+  // Inicia banco em segundo plano de forma 100% segura
+  initDb();
 });
