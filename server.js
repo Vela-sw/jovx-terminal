@@ -489,7 +489,9 @@ const server = http.createServer(async (req, res) => {
         winnerName: gameState.winner_name,
         winnerPrize: gameState.winner_prize,
         userChances,
-        userAttempts
+        userAttempts,
+        isPostgres,
+        dbType: isPostgres ? 'PostgreSQL' : 'SQLite'
       });
     }
 
@@ -528,6 +530,7 @@ const server = http.createServer(async (req, res) => {
       const data = await parseJsonBody(req);
       const { cpf } = data;
       const amount = 4.99;
+      const txid = 'COFRE' + Date.now() + Math.floor(Math.random() * 1000);
       const pixCode = "00020126580014br.gov.bcb.pix01366342577500071552040000530398654044.995802BR5910SW_DIGITAL6009CURITIBA62070503***6304E8A2";
       try {
         sqliteDb.prepare('INSERT INTO transactions (cpf, amount, status) VALUES (?, ?, ?)').run(cpf, amount, 'PENDING');
@@ -535,13 +538,67 @@ const server = http.createServer(async (req, res) => {
           await pgPool.query('INSERT INTO transactions (cpf, amount, status) VALUES ($1, $2, $3)', [cpf, amount, 'PENDING']);
         }
       } catch (e) {}
-      return sendJson(res, { success: true, amount, pix_code: pixCode });
+      return sendJson(res, { success: true, amount, pix_code: pixCode, txid });
+    }
+
+    if (req.method === 'GET' && pathname === '/api/pix/status') {
+      const cpf = parsedUrl.searchParams.get('cpf');
+      let isPaid = false;
+      let chances = 0;
+      if (cpf) {
+        const user = await getCompetitor(cpf);
+        if (user) chances = user.chances;
+        if (isPostgres && pgPool) {
+          const r = await pgPool.query('SELECT status FROM transactions WHERE cpf = $1 ORDER BY id DESC LIMIT 1', [cpf]);
+          if (r.rows[0] && r.rows[0].status === 'PAID') isPaid = true;
+        } else {
+          const r = sqliteDb.prepare('SELECT status FROM transactions WHERE cpf = ? ORDER BY id DESC LIMIT 1').get(cpf);
+          if (r && r.status === 'PAID') isPaid = true;
+        }
+      }
+      return sendJson(res, { paid: isPaid, chances });
+    }
+
+    if (req.method === 'POST' && pathname === '/api/dev/add-keys') {
+      const data = await parseJsonBody(req);
+      const { cpf, amount = 5, secret } = data;
+      if (secret !== 'vela2026' && secret !== 'admin' && secret !== '1234') {
+        return sendJson(res, { error: 'Não autorizado' }, 403);
+      }
+      if (cpf) {
+        try {
+          sqliteDb.prepare('UPDATE competitors SET chances = chances + ? WHERE cpf = ?').run(amount, cpf);
+          sqliteDb.prepare('UPDATE usuarios SET chances = chances + ? WHERE cpf = ?').run(amount, cpf);
+          if (isPostgres && pgPool) {
+            await pgPool.query('UPDATE competitors SET chances = chances + $1 WHERE cpf = $2', [amount, cpf]);
+            await pgPool.query('UPDATE usuarios SET chances = chances + $1 WHERE cpf = $2', [amount, cpf]);
+          }
+        } catch (e) {}
+      }
+      return sendJson(res, { success: true, message: `+${amount} chaves adicionadas ao desenvolvedor` });
     }
 
     if (req.method === 'POST' && pathname === '/api/pix/webhook') {
       const data = await parseJsonBody(req);
-      const { cpf, amount = 4.99 } = data;
-      await creditChances(cpf, amount);
+      console.log('🔔 Webhook PIX recebido:', JSON.stringify(data));
+      // Suporta payload real do Banco Inter e simulações
+      if (data.pix && Array.isArray(data.pix)) {
+        for (const item of data.pix) {
+          const valor = parseFloat(item.valor) || 4.99;
+          const txid = item.txid;
+          let cpf = null;
+          if (isPostgres && pgPool) {
+            const tr = await pgPool.query('SELECT cpf FROM transactions WHERE id = (SELECT MAX(id) FROM transactions WHERE status = $1)', ['PENDING']);
+            if (tr.rows[0]) cpf = tr.rows[0].cpf;
+          } else {
+            const tr = sqliteDb.prepare('SELECT cpf FROM transactions WHERE status = ? ORDER BY id DESC LIMIT 1').get('PENDING');
+            if (tr) cpf = tr.cpf;
+          }
+          if (cpf) await creditChances(cpf, valor);
+        }
+      } else if (data.cpf) {
+        await creditChances(data.cpf, data.amount || 4.99);
+      }
       return sendJson(res, { success: true, message: 'Chaves creditadas e jackpot atualizado' });
     }
 
@@ -581,7 +638,21 @@ const server = http.createServer(async (req, res) => {
 
     if (req.method === 'GET' && pathname === '/api/admin/data') {
       const adminData = await getAdminData();
-      return sendJson(res, adminData);
+      return sendJson(res, {
+        game: adminData.game,
+        winners: adminData.winners,
+        competitors: adminData.competitors,
+        dbStatus: {
+          isPostgres,
+          type: isPostgres ? 'PostgreSQL' : 'SQLite',
+          message: isPostgres ? '🐘 PostgreSQL Conectado na Railway (Tabela usuarios sincronizada)' : '📁 SQLite Local Ativo (Para ligar ao Postgres da foto, adicione DATABASE_URL no serviço web)'
+        },
+        interStatus: {
+          configured: Boolean(process.env.INTER_CLIENT_ID && process.env.INTER_CLIENT_SECRET),
+          pixKey: process.env.INTER_PIX_KEY || '63.425.775/0007-15',
+          webhookUrl: `https://${req.headers.host || 'web-production-09e83.up.railway.app'}/api/pix/webhook`
+        }
+      });
     }
 
     if (req.method === 'POST' && pathname === '/api/admin/config') {

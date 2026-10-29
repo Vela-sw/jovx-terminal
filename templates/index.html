@@ -170,9 +170,10 @@
 
     <!-- BARRA DO COMPETIDOR / SESSÃO ATIVA -->
     <div id="playerSessionBar" class="flex items-center justify-between bg-[#270b4a] border border-[#6b21a8] rounded-xl px-2.5 py-1 text-[9.5px] shadow-sm">
-      <div class="flex items-center gap-2 text-purple-100">
+      <div class="flex items-center gap-1.5 text-purple-100">
         <span class="text-xs">👤</span>
-        <span id="playerSessionName" class="font-bold text-white truncate max-w-[130px]">Visitante</span>
+        <span id="devBadge" class="hidden text-[8.5px] bg-amber-500/20 text-amber-300 border border-amber-400/50 font-black px-1.5 py-0.2 rounded-full tracking-wider">DEV</span>
+        <span id="playerSessionName" class="font-bold text-white truncate max-w-[120px]">Visitante</span>
         <span id="playerKeysBadge" class="hidden items-center gap-1 bg-amber-400/20 text-amber-300 font-mono font-black px-2 py-0.5 rounded-lg border border-amber-400/50 text-[9.5px]">
           🔑 <span id="chancesDisplay">0 CHAVES</span>
         </span>
@@ -509,15 +510,25 @@
         </div>
       </div>
 
-      <!-- BOTÃO DE SIMULAÇÃO PARA TESTE -->
-      <div class="pt-3 border-t border-purple-800/80">
-        <button onclick="simulatePixPayment()" class="w-full py-4 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-black text-sm uppercase active:scale-95 transition shadow-xl flex items-center justify-center gap-2">
-          <span>⚡</span>
-          <span>SIMULAR PAGAMENTO PIX APROVADO</span>
-        </button>
-        <p class="text-xs text-purple-300 text-center mt-2">
-          No ar: webhook do Banco Inter aprova instantaneamente
-        </p>
+      <!-- CONFIRMAÇÃO DO PIX EM TEMPO REAL -->
+      <div class="pt-3 border-t border-purple-800/80 space-y-3">
+        <div class="bg-black/50 border border-purple-800/80 rounded-2xl p-4 text-center space-y-2">
+          <div class="inline-flex items-center gap-2 text-emerald-400 font-bold text-xs sm:text-sm">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+            <span>Aguardando confirmação do Pix em tempo real...</span>
+          </div>
+          <p class="text-xs text-purple-200 leading-relaxed">
+            Abra o app do seu banco e pague com o QR Code ou Pix Copia e Cola. Suas <strong>5 Chaves</strong> serão creditadas automaticamente nesta tela assim que o pagamento for detectado!
+          </p>
+        </div>
+
+        <!-- ÁREA EXCLUSIVA DE DESENVOLVEDOR (VISÍVEL SOMENTE NO MODO DEV) -->
+        <div id="devPixTools" class="hidden bg-[#1f0740] border border-amber-400/50 rounded-2xl p-3 text-center space-y-2">
+          <span class="text-[10px] text-amber-300 font-black uppercase tracking-wider block">🛠️ FERRAMENTAS DO DESENVOLVEDOR</span>
+          <button onclick="simulatePixPayment()" class="w-full py-3 rounded-xl bg-purple-700 hover:bg-purple-600 text-white font-black text-xs uppercase shadow active:scale-95 transition">
+            ⚡ [DEV] Simular Pagamento Pix Aprovado
+          </button>
+        </div>
       </div>
 
     </div>
@@ -639,6 +650,38 @@
           <button onclick="toggleAdminModal()" class="w-10 h-10 rounded-full bg-purple-900/60 hover:bg-purple-800 text-purple-200 hover:text-white flex items-center justify-center text-lg active:scale-95 transition">✕</button>
         </div>
 
+        <!-- SEÇÃO: MODO DESENVOLVEDOR & STATUS DO BANCO / PIX INTER -->
+        <div class="bg-[#1a0636] p-4 rounded-2xl border border-purple-600/70 space-y-3 mb-4 shadow-lg">
+          <div class="flex items-center justify-between border-b border-purple-800/60 pb-2.5">
+            <span class="text-xs sm:text-sm font-black text-amber-300 uppercase flex items-center gap-1.5">
+              <span>🛠️</span> Acesso de Desenvolvedor
+            </span>
+            <button onclick="toggleDevMode()" id="devToggleBtn" class="px-3 py-1 rounded-full text-xs font-bold bg-purple-700 hover:bg-purple-600 text-white transition">
+              Ativar Modo Dev
+            </button>
+          </div>
+          
+          <div class="text-xs space-y-2 pt-0.5">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+              <span class="text-purple-300 font-semibold">Banco de Dados:</span>
+              <span id="adminDbStatusBadge" class="text-xs font-bold text-emerald-400 font-mono">Verificando...</span>
+            </div>
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+              <span class="text-purple-300 font-semibold">Pix Banco Inter:</span>
+              <span id="adminInterStatusBadge" class="text-xs font-bold text-amber-300 font-mono">Configurando...</span>
+            </div>
+          </div>
+
+          <div id="devQuickActions" class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2 border-t border-purple-800/60 hidden">
+            <button onclick="devAddKeysToSelf(5)" class="w-full py-3 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-black text-xs uppercase shadow transition">
+              🔑 Injetar +5 Chaves Dev
+            </button>
+            <button onclick="simulatePixPayment()" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-zinc-950 font-black text-xs uppercase shadow transition">
+              ⚡ Simular Pix Aprovado
+            </button>
+          </div>
+        </div>
+
         <!-- SEÇÃO 1: DADOS DO GANHADOR DO COFRE ATUAL -->
         <div id="adminWinnerCard" class="bg-[#17052e] p-4 rounded-2xl border border-amber-400/40 space-y-2 mb-4">
           <div class="flex items-center justify-between">
@@ -711,6 +754,7 @@
 
     window.addEventListener('DOMContentLoaded', () => {
       loadStoredSession();
+      updateDevModeUI();
       fetchGameState();
       // SINCRONIZAÇÃO EM TEMPO REAL: checa o estado do cofre a cada 2.5 segundos para todos os jogadores
       setInterval(fetchGameState, 2500);
@@ -815,6 +859,7 @@
           badgeEl.classList.remove('flex');
         }
       }
+      updateDevModeUI();
     }
 
     function handleLogout() {
@@ -941,13 +986,111 @@
     function openRulesModal() { document.getElementById('rulesModal').classList.remove('hidden'); }
     function closeRulesModal() { document.getElementById('rulesModal').classList.add('hidden'); }
 
+    let isDevMode = localStorage.getItem('cofre_dev_mode') === 'true';
+
+    function updateDevModeUI() {
+      const devBadge = document.getElementById('devBadge');
+      const devPixTools = document.getElementById('devPixTools');
+      const devQuickActions = document.getElementById('devQuickActions');
+      const devToggleBtn = document.getElementById('devToggleBtn');
+      if (devBadge) {
+        if (isDevMode) devBadge.classList.remove('hidden');
+        else devBadge.classList.add('hidden');
+      }
+      if (devPixTools) {
+        if (isDevMode) devPixTools.classList.remove('hidden');
+        else devPixTools.classList.add('hidden');
+      }
+      if (devQuickActions) {
+        if (isDevMode) devQuickActions.classList.remove('hidden');
+        else devQuickActions.classList.add('hidden');
+      }
+      if (devToggleBtn) {
+        devToggleBtn.innerText = isDevMode ? 'Desativar Modo Dev' : 'Ativar Modo Dev';
+        devToggleBtn.className = isDevMode 
+          ? 'px-3 py-1 rounded-full text-xs font-bold bg-amber-500 hover:bg-amber-400 text-zinc-950 transition' 
+          : 'px-3 py-1 rounded-full text-xs font-bold bg-purple-700 hover:bg-purple-600 text-white transition';
+      }
+    }
+
+    function toggleDevMode() {
+      isDevMode = !isDevMode;
+      localStorage.setItem('cofre_dev_mode', isDevMode ? 'true' : 'false');
+      updateDevModeUI();
+      alert(isDevMode ? "🛠️ Modo Desenvolvedor ATIVADO!\n\nAgora você vê o selo DEV na sua conta, botões de teste do Pix e atalhos rápidos de depuração." : "Modo Desenvolvedor DESATIVADO.");
+    }
+
+    async function devAddKeysToSelf(amount = 5) {
+      if (!currentUser || !currentUser.cpf) {
+        alert("Você precisa estar cadastrado/logado na sua conta primeiro para receber as chaves de desenvolvedor.");
+        return;
+      }
+      try {
+        const res = await fetch('/api/dev/add-keys', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ cpf: currentUser.cpf, amount, secret: 'vela2026' })
+        });
+        if (res.ok) {
+          chancesLeft += amount;
+          saveStoredSession();
+          updateChancesDisplay();
+          alert(`✅ +${amount} chaves adicionadas com sucesso à sua conta DEV!`);
+        } else {
+          alert("Erro ao adicionar chaves.");
+        }
+      } catch (e) {
+        alert("Erro de conexão ao adicionar chaves.");
+      }
+    }
+
+    let pixPollInterval = null;
+    function startPixPolling() {
+      stopPixPolling();
+      if (!currentUser || !currentUser.cpf) return;
+      const initialChances = chancesLeft;
+      pixPollInterval = setInterval(async () => {
+        try {
+          const res = await fetch(`/api/pix/status?cpf=${encodeURIComponent(currentUser.cpf)}`);
+          if (res.ok) {
+            const data = await res.json();
+            if (data.paid || data.chances > initialChances) {
+              stopPixPolling();
+              chancesLeft = data.chances > initialChances ? data.chances : (chancesLeft + 5);
+              saveStoredSession();
+              updateChancesDisplay();
+              closePixModal();
+              playUnlockSound();
+              const status = document.getElementById('statusMessage');
+              if (status) {
+                status.innerText = "PAGAMENTO PIX CONFIRMADO! +5 CHAVES LIBERADAS.";
+                status.className = "w-full text-center text-[9.5px] font-black py-1 px-2 rounded-lg bg-emerald-950 border border-emerald-500 text-emerald-300 min-h-[22px] flex items-center justify-center";
+              }
+            }
+          }
+        } catch (e) {}
+      }, 2500);
+    }
+
+    function stopPixPolling() {
+      if (pixPollInterval) {
+        clearInterval(pixPollInterval);
+        pixPollInterval = null;
+      }
+    }
+
     function openPixModal() {
       if (currentUser) {
         document.getElementById('pixModalUserDesc').innerText = `${currentUser.name} • PIX: ${currentUser.pixKey}`;
       }
+      updateDevModeUI();
       document.getElementById('pixModal').classList.remove('hidden');
+      startPixPolling();
     }
-    function closePixModal() { document.getElementById('pixModal').classList.add('hidden'); }
+    function closePixModal() {
+      stopPixPolling();
+      document.getElementById('pixModal').classList.add('hidden');
+    }
 
     function copyPixCode() {
       const codeInput = document.getElementById('pixCodeInput');
@@ -1261,6 +1404,27 @@
             } else {
               statusBadge.innerText = "RODADA ATIVA";
               statusBadge.className = "text-[8.5px] px-2 py-0.5 rounded-full font-black bg-emerald-500/20 text-emerald-300 border border-emerald-500/50";
+            }
+          }
+
+          if (data.dbStatus) {
+            const dbBadge = document.getElementById('adminDbStatusBadge');
+            if (dbBadge) {
+              dbBadge.innerText = data.dbStatus.message;
+              dbBadge.className = data.dbStatus.isPostgres
+                ? "text-xs font-bold text-emerald-400 font-mono"
+                : "text-xs font-bold text-amber-300 font-mono";
+            }
+          }
+          if (data.interStatus) {
+            const interBadge = document.getElementById('adminInterStatusBadge');
+            if (interBadge) {
+              interBadge.innerText = data.interStatus.configured
+                ? `🟢 Conectado (${data.interStatus.pixKey})`
+                : `🟡 Chave: ${data.interStatus.pixKey} (Aguardando Certificado Inter PJ)`;
+              interBadge.className = data.interStatus.configured
+                ? "text-xs font-bold text-emerald-400 font-mono"
+                : "text-xs font-bold text-amber-300 font-mono";
             }
           }
 
