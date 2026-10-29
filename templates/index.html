@@ -168,10 +168,13 @@
     </div>
 
     <!-- BARRA DO COMPETIDOR / SESSÃO ATIVA -->
-    <div id="playerSessionBar" class="flex items-center justify-between bg-[#270b4a] border border-[#6b21a8] rounded-xl px-2.5 py-1 text-[9px] shadow-sm">
-      <div class="flex items-center gap-1.5 text-purple-100">
+    <div id="playerSessionBar" class="flex items-center justify-between bg-[#270b4a] border border-[#6b21a8] rounded-xl px-2.5 py-1 text-[9.5px] shadow-sm">
+      <div class="flex items-center gap-2 text-purple-100">
         <span class="text-xs">👤</span>
-        <span id="playerSessionName" class="font-bold text-white truncate max-w-[170px]">Visitante</span>
+        <span id="playerSessionName" class="font-bold text-white truncate max-w-[130px]">Visitante</span>
+        <span id="playerKeysBadge" class="hidden items-center gap-1 bg-amber-400/20 text-amber-300 font-mono font-black px-2 py-0.5 rounded-lg border border-amber-400/50 text-[9.5px]">
+          🔑 <span id="chancesDisplay">0 CHAVES</span>
+        </span>
       </div>
       <div id="playerSessionActions">
         <button onclick="handleAuthAction()" id="playerAuthBtn" class="text-amber-300 hover:text-amber-200 font-black underline">
@@ -271,60 +274,44 @@
 
     </div>
 
-    <!-- PAINEL DAS 4 PISTAS PROGRESSIVAS (CORES VIVAS E DESTAQUE) -->
-    <div class="bg-gradient-to-b from-[#2a0c52] to-[#1a0533] border-2 border-[#7c3aed] rounded-2xl p-2 space-y-1 shadow-md">
-      <div class="flex items-center justify-between px-1 mb-0.5">
-        <h3 class="text-[9.5px] font-black uppercase tracking-wider text-amber-300 flex items-center gap-1">
-          <span>🧩</span> PISTAS ESTRATÉGICAS DO SEGREDO
+    <!-- PAINEL DAS 4 PISTAS PROGRESSIVAS (AMPLIADO, VISUAL LIMPO E ALTA LEGIBILIDADE) -->
+    <div class="bg-gradient-to-b from-[#2a0c52] to-[#1a0533] border-2 border-[#7c3aed] rounded-2xl p-2.5 sm:p-3 space-y-1.5 shadow-md">
+      <div class="flex items-center justify-between px-1 mb-1">
+        <h3 class="text-xs sm:text-sm font-black uppercase tracking-wider text-amber-300 flex items-center gap-1.5">
+          <span class="text-sm">🧩</span> PISTAS ESTRATÉGICAS DO SEGREDO
         </h3>
-        <span id="clueBadge" class="text-[8.5px] bg-amber-500/25 text-amber-200 font-black px-1.5 py-0.2 rounded-full border border-amber-400/50">
+        <span id="clueBadge" class="text-[9.5px] bg-amber-500/25 text-amber-200 font-black px-2 py-0.5 rounded-full border border-amber-400/50">
           0 de 4 liberadas
         </span>
       </div>
 
       <!-- PISTA 1 -->
-      <div id="clueRow1" class="flex items-center gap-1.5 p-1 rounded-xl bg-[#340e65] border border-[#6b21a8] text-xs transition-all duration-300">
-        <span class="text-xs clue-ico">🔒</span>
-        <span class="font-black text-amber-300 clue-title text-[10.5px]">1ª Pista:</span>
-        <span class="text-white font-bold text-[10.5px] clue-desc">Tente 1 palpite para liberar a 1ª pista</span>
+      <div id="clueRow1" class="flex items-center gap-2 p-1.5 sm:p-2 rounded-xl bg-[#340e65] border border-[#6b21a8] text-xs transition-all duration-300">
+        <span class="text-sm clue-ico">🔒</span>
+        <span class="font-black text-amber-300 clue-title text-[11px] sm:text-xs whitespace-nowrap">1ª Pista:</span>
+        <span class="text-white font-bold text-[11px] sm:text-xs clue-desc leading-tight">Tente 1 palpite para liberar a 1ª pista</span>
       </div>
 
       <!-- PISTA 2 -->
-      <div id="clueRow2" class="flex items-center gap-1.5 p-1 rounded-xl bg-[#340e65] border border-[#6b21a8] text-xs transition-all duration-300">
-        <span class="text-xs clue-ico">🔒</span>
-        <span class="font-black text-amber-300 clue-title text-[10.5px]">2ª Pista:</span>
-        <span class="text-white font-bold text-[10.5px] clue-desc">Tente 2 palpites para liberar a 2ª pista</span>
+      <div id="clueRow2" class="flex items-center gap-2 p-1.5 sm:p-2 rounded-xl bg-[#340e65] border border-[#6b21a8] text-xs transition-all duration-300">
+        <span class="text-sm clue-ico">🔒</span>
+        <span class="font-black text-amber-300 clue-title text-[11px] sm:text-xs whitespace-nowrap">2ª Pista:</span>
+        <span class="text-white font-bold text-[11px] sm:text-xs clue-desc leading-tight">Tente 2 palpites para liberar a 2ª pista</span>
       </div>
 
       <!-- PISTA 3 -->
-      <div id="clueRow3" class="flex items-center gap-1.5 p-1 rounded-xl bg-[#340e65] border border-[#6b21a8] text-xs transition-all duration-300">
-        <span class="text-xs clue-ico">🔒</span>
-        <span class="font-black text-amber-300 clue-title text-[10.5px]">3ª Pista:</span>
-        <span class="text-white font-bold text-[10.5px] clue-desc">Tente 3 palpites para liberar a 3ª pista</span>
+      <div id="clueRow3" class="flex items-center gap-2 p-1.5 sm:p-2 rounded-xl bg-[#340e65] border border-[#6b21a8] text-xs transition-all duration-300">
+        <span class="text-sm clue-ico">🔒</span>
+        <span class="font-black text-amber-300 clue-title text-[11px] sm:text-xs whitespace-nowrap">3ª Pista:</span>
+        <span class="text-white font-bold text-[11px] sm:text-xs clue-desc leading-tight">Tente 3 palpites para liberar a 3ª pista</span>
       </div>
 
       <!-- PISTA 4 -->
-      <div id="clueRow4" class="flex items-center gap-1.5 p-1 rounded-xl bg-[#340e65] border border-[#6b21a8] text-xs transition-all duration-300">
-        <span class="text-xs clue-ico">🔒</span>
-        <span class="font-black text-amber-300 clue-title text-[10.5px]">4ª Pista:</span>
-        <span class="text-white font-bold text-[10.5px] clue-desc">Tente 4 palpites para liberar a 4ª pista</span>
+      <div id="clueRow4" class="flex items-center gap-2 p-1.5 sm:p-2 rounded-xl bg-[#340e65] border border-[#6b21a8] text-xs transition-all duration-300">
+        <span class="text-sm clue-ico">🔒</span>
+        <span class="font-black text-amber-300 clue-title text-[11px] sm:text-xs whitespace-nowrap">4ª Pista:</span>
+        <span class="text-white font-bold text-[11px] sm:text-xs clue-desc leading-tight">Tente 4 palpites para liberar a 4ª pista</span>
       </div>
-    </div>
-
-    <!-- BARRA DE SALDO DE CHAVES + ADICIONAR CHANCES PIX -->
-    <div class="flex items-center justify-between bg-[#270b4a] border border-[#6b21a8] rounded-2xl px-2.5 py-1.5 shadow-sm">
-      <div class="flex items-center gap-2">
-        <span class="text-base">🔑</span>
-        <div>
-          <span class="text-[8px] text-purple-200 block font-bold">Chaves Restantes:</span>
-          <span class="text-[11px] font-black text-amber-300 font-mono" id="chancesDisplay">0 CHAVES</span>
-        </div>
-      </div>
-
-      <button onclick="handleBuyKeysClick()" class="bg-gradient-to-r from-emerald-500 to-emerald-400 hover:from-emerald-400 hover:to-emerald-300 text-zinc-950 font-black text-[11px] px-3 py-1.5 rounded-xl shadow-[0_0_15px_rgba(16,185,129,0.45)] active:scale-95 transition flex items-center gap-1.5">
-        <span>+5 Chaves</span>
-        <span class="bg-black/25 text-zinc-950 px-1 py-0.2 rounded text-[8.5px] font-mono">R$ 4,99</span>
-      </button>
     </div>
 
   </div>
@@ -704,16 +691,25 @@
     function updatePlayerSessionBar() {
       const nameEl = document.getElementById('playerSessionName');
       const actionEl = document.getElementById('playerAuthBtn');
+      const badgeEl = document.getElementById('playerKeysBadge');
       if (currentUser) {
         nameEl.innerText = `${currentUser.name.split(' ')[0]} (CPF ${currentUser.cpf.slice(0, 3)}...)`;
         nameEl.classList.add('text-amber-300', 'font-black');
         actionEl.innerText = "Trocar / Sair";
         actionEl.onclick = handleLogout;
+        if (badgeEl) {
+          badgeEl.classList.remove('hidden');
+          badgeEl.classList.add('flex');
+        }
       } else {
         nameEl.innerText = "Visitante";
         nameEl.classList.remove('text-amber-300', 'font-black');
         actionEl.innerText = "Entrar / Cadastrar";
         actionEl.onclick = handleAuthAction;
+        if (badgeEl) {
+          badgeEl.classList.add('hidden');
+          badgeEl.classList.remove('flex');
+        }
       }
     }
 
@@ -728,7 +724,8 @@
     }
 
     function updateChancesDisplay() {
-      document.getElementById('chancesDisplay').innerText = `${chancesLeft} CHAVES`;
+      const el = document.getElementById('chancesDisplay');
+      if (el) el.innerText = `${chancesLeft} CHAVES`;
     }
 
     function updateJackpotDisplay() {
@@ -936,6 +933,10 @@
       playMechanicalClick(800 + Math.random() * 400, 0.03);
     }
     function clickVaultWheel() {
+      if (chancesLeft <= 0) {
+        handleBuyKeysClick();
+        return;
+      }
       rotateWheel(45 + Math.floor(Math.random() * 60));
     }
 
@@ -1002,8 +1003,8 @@
           row.classList.add('bg-amber-400/25', 'border-amber-400', 'shadow-md');
           row.querySelector('.clue-ico').innerText = '💡';
           row.querySelector('.clue-title').innerText = clue.title;
-          row.querySelector('.clue-title').className = "font-black text-amber-300 clue-title text-[10.5px]";
-          row.querySelector('.clue-desc').className = "text-yellow-100 font-black text-[10.5px] clue-desc";
+          row.querySelector('.clue-title').className = "font-black text-amber-300 clue-title text-[11px] sm:text-xs whitespace-nowrap";
+          row.querySelector('.clue-desc').className = "text-yellow-100 font-black text-[11px] sm:text-xs clue-desc leading-tight";
           row.querySelector('.clue-desc').innerText = clue.text;
         }
       }
