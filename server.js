@@ -18,6 +18,7 @@ function findDatabaseUrl() {
   if (process.env.DATABASE_PRIVATE_URL) return process.env.DATABASE_PRIVATE_URL;
   if (process.env.DATABASE_PUBLIC_URL) return process.env.DATABASE_PUBLIC_URL;
   if (process.env.POSTGRES_URL) return process.env.POSTGRES_URL;
+  if (process.env.URL_DO_BANCO_DE_DADOS) return process.env.URL_DO_BANCO_DE_DADOS;
   for (const [k, v] of Object.entries(process.env)) {
     if (typeof v === 'string' && (v.startsWith('postgres://') || v.startsWith('postgresql://'))) {
       return v;
