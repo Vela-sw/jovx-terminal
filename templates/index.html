@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="color-scheme" content="dark">
-  <meta name="theme-color" content="#181d28">
-  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#181d28">
-  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#181d28">
+  <meta name="theme-color" content="#220745">
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#220745">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#220745">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Desafio do Cofre">
@@ -24,15 +24,15 @@
     }
 
     html {
-      background-color: #181d28;
+      background-color: #1a0533;
       color-scheme: dark;
       height: 100%;
       -webkit-text-size-adjust: 100%;
     }
 
     body {
-      background-color: #181d28;
-      background: radial-gradient(circle at 50% 10%, #252c3c 0%, #181d28 55%, #10131b 100%);
+      background-color: #1a0533;
+      background: radial-gradient(circle at 50% 15%, #43107a 0%, #290850 55%, #180332 100%);
       color: #ffffff;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       min-height: 100%;
@@ -42,32 +42,33 @@
       overflow-x: hidden;
     }
 
-    /* Carcaça do cofre em aço titânio claro */
+    /* Carcaça do cofre em Roxo Real & Ametista Luminoso */
     .vault-outer-frame {
-      background: linear-gradient(165deg, #2e3547 0%, #202533 60%, #171b24 100%);
-      border: 2px solid #525e7a;
+      background: linear-gradient(165deg, #370d6b 0%, #26074d 60%, #190433 100%);
+      border: 2px solid #8b5cf6;
       box-shadow: 
         inset 0 1px 2px rgba(255, 255, 255, 0.25),
         inset 0 -3px 6px rgba(0, 0, 0, 0.6),
-        0 12px 35px rgba(0, 0, 0, 0.55);
+        0 12px 35px rgba(0, 0, 0, 0.65),
+        0 0 35px rgba(139, 92, 246, 0.2);
     }
 
-    /* Rebaixo da porta blindada */
+    /* Rebaixo da porta blindada em Roxo Profundo */
     .vault-inner-door {
-      background: linear-gradient(175deg, #252b3a 0%, #1b1f2a 70%, #151821 100%);
+      background: linear-gradient(175deg, #2a0854 0%, #1c0538 70%, #120324 100%);
       box-shadow: 
-        inset 0 3px 8px rgba(0, 0, 0, 0.6),
-        inset 0 1px 2px rgba(255, 255, 255, 0.15),
-        0 1px 3px rgba(0, 0, 0, 0.4);
-      border: 1px solid #414b62;
+        inset 0 3px 10px rgba(0, 0, 0, 0.7),
+        inset 0 1px 2px rgba(255, 255, 255, 0.18),
+        0 0 25px rgba(147, 51, 234, 0.2);
+      border: 1px solid #7c3aed;
     }
 
-    /* Rebites de aço industrial */
+    /* Rebites em Ouro Nobre Industrial */
     .bolt-rivet {
       width: 9px;
       height: 9px;
       border-radius: 50%;
-      background: radial-gradient(circle at 35% 35%, #cbd5e1 0%, #64748b 60%, #334155 100%);
+      background: radial-gradient(circle at 35% 35%, #fef08a 0%, #eab308 60%, #78350f 100%);
       box-shadow: 
         inset 0 1px 1px rgba(255, 255, 255, 0.8),
         0 2px 4px rgba(0, 0, 0, 0.6);
@@ -82,10 +83,10 @@
     }
 
     .gold-metallic-btn {
-      background: linear-gradient(180deg, #fef08a 0%, #eab308 30%, #ca8a04 80%, #a16207 100%);
+      background: linear-gradient(180deg, #fef08a 0%, #facc15 30%, #ca8a04 80%, #a16207 100%);
       box-shadow: 
-        inset 0 1px 2px rgba(255, 255, 255, 0.6),
-        0 3px 8px rgba(202, 138, 4, 0.4),
+        inset 0 1px 2px rgba(255, 255, 255, 0.7),
+        0 4px 14px rgba(234, 179, 8, 0.45),
         0 1px 3px rgba(0, 0, 0, 0.5);
       border: 1px solid #fef08a;
     }
@@ -94,13 +95,13 @@
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
     }
 
-    /* Teclas de Cofre Táteis Confortáveis */
+    /* Teclas de Cofre Táteis com Brilho Violeta */
     .vault-key {
-      background: linear-gradient(180deg, #3d465c 0%, #2a3040 60%, #1e222e 100%);
-      border: 1px solid #576484;
+      background: linear-gradient(180deg, #441480 0%, #2f0b5c 60%, #20063f 100%);
+      border: 1px solid #7c3aed;
       box-shadow: 
         inset 0 1px 1px rgba(255, 255, 255, 0.3),
-        0 2px 4px rgba(0, 0, 0, 0.5);
+        0 2px 5px rgba(0, 0, 0, 0.5);
       transition: all 0.05s ease;
       user-select: none;
     }
@@ -109,28 +110,28 @@
       box-shadow: 
         inset 0 2px 4px rgba(0, 0, 0, 0.8),
         0 1px 2px rgba(0, 0, 0, 0.3);
-      background: #181b24;
+      background: #190533;
       border-color: #fde047;
     }
 
     /* Visor Digital dos 5 Números */
     .digit-box {
-      background: linear-gradient(180deg, #10131a 0%, #080a0e 100%);
-      border: 1.5px solid rgba(250, 204, 21, 0.6);
+      background: linear-gradient(180deg, #18042f 0%, #0c011a 100%);
+      border: 1.5px solid rgba(250, 204, 21, 0.75);
       box-shadow: 
         inset 0 2px 5px rgba(0, 0, 0, 0.9),
-        0 0 10px rgba(250, 204, 21, 0.2);
-      text-shadow: 0 0 10px rgba(250, 204, 21, 0.8);
+        0 0 14px rgba(168, 85, 247, 0.35);
+      text-shadow: 0 0 10px rgba(250, 204, 21, 0.85);
     }
 
-    /* Anel da tranca (Tamanho Equilibrado 125px) */
+    /* Anel da tranca (Tamanho Equilibrado 120px) */
     .dial-bearing-ring {
-      background: radial-gradient(circle, #333a4c 40%, #1e232f 75%, #13161f 100%);
+      background: radial-gradient(circle, #43147c 40%, #2a0952 75%, #180430 100%);
       box-shadow: 
         inset 0 3px 8px rgba(0, 0, 0, 0.8),
-        0 0 15px rgba(0, 0, 0, 0.7),
-        0 0 20px rgba(234, 179, 8, 0.2);
-      border: 2px solid #525e7a;
+        0 0 20px rgba(147, 51, 234, 0.4),
+        0 0 25px rgba(234, 179, 8, 0.35);
+      border: 2px solid #8b5cf6;
     }
   </style>
 </head>
@@ -153,22 +154,22 @@
           <h1 class="text-[11px] font-black tracking-widest text-white uppercase leading-none">
             DESAFIO DO COFRE
           </h1>
-          <p class="text-[8px] text-zinc-300 font-semibold mt-0.5">Torneio de Habilidade • Desafio do Enigma</p>
+          <p class="text-[8px] text-purple-200 font-semibold mt-0.5">Torneio de Habilidade • Desafio do Enigma</p>
         </div>
       </div>
       <div class="flex items-center gap-2">
         <button onclick="openRulesModal()" class="text-[9.5px] text-amber-300 hover:text-amber-200 underline font-black">
           Regras
         </button>
-        <button onclick="toggleAdminModal()" class="text-zinc-400 hover:text-amber-300 p-0.5 text-xs">
+        <button onclick="toggleAdminModal()" class="text-purple-300 hover:text-amber-300 p-0.5 text-xs">
           ⚙️
         </button>
       </div>
     </div>
 
     <!-- BARRA DO COMPETIDOR / SESSÃO ATIVA -->
-    <div id="playerSessionBar" class="flex items-center justify-between bg-[#1d2230] border border-[#3f4961] rounded-xl px-2.5 py-1 text-[9px]">
-      <div class="flex items-center gap-1.5 text-zinc-200">
+    <div id="playerSessionBar" class="flex items-center justify-between bg-[#270b4a] border border-[#6b21a8] rounded-xl px-2.5 py-1 text-[9px] shadow-sm">
+      <div class="flex items-center gap-1.5 text-purple-100">
         <span class="text-xs">👤</span>
         <span id="playerSessionName" class="font-bold text-white truncate max-w-[170px]">Visitante</span>
       </div>
@@ -183,12 +184,12 @@
     <div class="vault-inner-door rounded-2xl p-2 sm:p-2.5 flex flex-col items-center relative">
       
       <!-- MINI VISOR OLED DO VALOR ACUMULADO (CENTRALIZADO NO TOPO) -->
-      <div class="w-full flex flex-col items-center justify-center bg-[#13161f] border border-[#3c4458] rounded-xl py-1 px-2.5 mb-1 shadow-inner text-center">
+      <div class="w-full flex flex-col items-center justify-center bg-[#16042c] border border-[#7c3aed] rounded-xl py-1 px-2.5 mb-1 shadow-inner text-center">
         <div class="flex items-center gap-1.5">
           <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
-          <span class="text-[8px] text-zinc-300 uppercase tracking-widest font-black">Cofre Acumulado</span>
+          <span class="text-[8px] text-purple-200 uppercase tracking-widest font-black">Cofre Acumulado</span>
         </div>
-        <div class="text-base sm:text-lg font-black text-amber-300 font-mono tracking-tight leading-tight my-0.5" id="jackpotDisplay">
+        <div class="text-base sm:text-lg font-black text-amber-300 font-mono tracking-tight leading-tight my-0.5 drop-shadow-[0_0_8px_rgba(250,204,21,0.6)]" id="jackpotDisplay">
           R$ 3.424,50
         </div>
         <span class="text-[7.5px] text-emerald-400 font-black uppercase tracking-wider">
@@ -237,7 +238,7 @@
       </div>
 
       <!-- MENSAGEM DE STATUS DO COFRE -->
-      <div id="statusMessage" class="w-full text-center text-[9px] font-bold py-0.5 px-2 rounded-lg bg-[#151922] border border-[#3c4458] text-amber-200 min-h-[20px] flex items-center justify-center">
+      <div id="statusMessage" class="w-full text-center text-[9px] font-bold py-0.5 px-2 rounded-lg bg-[#1a0533] border border-[#6b21a8] text-amber-200 min-h-[20px] flex items-center justify-center">
         Digite a senha no teclado ou toque abaixo
       </div>
 
@@ -258,7 +259,7 @@
 
           <button onclick="clearDigits()" class="vault-key h-9 rounded-xl text-[8.5px] font-black text-red-400 uppercase tracking-tight">Limpar</button>
           <button onclick="pressDigit(0)" class="vault-key h-9 rounded-xl text-base font-mono font-black text-amber-300">0</button>
-          <button onclick="backspaceDigit()" class="vault-key h-9 rounded-xl text-sm font-black text-zinc-200">⌫</button>
+          <button onclick="backspaceDigit()" class="vault-key h-9 rounded-xl text-sm font-black text-purple-200">⌫</button>
         </div>
 
         <!-- BOTÃO DE AÇÃO MECÂNICA: DESTRAVAR COFRE -->
@@ -270,8 +271,8 @@
 
     </div>
 
-    <!-- PAINEL DAS 4 PISTAS PROGRESSIVAS (CORES FORTES E LETRAS NÍTIDAS) -->
-    <div class="bg-gradient-to-b from-[#1e2330] to-[#161a24] border-2 border-[#3d465d] rounded-2xl p-2 space-y-1 shadow-md">
+    <!-- PAINEL DAS 4 PISTAS PROGRESSIVAS (CORES VIVAS E DESTAQUE) -->
+    <div class="bg-gradient-to-b from-[#2a0c52] to-[#1a0533] border-2 border-[#7c3aed] rounded-2xl p-2 space-y-1 shadow-md">
       <div class="flex items-center justify-between px-1 mb-0.5">
         <h3 class="text-[9.5px] font-black uppercase tracking-wider text-amber-300 flex items-center gap-1">
           <span>🧩</span> PISTAS ESTRATÉGICAS DO SEGREDO
@@ -282,45 +283,45 @@
       </div>
 
       <!-- PISTA 1 -->
-      <div id="clueRow1" class="flex items-center gap-1.5 p-1 rounded-xl bg-[#252b3b] border border-[#48536f] text-xs transition-all duration-300">
+      <div id="clueRow1" class="flex items-center gap-1.5 p-1 rounded-xl bg-[#340e65] border border-[#6b21a8] text-xs transition-all duration-300">
         <span class="text-xs clue-ico">🔒</span>
-        <span class="font-black text-amber-400 clue-title text-[10.5px]">1ª Pista:</span>
+        <span class="font-black text-amber-300 clue-title text-[10.5px]">1ª Pista:</span>
         <span class="text-white font-bold text-[10.5px] clue-desc">Tente 1 palpite para liberar a 1ª pista</span>
       </div>
 
       <!-- PISTA 2 -->
-      <div id="clueRow2" class="flex items-center gap-1.5 p-1 rounded-xl bg-[#252b3b] border border-[#48536f] text-xs transition-all duration-300">
+      <div id="clueRow2" class="flex items-center gap-1.5 p-1 rounded-xl bg-[#340e65] border border-[#6b21a8] text-xs transition-all duration-300">
         <span class="text-xs clue-ico">🔒</span>
-        <span class="font-black text-amber-400 clue-title text-[10.5px]">2ª Pista:</span>
+        <span class="font-black text-amber-300 clue-title text-[10.5px]">2ª Pista:</span>
         <span class="text-white font-bold text-[10.5px] clue-desc">Tente 2 palpites para liberar a 2ª pista</span>
       </div>
 
       <!-- PISTA 3 -->
-      <div id="clueRow3" class="flex items-center gap-1.5 p-1 rounded-xl bg-[#252b3b] border border-[#48536f] text-xs transition-all duration-300">
+      <div id="clueRow3" class="flex items-center gap-1.5 p-1 rounded-xl bg-[#340e65] border border-[#6b21a8] text-xs transition-all duration-300">
         <span class="text-xs clue-ico">🔒</span>
-        <span class="font-black text-amber-400 clue-title text-[10.5px]">3ª Pista:</span>
+        <span class="font-black text-amber-300 clue-title text-[10.5px]">3ª Pista:</span>
         <span class="text-white font-bold text-[10.5px] clue-desc">Tente 3 palpites para liberar a 3ª pista</span>
       </div>
 
       <!-- PISTA 4 -->
-      <div id="clueRow4" class="flex items-center gap-1.5 p-1 rounded-xl bg-[#252b3b] border border-[#48536f] text-xs transition-all duration-300">
+      <div id="clueRow4" class="flex items-center gap-1.5 p-1 rounded-xl bg-[#340e65] border border-[#6b21a8] text-xs transition-all duration-300">
         <span class="text-xs clue-ico">🔒</span>
-        <span class="font-black text-amber-400 clue-title text-[10.5px]">4ª Pista:</span>
+        <span class="font-black text-amber-300 clue-title text-[10.5px]">4ª Pista:</span>
         <span class="text-white font-bold text-[10.5px] clue-desc">Tente 4 palpites para liberar a 4ª pista</span>
       </div>
     </div>
 
     <!-- BARRA DE SALDO DE CHAVES + ADICIONAR CHANCES PIX -->
-    <div class="flex items-center justify-between bg-[#1d2230] border border-[#3f4961] rounded-2xl px-2.5 py-1.5">
+    <div class="flex items-center justify-between bg-[#270b4a] border border-[#6b21a8] rounded-2xl px-2.5 py-1.5 shadow-sm">
       <div class="flex items-center gap-2">
         <span class="text-base">🔑</span>
         <div>
-          <span class="text-[8px] text-zinc-300 block font-bold">Chaves Restantes:</span>
+          <span class="text-[8px] text-purple-200 block font-bold">Chaves Restantes:</span>
           <span class="text-[11px] font-black text-amber-300 font-mono" id="chancesDisplay">0 CHAVES</span>
         </div>
       </div>
 
-      <button onclick="handleBuyKeysClick()" class="bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-black text-[11px] px-3 py-1.5 rounded-xl shadow active:scale-95 transition flex items-center gap-1.5">
+      <button onclick="handleBuyKeysClick()" class="bg-gradient-to-r from-emerald-500 to-emerald-400 hover:from-emerald-400 hover:to-emerald-300 text-zinc-950 font-black text-[11px] px-3 py-1.5 rounded-xl shadow-[0_0_15px_rgba(16,185,129,0.45)] active:scale-95 transition flex items-center gap-1.5">
         <span>+5 Chaves</span>
         <span class="bg-black/25 text-zinc-950 px-1 py-0.2 rounded text-[8.5px] font-mono">R$ 4,99</span>
       </button>
@@ -997,8 +998,8 @@
         if (!row) continue;
         if (i <= unlockedCount) {
           const clue = CLUES[i - 1];
-          row.classList.remove('bg-[#252b3b]', 'border-[#48536f]');
-          row.classList.add('bg-amber-400/20', 'border-amber-400', 'shadow-md');
+          row.classList.remove('bg-[#340e65]', 'border-[#6b21a8]', 'bg-[#252b3b]', 'border-[#48536f]');
+          row.classList.add('bg-amber-400/25', 'border-amber-400', 'shadow-md');
           row.querySelector('.clue-ico').innerText = '💡';
           row.querySelector('.clue-title').innerText = clue.title;
           row.querySelector('.clue-title').className = "font-black text-amber-300 clue-title text-[10.5px]";
