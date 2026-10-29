@@ -103,6 +103,12 @@ function initSqlite() {
     if (!check) {
       sqliteDb.prepare('INSERT INTO game_state (id, jackpot, secret_code, total_arrecadado, is_locked) VALUES (1, 500.00, ?, 0.0, 0)').run('72039');
     }
+
+    // Colunas de pistas personalizadas
+    try { sqliteDb.exec("ALTER TABLE game_state ADD COLUMN clue_1 TEXT DEFAULT 'A soma de todos os 5 dígitos é exatamente 21'"); } catch(e) {}
+    try { sqliteDb.exec("ALTER TABLE game_state ADD COLUMN clue_2 TEXT DEFAULT 'O 2º número do segredo é PAR (0, 2, 4, 6 ou 8)'"); } catch(e) {}
+    try { sqliteDb.exec("ALTER TABLE game_state ADD COLUMN clue_3 TEXT DEFAULT 'O número 2 NÃO FAZ PARTE da combinação'"); } catch(e) {}
+    try { sqliteDb.exec("ALTER TABLE game_state ADD COLUMN clue_4 TEXT DEFAULT 'O número 9 NÃO FAZ PARTE da combinação'"); } catch(e) {}
   } catch (err) {
     console.warn('Aviso SQLite init:', err.message);
   }
@@ -233,6 +239,17 @@ async function initDb() {
         try { await pgPool.query(colSql); } catch (e) {}
       }
 
+      // Garante colunas de pistas personalizadas no Postgres
+      const clueCols = [
+        "ALTER TABLE game_state ADD COLUMN IF NOT EXISTS clue_1 TEXT DEFAULT 'A soma de todos os 5 dígitos é exatamente 21'",
+        "ALTER TABLE game_state ADD COLUMN IF NOT EXISTS clue_2 TEXT DEFAULT 'O 2º número do segredo é PAR (0, 2, 4, 6 ou 8)'",
+        "ALTER TABLE game_state ADD COLUMN IF NOT EXISTS clue_3 TEXT DEFAULT 'O número 2 NÃO FAZ PARTE da combinação'",
+        "ALTER TABLE game_state ADD COLUMN IF NOT EXISTS clue_4 TEXT DEFAULT 'O número 9 NÃO FAZ PARTE da combinação'"
+      ];
+      for (const colSql of clueCols) {
+        try { await pgPool.query(colSql); } catch (e) {}
+      }
+
       // Garante estado inicial do cofre no Postgres
       try {
         const check = await pgPool.query('SELECT * FROM game_state WHERE id = 1');
@@ -255,7 +272,7 @@ async function initDb() {
 async function getGameState() {
   if (isPostgres && pgPool) {
     try {
-      const res = await pgPool.query('SELECT jackpot, secret_code, total_arrecadado, is_locked, winner_name, winner_prize FROM game_state WHERE id = 1');
+      const res = await pgPool.query('SELECT jackpot, secret_code, total_arrecadado, is_locked, winner_name, winner_prize, clue_1, clue_2, clue_3, clue_4 FROM game_state WHERE id = 1');
       const r = res.rows[0];
       if (r) {
         return {
@@ -263,22 +280,42 @@ async function getGameState() {
           secret_code: r.secret_code || '72039',
           is_locked: Boolean(r.is_locked),
           winner_name: r.winner_name,
-          winner_prize: r.winner_prize ? parseFloat(r.winner_prize) : null
+          winner_prize: r.winner_prize ? parseFloat(r.winner_prize) : null,
+          clue_1: r.clue_1 || "A soma de todos os 5 dígitos é exatamente 21",
+          clue_2: r.clue_2 || "O 2º número do segredo é PAR (0, 2, 4, 6 ou 8)",
+          clue_3: r.clue_3 || "O número 2 NÃO FAZ PARTE da combinação",
+          clue_4: r.clue_4 || "O número 9 NÃO FAZ PARTE da combinação",
+          clues: [
+            r.clue_1 || "A soma de todos os 5 dígitos é exatamente 21",
+            r.clue_2 || "O 2º número do segredo é PAR (0, 2, 4, 6 ou 8)",
+            r.clue_3 || "O número 2 NÃO FAZ PARTE da combinação",
+            r.clue_4 || "O número 9 NÃO FAZ PARTE da combinação"
+          ]
         };
       }
     } catch (e) {}
   }
   try {
-    const r = sqliteDb.prepare('SELECT jackpot, secret_code, total_arrecadado, is_locked, winner_name, winner_prize FROM game_state WHERE id = 1').get();
+    const r = sqliteDb.prepare('SELECT jackpot, secret_code, total_arrecadado, is_locked, winner_name, winner_prize, clue_1, clue_2, clue_3, clue_4 FROM game_state WHERE id = 1').get();
     return r ? {
       jackpot: parseFloat(r.jackpot) || 500.00,
       secret_code: r.secret_code || '72039',
       is_locked: Boolean(r.is_locked),
       winner_name: r.winner_name,
-      winner_prize: r.winner_prize ? parseFloat(r.winner_prize) : null
-    } : { jackpot: 500.00, secret_code: '72039', is_locked: false, winner_name: null, winner_prize: null };
+      winner_prize: r.winner_prize ? parseFloat(r.winner_prize) : null,
+      clue_1: r.clue_1 || "A soma de todos os 5 dígitos é exatamente 21",
+      clue_2: r.clue_2 || "O 2º número do segredo é PAR (0, 2, 4, 6 ou 8)",
+      clue_3: r.clue_3 || "O número 2 NÃO FAZ PARTE da combinação",
+      clue_4: r.clue_4 || "O número 9 NÃO FAZ PARTE da combinação",
+      clues: [
+        r.clue_1 || "A soma de todos os 5 dígitos é exatamente 21",
+        r.clue_2 || "O 2º número do segredo é PAR (0, 2, 4, 6 ou 8)",
+        r.clue_3 || "O número 2 NÃO FAZ PARTE da combinação",
+        r.clue_4 || "O número 9 NÃO FAZ PARTE da combinação"
+      ]
+    } : { jackpot: 500.00, secret_code: '72039', is_locked: false, winner_name: null, winner_prize: null, clues: ["A soma de todos os 5 dígitos é exatamente 21", "O 2º número do segredo é PAR (0, 2, 4, 6 ou 8)", "O número 2 NÃO FAZ PARTE da combinação", "O número 9 NÃO FAZ PARTE da combinação"] };
   } catch (e) {
-    return { jackpot: 500.00, secret_code: '72039', is_locked: false, winner_name: null, winner_prize: null };
+    return { jackpot: 500.00, secret_code: '72039', is_locked: false, winner_name: null, winner_prize: null, clues: ["A soma de todos os 5 dígitos é exatamente 21", "O 2º número do segredo é PAR (0, 2, 4, 6 ou 8)", "O número 2 NÃO FAZ PARTE da combinação", "O número 9 NÃO FAZ PARTE da combinação"] };
   }
 }
 
@@ -433,7 +470,7 @@ async function getAdminData() {
   }
 }
 
-async function saveAdminConfig({ secret_code, jackpot, reset }) {
+async function saveAdminConfig({ secret_code, jackpot, reset, clue_1, clue_2, clue_3, clue_4 }) {
   // SQLite
   try {
     if (secret_code && secret_code.length === 5) {
@@ -442,6 +479,10 @@ async function saveAdminConfig({ secret_code, jackpot, reset }) {
     if (jackpot !== undefined && !isNaN(jackpot)) {
       sqliteDb.prepare('UPDATE game_state SET jackpot = ? WHERE id = 1').run(parseFloat(jackpot));
     }
+    if (clue_1 !== undefined) sqliteDb.prepare('UPDATE game_state SET clue_1 = ? WHERE id = 1').run(clue_1);
+    if (clue_2 !== undefined) sqliteDb.prepare('UPDATE game_state SET clue_2 = ? WHERE id = 1').run(clue_2);
+    if (clue_3 !== undefined) sqliteDb.prepare('UPDATE game_state SET clue_3 = ? WHERE id = 1').run(clue_3);
+    if (clue_4 !== undefined) sqliteDb.prepare('UPDATE game_state SET clue_4 = ? WHERE id = 1').run(clue_4);
     if (reset) {
       sqliteDb.prepare('UPDATE game_state SET is_locked = 0, winner_name = NULL, winner_prize = NULL WHERE id = 1').run();
     }
@@ -456,6 +497,10 @@ async function saveAdminConfig({ secret_code, jackpot, reset }) {
       if (jackpot !== undefined && !isNaN(jackpot)) {
         await pgPool.query('UPDATE game_state SET jackpot = $1 WHERE id = 1', [parseFloat(jackpot)]);
       }
+      if (clue_1 !== undefined) await pgPool.query('UPDATE game_state SET clue_1 = $1 WHERE id = 1', [clue_1]);
+      if (clue_2 !== undefined) await pgPool.query('UPDATE game_state SET clue_2 = $1 WHERE id = 1', [clue_2]);
+      if (clue_3 !== undefined) await pgPool.query('UPDATE game_state SET clue_3 = $1 WHERE id = 1', [clue_3]);
+      if (clue_4 !== undefined) await pgPool.query('UPDATE game_state SET clue_4 = $1 WHERE id = 1', [clue_4]);
       if (reset) {
         await pgPool.query('UPDATE game_state SET is_locked = 0, winner_name = NULL, winner_prize = NULL WHERE id = 1');
       }
@@ -522,7 +567,8 @@ const server = http.createServer(async (req, res) => {
         userChances,
         userAttempts,
         isPostgres,
-        dbType: isPostgres ? 'PostgreSQL' : 'SQLite'
+        dbType: isPostgres ? 'PostgreSQL' : 'SQLite',
+        clues: gameState.clues
       });
     }
 
