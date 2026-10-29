@@ -162,9 +162,6 @@
         <button onclick="openRulesModal()" class="text-[9.5px] text-amber-300 hover:text-amber-200 underline font-black">
           Regras
         </button>
-        <button id="adminGearBtn" onclick="toggleAdminModal()" class="hidden text-purple-300 hover:text-amber-300 p-0.5 text-xs transition" title="Painel de Controle">
-          ⚙️
-        </button>
       </div>
     </div>
 
@@ -767,11 +764,9 @@
     ];
 
     window.addEventListener('DOMContentLoaded', () => {
+      localStorage.removeItem('cofre_admin_revealed');
       loadStoredSession();
       updateDevModeUI();
-      if (localStorage.getItem('cofre_admin_revealed') === 'true') {
-        revealAdminGear();
-      }
       fetchGameState();
       // SINCRONIZAÇÃO EM TEMPO REAL: checa o estado do cofre a cada 2.5 segundos para todos os jogadores
       setInterval(fetchGameState, 2500);
@@ -1520,8 +1515,6 @@
         starTapCount = 0;
         const pass = prompt("⭐ Painel do Administrador\nDigite a senha mestre:");
         if (pass === "vela2026" || pass === "admin" || pass === "1234") {
-          localStorage.setItem('cofre_admin_revealed', 'true');
-          revealAdminGear();
           const modal = document.getElementById('adminModal');
           modal.classList.remove('hidden');
           loadAdminData();
@@ -1529,11 +1522,6 @@
           alert("Senha incorreta!");
         }
       }
-    }
-
-    function revealAdminGear() {
-      const gear = document.getElementById('adminGearBtn');
-      if (gear) gear.classList.remove('hidden');
     }
 
     async function toggleAdminModal() {
