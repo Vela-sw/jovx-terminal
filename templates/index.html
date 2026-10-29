@@ -678,9 +678,17 @@
         </div>
       </div>
 
-      <!-- SEÇÃO 3: TOTAL DE JOGADORES -->
-      <div id="adminCompetitorsCount" class="text-center text-xs sm:text-sm text-purple-300 font-semibold py-4 border-t border-purple-800/80 mt-4">
-        Carregando dados dos competidores...
+      <!-- SEÇÃO 3: LISTA COMPLETA DE COMPETIDORES CADASTRADOS NO BANCO -->
+      <div class="space-y-3 bg-[#17052e] p-4 rounded-2xl border border-purple-800/70 mt-4">
+        <div class="flex items-center justify-between border-b border-purple-800/60 pb-2">
+          <span class="text-xs sm:text-sm font-black text-amber-300 uppercase flex items-center gap-1.5">
+            <span>👥</span> Competidores Cadastrados (<span id="adminCompetitorsCountNum">0</span>)
+          </span>
+          <span class="text-[10px] text-emerald-400 font-bold bg-emerald-500/20 px-2 py-0.5 rounded-full border border-emerald-500/40">● Banco Ativo</span>
+        </div>
+        <div id="adminCompetitorsList" class="space-y-2 max-h-56 overflow-y-auto pr-1">
+          <p class="text-zinc-400 text-xs italic text-center py-2">Carregando lista do banco de dados...</p>
+        </div>
       </div>
     </div>
   </div>
@@ -704,24 +712,56 @@
     window.addEventListener('DOMContentLoaded', () => {
       loadStoredSession();
       fetchGameState();
+      // SINCRONIZAÇÃO EM TEMPO REAL: checa o estado do cofre a cada 2.5 segundos para todos os jogadores
+      setInterval(fetchGameState, 2500);
     });
 
     let isCofreLocked = false;
 
     async function fetchGameState() {
       try {
-        const res = await fetch('/api/game/state');
+        const cpfParam = currentUser && currentUser.cpf ? `?cpf=${encodeURIComponent(currentUser.cpf)}` : '';
+        const res = await fetch(`/api/game/state${cpfParam}`);
         if (res.ok) {
           const data = await res.json();
           jackpot = data.jackpot || jackpot;
           updateJackpotDisplay();
+
+          // Sincroniza saldo de chaves do banco de dados (chaves nunca expiram!)
+          if (currentUser && data.userChances !== null && data.userChances !== undefined) {
+            if (chancesLeft !== data.userChances) {
+              chancesLeft = data.userChances;
+              currentUser.chances = chancesLeft;
+              saveStoredSession();
+              updateChancesDisplay();
+            }
+          }
+
+          const status = document.getElementById('statusMessage');
+          const unlockBtn = document.querySelector('button[onclick="submitGuess()"]') || document.getElementById('unlockBtn');
+
           if (data.isLocked) {
             isCofreLocked = true;
-            const status = document.getElementById('statusMessage');
             if (status) {
               const pVal = data.winnerPrize ? ('R$ ' + Number(data.winnerPrize).toFixed(2).replace('.', ',')) : '';
-              status.innerText = `🚨 COFRE ABERTO! ${data.winnerName || 'Competidor'} levou ${pVal}! Aguarde nova rodada!`;
-              status.className = "w-full text-center text-[9px] font-black py-1 px-2 rounded-lg bg-amber-500/20 border border-amber-400 text-amber-200 min-h-[22px] flex items-center justify-center animate-pulse";
+              status.innerText = `🚨 COFRE ABERTO! ${data.winnerName || 'Um jogador'} levou ${pVal}! Suas chaves estão salvas para a próxima rodada!`;
+              status.className = "w-full text-center text-[10px] sm:text-xs font-black py-1.5 px-2 rounded-xl bg-amber-500/20 border-2 border-amber-400 text-amber-200 min-h-[26px] flex items-center justify-center animate-pulse";
+            }
+            if (unlockBtn) {
+              unlockBtn.classList.add('opacity-50');
+            }
+          } else {
+            // Se o ADM reabriu o cofre (iniciou nova rodada)
+            if (isCofreLocked) {
+              isCofreLocked = false;
+              if (status) {
+                status.innerText = "NOVA RODADA ABERTA! O cofre está pronto para seus palpites.";
+                status.className = "w-full text-center text-[10px] font-bold py-1 px-2 rounded-lg bg-emerald-950 border border-emerald-500 text-emerald-300 min-h-[22px] flex items-center justify-center";
+              }
+              if (unlockBtn) {
+                unlockBtn.classList.remove('opacity-50');
+              }
+              clearDigits();
             }
           }
         }
@@ -1026,6 +1066,10 @@
     }
 
     function pressDigit(num) {
+      if (isCofreLocked) {
+        alert("🚨 O cofre já foi aberto nesta rodada!\n\nAguarde o Administrador iniciar uma nova rodada. Suas chaves continuam salvas para a próxima rodada!");
+        return;
+      }
       if (chancesLeft <= 0) {
         handleBuyKeysClick();
         return;
@@ -1082,6 +1126,11 @@
 
     // TENTAR ABRIR (VALIDAÇÃO NO SERVIDOR)
     async function submitGuess() {
+      if (isCofreLocked) {
+        alert("🚨 O cofre já foi aberto nesta rodada!\n\nAguarde o Administrador iniciar uma nova rodada. Suas chaves estão salvas e intactas para o novo desafio!");
+        return;
+      }
+
       if (!currentUser || chancesLeft <= 0) {
         handleBuyKeysClick();
         return;
@@ -1105,6 +1154,14 @@
           body: JSON.stringify({ cpf: currentUser.cpf, guess: guessStr })
         });
         const data = await res.json();
+
+        if (data.isLocked) {
+          isCofreLocked = true;
+          alert(`🚨 O cofre acabou de ser encerrado!\n\n${data.winnerName || 'Outro competidor'} acertou o enigma e levou o prêmio!\n\nSuas chaves NÃO foram gastas e continuam guardadas para a próxima rodada.`);
+          fetchGameState();
+          return;
+        }
+
         won = data.won;
         chancesLeft = data.chancesLeft !== undefined ? data.chancesLeft : chancesLeft - 1;
         attemptsCount = data.attemptsCount !== undefined ? data.attemptsCount : attemptsCount + 1;
@@ -1228,8 +1285,45 @@
             `;
           }
 
-          if (data.competitors) {
-            document.getElementById('adminCompetitorsCount').innerText = `Total de competidores cadastrados no banco: ${data.competitors.length}`;
+          if (data.competitors && data.competitors.length > 0) {
+            const countEl = document.getElementById('adminCompetitorsCountNum');
+            if (countEl) countEl.innerText = data.competitors.length;
+            const listEl = document.getElementById('adminCompetitorsList');
+            if (listEl) {
+              listEl.innerHTML = data.competitors.map(c => {
+                const cleanPhone = (c.phone || '').replace(/\D/g, '');
+                return `
+                  <div class="bg-[#120324] p-3 rounded-xl border border-purple-800/60 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-xs">
+                    <div>
+                      <div class="flex items-center gap-1.5 font-bold text-white text-sm">
+                        <span>👤</span> ${c.name}
+                        <span class="text-xs font-mono text-purple-300">(${c.cpf})</span>
+                      </div>
+                      <div class="text-xs text-purple-200 mt-1 flex flex-wrap gap-x-3 gap-y-1">
+                        <span>🔑 <strong class="text-amber-300 font-bold">${c.chances}</strong> chaves restantes</span>
+                        <span>🎯 <strong>${c.attempts}</strong> palpites dados</span>
+                        <span>💸 PIX: <strong class="text-emerald-300 font-mono">${c.pix_key || '-'}</strong></span>
+                        ${c.phone ? `<span>📱 <strong class="text-purple-200 font-mono">${c.phone}</strong></span>` : ''}
+                      </div>
+                    </div>
+                    <div class="flex items-center gap-2 pt-1 sm:pt-0">
+                      ${cleanPhone ? `
+                        <a href="https://wa.me/55${cleanPhone}" target="_blank" class="px-3 py-1.5 bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-black rounded-lg text-xs flex items-center gap-1 shadow active:scale-95 transition">
+                          <span>💬</span> WhatsApp
+                        </a>
+                      ` : ''}
+                    </div>
+                  </div>
+                `;
+              }).join('');
+            }
+          } else {
+            const countEl = document.getElementById('adminCompetitorsCountNum');
+            if (countEl) countEl.innerText = '0';
+            const listEl = document.getElementById('adminCompetitorsList');
+            if (listEl) {
+              listEl.innerHTML = `<p class="text-zinc-400 text-xs italic text-center py-3">Nenhum competidor cadastrado ainda.</p>`;
+            }
           }
         }
       } catch (err) {}

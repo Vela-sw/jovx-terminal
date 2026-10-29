@@ -107,11 +107,23 @@ const server = http.createServer(async (req, res) => {
   // ROTAS DE API
   if (req.method === 'GET' && pathname === '/api/game/state') {
     const row = db.prepare('SELECT jackpot, is_locked, winner_name, winner_prize FROM game_state WHERE id = 1').get();
+    const cpf = parsedUrl.searchParams.get('cpf');
+    let userChances = null;
+    let userAttempts = null;
+    if (cpf) {
+      const user = db.prepare('SELECT chances, attempts FROM competitors WHERE cpf = ?').get(cpf);
+      if (user) {
+        userChances = user.chances;
+        userAttempts = user.attempts;
+      }
+    }
     return sendJson(res, {
       jackpot: row ? row.jackpot : 500.00,
       isLocked: Boolean(row && row.is_locked),
       winnerName: row ? row.winner_name : null,
-      winnerPrize: row ? row.winner_prize : null
+      winnerPrize: row ? row.winner_prize : null,
+      userChances,
+      userAttempts
     });
   }
 
