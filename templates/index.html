@@ -134,6 +134,53 @@
         0 0 25px rgba(234, 179, 8, 0.35);
       border: 2px solid #8b5cf6;
     }
+
+    /* Animação de tremor mecânico da porta do cofre ao errar */
+    @keyframes vaultShake {
+      0%, 100% { transform: translateX(0); }
+      15%, 55% { transform: translateX(-6px); }
+      35%, 75% { transform: translateX(6px); }
+    }
+    .animate-vault-shake {
+      animation: vaultShake 0.45s ease-in-out;
+    }
+
+    /* Animação de escaneamento sequencial e piscada dos dígitos ao destravar */
+    @keyframes digitScanPulse {
+      0% { transform: scale(1); filter: brightness(1); }
+      50% { transform: scale(1.15); filter: brightness(1.9) drop-shadow(0 0 14px #facc15); border-color: #fde047; }
+      100% { transform: scale(1); filter: brightness(1); }
+    }
+    .digit-scan-active {
+      animation: digitScanPulse 0.22s ease-in-out;
+    }
+
+    /* Piscada rápida de alta tensão dos dígitos durante a verificação */
+    @keyframes digitSuspenseBlink {
+      0%, 100% { filter: brightness(1); box-shadow: 0 0 5px rgba(250, 204, 21, 0.3); }
+      50% { filter: brightness(1.8); box-shadow: 0 0 18px rgba(250, 204, 21, 0.95); border-color: #fde047; }
+    }
+    .digit-suspense-blink {
+      animation: digitSuspenseBlink 0.12s ease-in-out infinite alternate;
+    }
+
+    /* Piscada vermelha de erro */
+    @keyframes digitErrorFlash {
+      0%, 100% { background: #18042f; border-color: rgba(250, 204, 21, 0.75); }
+      30%, 70% { background: #450a0a; border-color: #ef4444; box-shadow: 0 0 18px rgba(239, 68, 68, 0.95); color: #fca5a5; }
+    }
+    .digit-error-flash {
+      animation: digitErrorFlash 0.5s ease-in-out;
+    }
+
+    /* Piscada verde esmeralda de vitória */
+    @keyframes digitSuccessFlash {
+      0%, 100% { background: #064e3b; border-color: #10b981; }
+      50% { background: #047857; border-color: #34d399; box-shadow: 0 0 25px rgba(52, 211, 153, 1); color: #ffffff; }
+    }
+    .digit-success-flash {
+      animation: digitSuccessFlash 0.4s ease-in-out infinite alternate;
+    }
   </style>
 </head>
 <body class="flex flex-col items-center justify-start sm:justify-center p-0 sm:p-3 select-none antialiased min-h-screen">
@@ -1250,23 +1297,109 @@
       if (navigator.vibrate) navigator.vibrate(ms);
     }
 
-    function playMechanicalClick(frequency = 900, duration = 0.02) {
+    // SOM DE TECLADO TÁTIL E MODERNO (MUITO MAIS AGRADÁVEL E SUAVE)
+    function playKeypadClick(digit = 5) {
       hapticFeedback(12);
       try {
         const ctx = getAudioContext();
         if (ctx.state === 'suspended') ctx.resume();
+        const now = ctx.currentTime;
+
+        // 1. Estalo tátil sutil de alta precisão (tipo chave mecânica premium)
+        const oscClick = ctx.createOscillator();
+        const gainClick = ctx.createGain();
+        oscClick.type = 'sine';
+        oscClick.frequency.setValueAtTime(1400, now);
+        oscClick.frequency.exponentialRampToValueAtTime(280, now + 0.016);
+        gainClick.gain.setValueAtTime(0.22, now);
+        gainClick.gain.exponentialRampToValueAtTime(0.001, now + 0.016);
+        oscClick.connect(gainClick);
+        gainClick.connect(ctx.destination);
+        oscClick.start(now);
+        oscClick.stop(now + 0.016);
+
+        // 2. Tom musical aveludado e suave com notas harmônicas por tecla
+        const keyTones = [392.00, 440.00, 493.88, 523.25, 587.33, 659.25, 698.46, 783.99, 880.00, 987.77];
+        const noteFreq = keyTones[digit % keyTones.length] || 523.25;
+
+        const oscTone = ctx.createOscillator();
+        const gainTone = ctx.createGain();
+        oscTone.type = 'triangle';
+        oscTone.frequency.setValueAtTime(noteFreq, now);
+        gainTone.gain.setValueAtTime(0.12, now);
+        gainTone.gain.exponentialRampToValueAtTime(0.0001, now + 0.045);
+        oscTone.connect(gainTone);
+        gainTone.connect(ctx.destination);
+        oscTone.start(now);
+        oscTone.stop(now + 0.045);
+      } catch (e) {}
+    }
+
+    // SOM DE CATRACA DO DISCO GIRATÓRIO (CLICK DUPLO DE PRECISÃO)
+    function playWheelRatchetSound() {
+      hapticFeedback(8);
+      try {
+        const ctx = getAudioContext();
+        if (ctx.state === 'suspended') ctx.resume();
+        const now = ctx.currentTime;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(950 + Math.random() * 200, now);
+        osc.frequency.exponentialRampToValueAtTime(200, now + 0.012);
+        gain.gain.setValueAtTime(0.15, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.012);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.012);
+      } catch (e) {}
+    }
+
+    // BIP/SCANNER AO CHECAR O ENIGMA (SOM PROGRESSIVO DE LEITURA)
+    function playScanBeep(step = 0) {
+      hapticFeedback(8);
+      try {
+        const ctx = getAudioContext();
+        if (ctx.state === 'suspended') ctx.resume();
+        const now = ctx.currentTime;
+        const scanFreqs = [523.25, 659.25, 783.99, 932.33, 1046.50];
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(scanFreqs[step] || 750, now);
+        gain.gain.setValueAtTime(0.18, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.05);
+      } catch (e) {}
+    }
+
+    // SOM DE TRANCA TRAVADA (ROBUSTO E MECÂNICO)
+    function playLockRejectSound() {
+      hapticFeedback([40, 25, 60]);
+      try {
+        const ctx = getAudioContext();
+        if (ctx.state === 'suspended') ctx.resume();
+        const now = ctx.currentTime;
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         osc.type = 'triangle';
-        osc.frequency.setValueAtTime(frequency, ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(150, ctx.currentTime + duration);
-        gain.gain.setValueAtTime(0.3, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+        osc.frequency.setValueAtTime(140, now);
+        osc.frequency.exponentialRampToValueAtTime(45, now + 0.16);
+        gain.gain.setValueAtTime(0.35, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
         osc.connect(gain);
         gain.connect(ctx.destination);
-        osc.start();
-        osc.stop(ctx.currentTime + duration);
+        osc.start(now);
+        osc.stop(now + 0.18);
       } catch (e) {}
+    }
+
+    function playMechanicalClick(frequency = 900, duration = 0.02) {
+      playKeypadClick(5);
     }
 
     function playUnlockSound() {
@@ -1359,18 +1492,18 @@
       } catch (e) {}
     }
 
-    function rotateWheel(degrees) {
+    function rotateWheel(degrees, withSound = true) {
       currentWheelAngle += degrees;
       const wheel = document.getElementById('vaultWheel');
       if (wheel) wheel.style.transform = `rotate(${currentWheelAngle}deg)`;
-      playMechanicalClick(800 + Math.random() * 400, 0.03);
+      if (withSound) playWheelRatchetSound();
     }
     function clickVaultWheel() {
       if (chancesLeft <= 0) {
         handleBuyKeysClick();
         return;
       }
-      rotateWheel(45 + Math.floor(Math.random() * 60));
+      rotateWheel(45 + Math.floor(Math.random() * 60), true);
     }
 
     function updateDigitDisplay() {
@@ -1397,25 +1530,28 @@
         handleBuyKeysClick();
         return;
       }
+      playKeypadClick(num);
       if (currentDigits.length < 5) {
         currentDigits.push(num);
         updateDigitDisplay();
-        rotateWheel(36 * (num + 1));
+        rotateWheel(36 * (num + 1), false);
       }
     }
 
     function backspaceDigit() {
+      playKeypadClick(0);
       if (currentDigits.length > 0) {
         currentDigits.pop();
         updateDigitDisplay();
-        rotateWheel(-30);
+        rotateWheel(-30, false);
       }
     }
 
     function clearDigits() {
+      playKeypadClick(2);
       currentDigits = [];
       updateDigitDisplay();
-      rotateWheel(-90);
+      rotateWheel(-90, false);
     }
 
     window.addEventListener('keydown', (e) => {
@@ -1469,8 +1605,11 @@
       }
     }
 
-    // TENTAR ABRIR (VALIDAÇÃO NO SERVIDOR)
+    let isSubmittingGuess = false;
+
+    // TENTAR ABRIR (VALIDAÇÃO NO SERVIDOR COM ANIMAÇÃO DE VARREDURA & PISCADA)
     async function submitGuess() {
+      if (isSubmittingGuess) return;
       if (isCofreLocked) {
         alert("🚨 O cofre já foi aberto nesta rodada!\n\nAguarde o Administrador iniciar uma nova rodada. Suas chaves estão salvas e intactas para o novo desafio!");
         return;
@@ -1483,48 +1622,99 @@
 
       if (currentDigits.length < 5) {
         const status = document.getElementById('statusMessage');
-        status.innerText = "Complete os 5 dígitos antes de girar!";
-        status.className = "w-full text-center text-[9.5px] font-black py-0.5 px-2 rounded-lg bg-amber-950 border border-amber-500 text-amber-200 min-h-[22px] flex items-center justify-center";
+        if (status) {
+          status.innerText = "Complete os 5 dígitos antes de girar!";
+          status.className = "w-full text-center text-[9.5px] font-black py-0.5 px-2 rounded-lg bg-amber-950 border border-amber-500 text-amber-200 min-h-[22px] flex items-center justify-center";
+        }
         return;
       }
 
+      isSubmittingGuess = true;
       const guessStr = currentDigits.join('');
-      rotateWheel(360 + Math.floor(Math.random() * 180));
+      const status = document.getElementById('statusMessage');
+      if (status) {
+        status.innerText = "⚡ ANALISANDO TRANCA MECÂNICA...";
+        status.className = "w-full text-center text-[9.5px] font-black py-0.5 px-2 rounded-lg bg-purple-950 border border-amber-400 text-amber-300 min-h-[22px] flex items-center justify-center animate-pulse";
+      }
+
+      // 1. Gira a engrenagem do cofre com som de catraca
+      rotateWheel(360 + Math.floor(Math.random() * 180), true);
+
+      // 2. Animação de Varredura / Piscada sequencial pelos 5 dígitos com bipe progressivo
+      for (let i = 0; i < 5; i++) {
+        const el = document.getElementById(`digit-${i}`);
+        if (el) {
+          el.classList.add('digit-scan-active');
+          playScanBeep(i);
+        }
+        await new Promise(r => setTimeout(r, 70));
+        if (el) el.classList.remove('digit-scan-active');
+      }
+
+      // 3. Piscada rápida de todos os 5 dígitos juntos (Suspense antes da resposta)
+      for (let i = 0; i < 5; i++) {
+        const el = document.getElementById(`digit-${i}`);
+        if (el) el.classList.add('digit-suspense-blink');
+      }
 
       let won = false;
+      let serverResponse = null;
       try {
         const res = await fetch('/api/game/guess', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ cpf: currentUser.cpf, guess: guessStr })
         });
-        const data = await res.json();
-
-        if (data.isLocked) {
-          isCofreLocked = true;
-          alert(`🚨 O cofre acabou de ser encerrado!\n\n${data.winnerName || 'Outro competidor'} acertou o enigma e levou o prêmio!\n\nSuas chaves NÃO foram gastas e continuam guardadas para a próxima rodada.`);
-          fetchGameState();
-          return;
-        }
-
-        won = data.won;
-        chancesLeft = data.chancesLeft !== undefined ? data.chancesLeft : chancesLeft - 1;
-        attemptsCount = data.attemptsCount !== undefined ? data.attemptsCount : attemptsCount + 1;
+        serverResponse = await res.json();
       } catch (err) {
-        chancesLeft--;
+        serverResponse = { won: (guessStr === "72039") };
+      }
+
+      // Intervalo de suspense da piscada antes do veredito final
+      await new Promise(r => setTimeout(r, 200));
+
+      // Remove piscada de suspense
+      for (let i = 0; i < 5; i++) {
+        const el = document.getElementById(`digit-${i}`);
+        if (el) el.classList.remove('digit-suspense-blink');
+      }
+
+      if (serverResponse && serverResponse.isLocked) {
+        isCofreLocked = true;
+        isSubmittingGuess = false;
+        alert(`🚨 O cofre acabou de ser encerrado!\n\n${serverResponse.winnerName || 'Outro competidor'} acertou o enigma e levou o prêmio!\n\nSuas chaves NÃO foram gastas e continuam guardadas para a próxima rodada.`);
+        fetchGameState();
+        return;
+      }
+
+      won = serverResponse ? serverResponse.won : false;
+      if (serverResponse && serverResponse.chancesLeft !== undefined) {
+        chancesLeft = serverResponse.chancesLeft;
+      } else {
+        chancesLeft = Math.max(0, chancesLeft - 1);
+      }
+      if (serverResponse && serverResponse.attemptsCount !== undefined) {
+        attemptsCount = serverResponse.attemptsCount;
+      } else {
         attemptsCount++;
-        won = (guessStr === "72039");
       }
 
       saveStoredSession();
       updateChancesDisplay();
 
       if (won) {
+        // Efeito de vitória nos dígitos
+        for (let i = 0; i < 5; i++) {
+          const el = document.getElementById(`digit-${i}`);
+          if (el) el.classList.add('digit-success-flash');
+        }
+
         playVictoryCelebrationSound();
         launchFireworks();
-        const status = document.getElementById('statusMessage');
-        status.innerText = "TRANCA DESTRAVADA! VOCÊ É O VENCEDOR!";
-        status.className = "w-full text-center text-[9.5px] font-black py-1 px-2 rounded-lg bg-emerald-950 border border-emerald-400 text-emerald-200 min-h-[22px] flex items-center justify-center";
+        if (status) {
+          status.innerText = "✨ TRANCA DESTRAVADA! VOCÊ É O VENCEDOR! ✨";
+          status.className = "w-full text-center text-[9.5px] font-black py-1 px-2 rounded-lg bg-emerald-950 border border-emerald-400 text-emerald-200 min-h-[22px] flex items-center justify-center";
+        }
         
         document.getElementById('victoryPrize').innerText = document.getElementById('jackpotDisplay').innerText;
         document.getElementById('victoryWinnerName').innerText = currentUser.name;
@@ -1533,22 +1723,42 @@
 
         setTimeout(() => {
           document.getElementById('victoryModal').classList.remove('hidden');
+          isSubmittingGuess = false;
         }, 500);
       } else {
-        playMechanicalClick(200, 0.08);
+        // Efeito mecânico de erro: Tremor da porta do cofre + Piscada vermelha de erro
+        const vaultDoor = document.querySelector('.vault-inner-door');
+        if (vaultDoor) {
+          vaultDoor.classList.remove('animate-vault-shake');
+          void vaultDoor.offsetWidth; // Força reflow no navegador
+          vaultDoor.classList.add('animate-vault-shake');
+        }
+
+        for (let i = 0; i < 5; i++) {
+          const el = document.getElementById(`digit-${i}`);
+          if (el) el.classList.add('digit-error-flash');
+        }
+
+        playLockRejectSound();
         revealClues(attemptsCount);
 
-        const status = document.getElementById('statusMessage');
-        status.innerText = `Combinação incorreta! Tranca travada. (Pista #${Math.min(attemptsCount, 4)} liberada)`;
-        status.className = "w-full text-center text-[9.5px] font-bold py-0.5 px-2 rounded-lg bg-red-950 border border-red-600 text-red-200 min-h-[22px] flex items-center justify-center";
+        if (status) {
+          status.innerText = `❌ Combinação incorreta! Tranca travada. (Pista #${Math.min(attemptsCount, 4)} liberada)`;
+          status.className = "w-full text-center text-[9.5px] font-bold py-0.5 px-2 rounded-lg bg-red-950 border border-red-600 text-red-200 min-h-[22px] flex items-center justify-center";
+        }
 
         setTimeout(() => {
+          for (let i = 0; i < 5; i++) {
+            const el = document.getElementById(`digit-${i}`);
+            if (el) el.classList.remove('digit-error-flash');
+          }
           clearDigits();
-          if (chancesLeft === 0) {
+          isSubmittingGuess = false;
+          if (chancesLeft === 0 && status) {
             status.innerText = "Suas chaves acabaram! Adicione +10 chaves para continuar.";
             status.className = "w-full text-center text-[9.5px] font-bold py-0.5 px-2 rounded-lg bg-amber-950 border border-amber-500 text-amber-200 min-h-[22px] flex items-center justify-center";
           }
-        }, 900);
+        }, 850);
       }
     }
 
