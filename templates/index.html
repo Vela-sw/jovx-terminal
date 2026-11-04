@@ -32,8 +32,16 @@
     }
 
     body {
-      background-color: #1a0533;
-      background: radial-gradient(circle at 50% 15%, #43107a 0%, #290850 55%, #180332 100%);
+      background-color: #0b0114;
+      background: linear-gradient(135deg, 
+        #2c0750 0%, 
+        #120c36 22%, 
+        #38095e 48%, 
+        #0e173b 72%, 
+        #240445 100%
+      );
+      background-size: 300% 300%;
+      animation: luxuryAmbientFlow 22s ease-in-out infinite alternate;
       color: #ffffff;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       min-height: 100%;
@@ -43,15 +51,39 @@
       overflow-x: hidden;
     }
 
-    /* Carcaça do cofre em Roxo Real & Ametista Luminoso */
+    /* Carcaça do cofre em Roxo Real & Ametista com Marcas D'água Sutis e Movimento de Luxo */
     .vault-outer-frame {
-      background: linear-gradient(165deg, #370d6b 0%, #26074d 60%, #190433 100%);
+      background-color: #1a0533;
+      background-image: 
+        url("data:image/svg+xml,%3Csvg width='130' height='130' viewBox='0 0 130 130' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23fde047' stroke-width='1.2' opacity='0.045'%3E%3C!-- Disco do Cofre com Catraca --%3E%3Ccircle cx='35' cy='35' r='20' stroke-dasharray='3,3'/%3E%3Ccircle cx='35' cy='35' r='10'/%3E%3Ccircle cx='35' cy='35' r='3' fill='%23fde047' fill-opacity='0.045'/%3E%3C!-- Estrela de 4 Pontas Lapidada --%3E%3Cpath d='M95 20 L98 29 L107 32 L98 35 L95 44 L92 35 L83 32 L92 29 Z' fill='%23fde047' fill-opacity='0.035'/%3E%3C!-- Chave do Segredo --%3E%3Ccircle cx='95' cy='90' r='6'/%3E%3Cpath d='M95 96 L95 114 M95 105 L101 105 M95 110 L102 110' stroke-linecap='round'/%3E%3C!-- Escudo Blindado --%3E%3Cpath d='M35 85 L47 90 C47 105 35 113 35 113 C35 113 23 105 23 90 Z'/%3E%3C/g%3E%3C/svg%3E"),
+        linear-gradient(135deg, 
+          #2c0750 0%, 
+          #120c36 22%, 
+          #38095e 48%, 
+          #0e173b 72%, 
+          #240445 100%
+        );
+      background-size: 130px 130px, 300% 300%;
+      animation: luxuryAmbientFlow 22s ease-in-out infinite alternate;
       border: 2px solid #8b5cf6;
       box-shadow: 
         inset 0 1px 2px rgba(255, 255, 255, 0.25),
         inset 0 -3px 6px rgba(0, 0, 0, 0.6),
         0 12px 35px rgba(0, 0, 0, 0.65),
         0 0 35px rgba(139, 92, 246, 0.2);
+    }
+
+    /* Movimento aveludado e contínuo do gradiente e das marcas d'água */
+    @keyframes luxuryAmbientFlow {
+      0% {
+        background-position: 0px 0px, 0% 20%;
+      }
+      50% {
+        background-position: 25px 25px, 100% 80%;
+      }
+      100% {
+        background-position: 50px 50px, 20% 100%;
+      }
     }
 
     /* Rebaixo da porta blindada em Roxo Profundo */
