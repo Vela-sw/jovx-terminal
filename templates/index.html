@@ -182,42 +182,73 @@
       </div>
     </div>
 
-    <!-- PORTA INTERNA DO COFRE (LAYOUT ORIGINAL CENTRALIZADO) -->
+    <!-- PORTA INTERNA DO COFRE -->
     <div class="vault-inner-door rounded-2xl p-2 sm:p-2.5 flex flex-col items-center relative">
       
-      <!-- MINI VISOR OLED DO VALOR ACUMULADO (CENTRALIZADO NO TOPO) -->
-      <div class="w-full flex flex-col items-center justify-center bg-[#16042c] border border-[#7c3aed] rounded-xl py-1 px-2.5 mb-1 shadow-inner text-center">
-        <div class="flex items-center gap-1.5">
-          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
-          <span class="text-[8px] text-purple-200 uppercase tracking-widest font-black">Cofre Acumulado</span>
-        </div>
-        <div class="text-base sm:text-lg font-black text-amber-300 font-mono tracking-tight leading-tight my-0.5 drop-shadow-[0_0_8px_rgba(250,204,21,0.6)]" id="jackpotDisplay">
-          R$ 3.424,50
-        </div>
-        <span class="text-[7.5px] text-emerald-400 font-black uppercase tracking-wider">
-          Para quem desvendar o enigma
-        </span>
-      </div>
-
-      <!-- SEÇÃO DA TRANCA DOURADA (CENTRALIZADA, TAMANHO EQUILIBRADO 120px) -->
-      <div class="relative flex flex-col items-center justify-center my-0.5">
+      <!-- BLOCO HORIZONTAL LADO A LADO: CADEADO DO COFRE NA ESQUERDA + PREMIAÇÃO NA DIREITA -->
+      <div class="w-full flex items-center justify-between gap-2.5 bg-gradient-to-r from-[#17042c] via-[#230847] to-[#16032b] border-2 border-[#7c3aed] rounded-2xl p-2.5 mb-1.5 shadow-xl relative overflow-hidden">
         
-        <!-- INDICADOR TRIANGULAR DE PRECISÃO NO TOPO -->
-        <div class="z-20 -mb-1 flex flex-col items-center">
-          <div class="w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-t-[6px] border-t-amber-400 filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]"></div>
-        </div>
-
-        <!-- ANEL DE ROLAMENTO E DISCO DOURADO 3D (120px) -->
-        <div class="dial-bearing-ring rounded-full p-1.5 relative cursor-pointer active:scale-98 transition flex items-center justify-center" onclick="clickVaultWheel()" title="Toque para girar">
-          <div style="width: 120px; height: 120px;" class="rounded-full overflow-hidden flex items-center justify-center relative">
-            <img id="vaultWheel" src="/static/dial_luxo.png" alt="Disco Dourado do Cofre"
-              class="w-full h-full object-cover transition-transform duration-700 ease-out select-none pointer-events-none drop-shadow-2xl" />
+        <!-- LADO ESQUERDO: DISCO DOURADO DO COFRE (ORIGINAL GIRATÓRIO) -->
+        <div class="relative flex flex-col items-center justify-center flex-shrink-0 pl-1">
+          <!-- Indicador triangular superior de precisão -->
+          <div class="z-20 -mb-1 flex flex-col items-center">
+            <div class="w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-t-[6px] border-t-amber-400 filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]"></div>
           </div>
+
+          <!-- Anel com rolamento e disco giratório original -->
+          <div class="dial-bearing-ring rounded-full p-1 relative cursor-pointer active:scale-95 transition flex items-center justify-center shadow-[0_0_15px_rgba(139,92,246,0.35)]" onclick="clickVaultWheel()" title="Toque para girar">
+            <div style="width: 104px; height: 104px;" class="rounded-full overflow-hidden flex items-center justify-center relative">
+              <img id="vaultWheel" src="/static/dial_luxo.png" alt="Disco Dourado do Cofre"
+                class="w-full h-full object-cover transition-transform duration-700 ease-out select-none pointer-events-none drop-shadow-2xl" />
+            </div>
+          </div>
+
+          <span class="text-[7.5px] text-amber-300 font-mono tracking-widest uppercase font-black mt-1">
+            5 DÍGITOS
+          </span>
         </div>
 
-        <span class="text-[8px] text-amber-300 font-mono tracking-widest uppercase font-black mt-1">
-          COMBINAÇÃO MECÂNICA • 5 DÍGITOS
-        </span>
+        <!-- LADO DIREITO: VALOR DA PREMIAÇÃO COM LOUROS DOURADOS DE LUXO -->
+        <div class="flex-1 flex flex-col items-center justify-center text-center pr-1">
+          
+          <!-- TÍTULO: COFRE ACUMULADO -->
+          <div class="flex items-center gap-1 mb-0.5">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+            <span class="text-[9.5px] sm:text-[11px] font-black tracking-widest text-amber-200 uppercase font-serif drop-shadow">
+              COFRE ACUMULADO
+            </span>
+          </div>
+
+          <!-- VALOR DO PRÊMIO FLANQUEADO POR LOUROS DOURADOS -->
+          <div class="flex items-center justify-center gap-1 my-0.5 w-full">
+            <!-- Ramo de Louro Dourado Esquerdo -->
+            <svg class="w-4 h-9 text-amber-400 flex-shrink-0 opacity-95 filter drop-shadow" viewBox="0 0 24 48" fill="currentColor">
+              <ellipse cx="6" cy="12" rx="3.5" ry="5.5" transform="rotate(-30 6 12)" />
+              <ellipse cx="4" cy="22" rx="3.5" ry="5.5" transform="rotate(-20 4 22)" />
+              <ellipse cx="6" cy="32" rx="3.5" ry="5.5" transform="rotate(-10 6 32)" />
+              <path d="M12 4 Q10 24 14 44" stroke="currentColor" stroke-width="1.8" fill="none" />
+            </svg>
+
+            <!-- Valor do Prêmio (ID jackpotDisplay preservado intacto) -->
+            <div id="jackpotDisplay" class="text-[20px] sm:text-[23px] font-black text-amber-300 font-mono tracking-tight leading-none drop-shadow-[0_0_12px_rgba(250,204,21,0.6)] whitespace-nowrap">
+              R$ 3.424,50
+            </div>
+
+            <!-- Ramo de Louro Dourado Direito (Espelhado) -->
+            <svg class="w-4 h-9 text-amber-400 flex-shrink-0 opacity-95 filter drop-shadow transform scale-x-[-1]" viewBox="0 0 24 48" fill="currentColor">
+              <ellipse cx="6" cy="12" rx="3.5" ry="5.5" transform="rotate(-30 6 12)" />
+              <ellipse cx="4" cy="22" rx="3.5" ry="5.5" transform="rotate(-20 4 22)" />
+              <ellipse cx="6" cy="32" rx="3.5" ry="5.5" transform="rotate(-10 6 32)" />
+              <path d="M12 4 Q10 24 14 44" stroke="currentColor" stroke-width="1.8" fill="none" />
+            </svg>
+          </div>
+
+          <!-- SUBTÍTULO -->
+          <span class="text-[7.5px] sm:text-[8px] text-emerald-400 font-black uppercase tracking-wider mt-0.5 leading-tight">
+            Para quem desvendar o enigma
+          </span>
+        </div>
+
       </div>
 
       <!-- DISPLAY OLED DOS 5 DÍGITOS (AMPLO E DESTACADO) -->
